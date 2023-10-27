@@ -11,6 +11,9 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * This class is responsible for configuring Swagger in the application.
+ */
 @Configuration
 @RequiredArgsConstructor
 public class SwaggerConfig {
@@ -18,6 +21,13 @@ public class SwaggerConfig {
     @Value("${springdoc.version")
     String springDocVersion;
 
+    /**
+     * This method creates and returns an instance of OpenAPI.
+     * It sets the title, version, and description of the API using the provided values.
+     * It also adds security schemes and requirements to the API.
+     *
+     * @return An instance of OpenAPI with the specified settings and security requirements.
+     */
     @Bean
     public OpenAPI openAPI(){
         Info info = new Info()
