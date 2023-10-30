@@ -4,6 +4,7 @@ import com.projpolice.domain.user.domain.User;
 import com.projpolice.global.common.base.BaseEntity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -32,17 +33,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user_project", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"user_id", "project_id"})
+    @UniqueConstraint(
+        name = "uk_user_project",
+        columnNames = {"user_id", "project_id"}
+    )
 })
 public class UserProject extends BaseEntity {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user_project_user"))
     private User user;
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "project_id", foreignKey = @ForeignKey(name = "fk_user_project_project"))
     private Project project;
 }
