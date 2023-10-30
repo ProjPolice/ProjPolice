@@ -19,11 +19,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BaseResponse<T> {
-    private ResponseCode code;
-    private String message;
-    private T body;
+	private Integer code;
+	private String message;
+	private T body;
 
-    public BaseResponse(T body){
-        this.body = body;
-    }
+	public BaseResponse(T body) {
+		this.body = body;
+	}
 }

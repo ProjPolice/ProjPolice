@@ -1,6 +1,6 @@
-package com.projpolice.global.common.model.exception;
+package com.projpolice.global.common.error.exception;
 
-import com.projpolice.global.common.base.ResponseCode;
+import com.projpolice.global.common.error.info.ExceptionInfo;
 
 /**
  * Exception representing a bad request error.
@@ -12,11 +12,7 @@ import com.projpolice.global.common.base.ResponseCode;
  * @since 1.0
  */
 public class BadRequestException extends BaseException {
-    public BadRequestException(ResponseCode code, String message) {
-        super(code, message);
-    }
-
-    public BadRequestException(ResponseCode code, String message, String log){
-        super(code, message, log);
-    }
+	public BadRequestException(ExceptionInfo exceptionInfo) {
+		super(exceptionInfo.getStatus(), exceptionInfo.getCode(), exceptionInfo.getMessage());
+	}
 }
