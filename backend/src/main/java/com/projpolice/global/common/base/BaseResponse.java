@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BaseResponse<T> {
-	private Integer code;
+	private int code;
 	private String message;
 	private T body;
 

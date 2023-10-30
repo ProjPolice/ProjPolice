@@ -1,10 +1,6 @@
 package com.projpolice.domain.epic.domain;
 
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import java.time.LocalDate;
 
 import com.projpolice.domain.project.domain.Project;
 import com.projpolice.global.common.base.BaseEntity;
@@ -39,15 +35,11 @@ public class Epic extends BaseEntity {
 	@Size(max = 255)
 	private String description;
 
-	@CreationTimestamp
-	@ColumnDefault("CURRENT_TIMESTAMP")
-	@Column(updatable = false, nullable = false)
-	private LocalDateTime createdAt;
+	@Column
+	private LocalDate startDate;
 
-	@UpdateTimestamp
-	@ColumnDefault("CURRENT_TIMESTAMP")
-	@Column(nullable = false)
-	private LocalDateTime updatedAt;
+	@Column
+	private LocalDate endDate;
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
