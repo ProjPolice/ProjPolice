@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends BaseEntity {
+
     @NotNull
     private String email;
     // TODO: implement Entity and Hashcode/Equals
