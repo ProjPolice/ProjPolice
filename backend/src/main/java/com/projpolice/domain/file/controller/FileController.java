@@ -1,9 +1,9 @@
-package com.projpolice.domain.project.controller;
+package com.projpolice.domain.file.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/projects")
-public class ProjectController {
+@RequestMapping("/files")
+public class FileController {
 }
