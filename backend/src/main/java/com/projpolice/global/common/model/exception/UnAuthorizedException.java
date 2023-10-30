@@ -1,6 +1,6 @@
-package com.projpolice.api.exception;
+package com.projpolice.global.common.model.exception;
 
-import com.projpolice.common.model.ResponseCode;
+import com.projpolice.global.common.base.ResponseCode;
 
 /**
  * Represents an exception thrown when an unauthorized access is detected.

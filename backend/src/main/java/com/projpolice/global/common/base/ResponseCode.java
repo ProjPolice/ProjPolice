@@ -1,4 +1,4 @@
-package com.projpolice.common.model;
+package com.projpolice.global.common.base;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

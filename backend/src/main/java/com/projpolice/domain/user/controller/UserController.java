@@ -1,4 +1,4 @@
-package com.projpolice.api.controller;
+package com.projpolice.domain.user.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.projpolice.api.request.UserLoginRequest;
-import com.projpolice.api.response.UserLoginResponse;
-import com.projpolice.common.model.BaseResponse;
-import com.projpolice.common.model.ResponseCode;
+import com.projpolice.domain.user.request.UserLoginRequest;
+import com.projpolice.domain.user.response.UserLoginResponse;
+import com.projpolice.global.common.base.BaseResponse;
+import com.projpolice.global.common.base.ResponseCode;
 
 import lombok.RequiredArgsConstructor;
 

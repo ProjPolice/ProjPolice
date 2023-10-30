@@ -1,7 +1,7 @@
-package com.projpolice.api.exception;
+package com.projpolice.global.common.model.exception;
 
-import com.projpolice.common.model.BaseResponse;
-import com.projpolice.common.model.ResponseCode;
+import com.projpolice.global.common.base.BaseResponse;
+import com.projpolice.global.common.base.ResponseCode;
 
 import lombok.Builder;
 import lombok.Getter;

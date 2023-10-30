@@ -1,4 +1,4 @@
-package com.projpolice.api.request;
+package com.projpolice.domain.user.request;
 
 import lombok.Data;
 

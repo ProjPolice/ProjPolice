@@ -1,4 +1,4 @@
-package com.projpolice.api.response;
+package com.projpolice.domain.user.response;
 
 import lombok.Builder;
 import lombok.Data;

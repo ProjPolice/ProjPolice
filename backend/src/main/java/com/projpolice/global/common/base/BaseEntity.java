@@ -1,4 +1,4 @@
-package com.projpolice.db.entitiy;
+package com.projpolice.global.common.base;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

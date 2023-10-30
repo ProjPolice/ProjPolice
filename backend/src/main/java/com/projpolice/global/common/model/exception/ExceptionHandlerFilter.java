@@ -1,4 +1,4 @@
-package com.projpolice.api.exception;
+package com.projpolice.global.common.model.exception;
 
 import javax.ws.rs.core.MediaType;
 
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.projpolice.common.model.ResponseCode;
+import com.projpolice.global.common.base.ResponseCode;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;

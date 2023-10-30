@@ -1,11 +1,11 @@
-package com.projpolice.db.repository;
+package com.projpolice.domain.user.repository;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.projpolice.db.entitiy.User;
+import com.projpolice.domain.user.domain.User;
 
 /**
  * UserRepository is an interface that extends the JpaRepository interface.

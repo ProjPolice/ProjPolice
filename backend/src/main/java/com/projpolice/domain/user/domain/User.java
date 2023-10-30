@@ -1,4 +1,6 @@
-package com.projpolice.db.entitiy;
+package com.projpolice.domain.user.domain;
+
+import com.projpolice.global.common.base.BaseEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends BaseEntity{
+public class User extends BaseEntity {
     @NotNull
     private String email;
     // TODO: implement Entity and Hashcode/Equals
