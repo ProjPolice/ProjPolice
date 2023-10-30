@@ -1,6 +1,10 @@
 package com.projpolice.domain.project.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.projpolice.global.common.base.BaseEntity;
 
@@ -72,4 +76,9 @@ public class Project extends BaseEntity {
     @Size(max = 255)
     @Column
     private String image;
+
+    @CreationTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdAt;
 }

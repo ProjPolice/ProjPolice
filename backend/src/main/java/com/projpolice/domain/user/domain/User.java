@@ -1,7 +1,13 @@
 package com.projpolice.domain.user.domain;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.projpolice.global.common.base.BaseEntity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -22,5 +28,9 @@ public class User extends BaseEntity {
 
     @NotNull
     private String email;
-    // TODO: implement Entity and Hashcode/Equals
+
+    @CreationTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdAt;
 }
