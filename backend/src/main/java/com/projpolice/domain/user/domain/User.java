@@ -6,6 +6,9 @@ import org.hibernate.annotations.Where;
 import com.projpolice.global.common.base.BaseEntity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -27,11 +30,44 @@ import lombok.NoArgsConstructor;
 public class User extends BaseEntity {
 
     @NotNull
+    @Size(max = 50)
     private String email;
 
-    @Size(max = 25)
     @NotNull
+    @Size(max = 25)
     private String name;
 
-    // TODO: implement
+    @NotNull
+    @Size(max = 50)
+    private String password;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return name;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
