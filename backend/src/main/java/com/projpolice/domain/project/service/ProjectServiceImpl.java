@@ -17,11 +17,14 @@ import com.projpolice.global.common.error.exception.BadRequestException;
 import com.projpolice.global.common.error.exception.UnAuthorizedException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
 @RequestMapping
+@RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
 
-    ProjectRepository projectRepository;
+    private final ProjectRepository projectRepository;
 
     /**
      * Retrieves the detailed information of a project based on its id.
