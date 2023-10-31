@@ -1,9 +1,9 @@
 package com.projpolice.global.common.base;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 /**
  * This class represents a base response object.
@@ -15,15 +15,15 @@ import lombok.NoArgsConstructor;
  * @param <T> the type of the response body
  */
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 public class BaseResponse<T> {
     private int code;
     private String message;
-    private T body;
+    private T data;
 
-    public BaseResponse(T body) {
-        this.body = body;
+    public BaseResponse(T data) {
+        this.data = data;
     }
 }
