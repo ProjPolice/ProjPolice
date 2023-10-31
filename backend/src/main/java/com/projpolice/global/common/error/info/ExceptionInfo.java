@@ -10,7 +10,9 @@ public enum ExceptionInfo {
     // Meta
     INVALID_METADATA(HttpStatus.BAD_REQUEST, 1900, "유효하지 않은 메타데이터 입니다."),
     INVALID_PROJECT(HttpStatus.BAD_REQUEST, 1901, "존재하지 않는 프로젝트입니다."),
-    INVALID_PROJECT_INSERTION_PARAM(HttpStatus.BAD_REQUEST, 1901, "프로젝트 입력 실패 : 유효하지 않은 매개변수");
+    INVALID_PROJECT_INSERTION_PARAM(HttpStatus.BAD_REQUEST, 1901, "프로젝트 입력 실패 : 유효하지 않은 매개변수"),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, 1902, "권한이 존재하지 않습니다."),
+    ;
 
 
 
