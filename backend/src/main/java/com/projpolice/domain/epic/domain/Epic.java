@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import com.projpolice.domain.epic.request.EpicCreateRequest;
 import com.projpolice.domain.project.domain.Project;
 import com.projpolice.global.common.base.BaseEntity;
 
@@ -50,4 +51,14 @@ public class Epic extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", foreignKey = @ForeignKey(name = "fk_epic_to_project_project_id"))
     private Project project;
+
+    public static Epic of(EpicCreateRequest epicCreateRequest, Project project) {
+        return Epic.builder()
+            .name(epicCreateRequest.getName())
+            .description(epicCreateRequest.getDescription())
+            .startDate(epicCreateRequest.getStartDate())
+            .endDate(epicCreateRequest.getEndDate())
+            .project(project)
+            .build();
+    }
 }
