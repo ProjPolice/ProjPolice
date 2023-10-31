@@ -9,8 +9,8 @@ public enum ExceptionInfo {
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 9999, "서버 에러입니다."),
     // Meta
     INVALID_METADATA(HttpStatus.BAD_REQUEST, 1900, "유효하지 않은 메타데이터 입니다."),
+    // Project
     INVALID_PROJECT(HttpStatus.BAD_REQUEST, 1901, "존재하지 않는 프로젝트입니다.");
-
 
     private final HttpStatus status;
     private final Integer code;
