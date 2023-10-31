@@ -5,10 +5,14 @@ import java.time.LocalDate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import com.projpolice.domain.user.domain.User;
 import com.projpolice.global.common.base.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -77,4 +81,10 @@ public class Project extends BaseEntity {
     @Size(max = 255)
     @Column
     private String image;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_project_to_user_user_id"))
+    private User user;
+
 }
