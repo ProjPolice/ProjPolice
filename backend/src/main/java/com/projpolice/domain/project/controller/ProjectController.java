@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProjectController {
 
-    ProjectService projectService;
+    private final ProjectService projectService;
 
     /**
      * Retrieves the details of a project.
