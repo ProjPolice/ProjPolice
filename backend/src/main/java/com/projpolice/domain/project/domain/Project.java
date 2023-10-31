@@ -85,6 +85,6 @@ public class Project extends BaseEntity {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_project_to_user_user_id"))
-    User user;
+    private User user;
 
 }
