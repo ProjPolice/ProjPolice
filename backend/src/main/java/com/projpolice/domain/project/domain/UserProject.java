@@ -1,5 +1,8 @@
 package com.projpolice.domain.project.domain;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import com.projpolice.domain.user.domain.User;
 import com.projpolice.global.common.base.BaseEntity;
 
@@ -38,6 +41,8 @@ import lombok.NoArgsConstructor;
         columnNames = {"user_id", "project_id"}
     )
 })
+@SQLDelete(sql = "UPDATE user_project SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class UserProject extends BaseEntity {
 
     @NotNull

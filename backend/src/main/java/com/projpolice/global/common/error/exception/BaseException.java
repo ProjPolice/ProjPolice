@@ -14,28 +14,28 @@ import lombok.Getter;
 @Builder
 @Getter
 public class BaseException extends RuntimeException {
-	HttpStatus status;
-	Integer code;
-	String message;
-	String log;
+    HttpStatus status;
+    Integer code;
+    String message;
+    String log;
 
-	BaseException(HttpStatus status, Integer code, String message) {
-		this.status = status;
-		this.code = code;
-		this.message = message;
-	}
+    BaseException(HttpStatus status, Integer code, String message) {
+        this.status = status;
+        this.code = code;
+        this.message = message;
+    }
 
-	BaseException(HttpStatus status, Integer code, String message, String log) {
-		this.status = status;
-		this.code = code;
-		this.message = message;
-		this.log = log;
-	}
+    BaseException(HttpStatus status, Integer code, String message, String log) {
+        this.status = status;
+        this.code = code;
+        this.message = message;
+        this.log = log;
+    }
 
-	BaseResponse<Void> toResponse() {
-		return BaseResponse.<Void>builder()
-			.code(code)
-			.message(message)
-			.build();
-	}
+    BaseResponse<Void> toResponse() {
+        return BaseResponse.<Void>builder()
+            .code(code)
+            .message(message)
+            .build();
+    }
 }

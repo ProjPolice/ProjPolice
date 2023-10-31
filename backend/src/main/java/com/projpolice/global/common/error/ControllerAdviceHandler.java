@@ -33,28 +33,28 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 public class ControllerAdviceHandler {
 
-	/**
-	 * Handles general exceptions and returns a ResponseEntity with a BaseResponse object.
-	 *
-	 * @param exception The exception that is being handled.
-	 * @return A ResponseEntity with a BaseResponse object representing an internal server error.
-	 */
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<BaseResponse<Void>> handleGeneralException(Exception exception) {
-		log.error("Uncaught Exception : {}", exception.getMessage());
-		StringBuilder stackTrage = new StringBuilder();
-		for (StackTraceElement elem : exception.getStackTrace()) {
-			stackTrage.append(elem.toString()).append("\n");
-		}
-		log.error("{}", stackTrage);
+    /**
+     * Handles general exceptions and returns a ResponseEntity with a BaseResponse object.
+     *
+     * @param exception The exception that is being handled.
+     * @return A ResponseEntity with a BaseResponse object representing an internal server error.
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<BaseResponse<Void>> handleGeneralException(Exception exception) {
+        log.error("Uncaught Exception : {}", exception.getMessage());
+        StringBuilder stackTrage = new StringBuilder();
+        for (StackTraceElement elem : exception.getStackTrace()) {
+            stackTrage.append(elem.toString()).append("\n");
+        }
+        log.error("{}", stackTrage);
 
-		ExceptionInfo exceptionInfo = ExceptionInfo.INTERNAL_ERROR;
-		return ResponseEntity.status(exceptionInfo.getStatus())
-			.body(
-				BaseResponse.<Void>builder()
-					.code(exceptionInfo.getCode())
-					.message(exceptionInfo.getMessage())
-					.build()
-			);
-	}
+        ExceptionInfo exceptionInfo = ExceptionInfo.INTERNAL_ERROR;
+        return ResponseEntity.status(exceptionInfo.getStatus())
+            .body(
+                BaseResponse.<Void>builder()
+                    .code(exceptionInfo.getCode())
+                    .message(exceptionInfo.getMessage())
+                    .build()
+            );
+    }
 }

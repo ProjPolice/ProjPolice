@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -40,17 +41,22 @@ import lombok.Data;
 @Data
 @MappedSuperclass
 abstract public class BaseEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id = null;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id = null;
 
-	@CreationTimestamp
-	@ColumnDefault("CURRENT_TIMESTAMP")
-	@Column(updatable = false, nullable = false)
-	private LocalDateTime createdAt;
+    @CreationTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdAt;
 
-	@UpdateTimestamp
-	@ColumnDefault("CURRENT_TIMESTAMP")
-	@Column(nullable = false)
-	private LocalDateTime updatedAt;
+    @UpdateTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    @NotNull
+    @ColumnDefault("false")
+    @Column
+    private boolean deleted = Boolean.FALSE;
 }

@@ -7,7 +7,7 @@ import com.projpolice.global.common.error.info.ExceptionInfo;
  * It is used to indicate that a resource or object is not found in the system.
  */
 public class NotFoundException extends BaseException {
-	public NotFoundException(ExceptionInfo exceptionInfo) {
-		super(exceptionInfo.getStatus(), exceptionInfo.getCode(), exceptionInfo.getMessage());
-	}
+    public NotFoundException(ExceptionInfo exceptionInfo) {
+        super(exceptionInfo.getStatus(), exceptionInfo.getCode(), exceptionInfo.getMessage());
+    }
 }
