@@ -10,14 +10,21 @@ import com.projpolice.domain.project.domain.Project;
 import com.projpolice.domain.project.dto.ProjectDetailData;
 import com.projpolice.domain.project.repository.ProjectRepository;
 import com.projpolice.domain.project.request.ProjectInsertRequest;
+import com.projpolice.domain.project.request.ProjectModifyRequest;
+import com.projpolice.domain.user.domain.User;
+import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.error.exception.BadRequestException;
+import com.projpolice.global.common.error.exception.UnAuthorizedException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequestMapping
+@RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
 
-    ProjectRepository projectRepository;
+    private final ProjectRepository projectRepository;
 
     /**
      * Retrieves the detailed information of a project based on its id.
@@ -31,6 +38,12 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findById(id).orElseThrow(
             () -> new BadRequestException(ExceptionInfo.INVALID_PROJECT)
         );
+
+        /*
+        TODO: \
+         check whether the current user is owner or member of project \
+          or the project is shared
+         */
         return ProjectDetailData.from(project);
     }
 
@@ -48,14 +61,59 @@ public class ProjectServiceImpl implements ProjectService {
             throw new BadRequestException(INVALID_PROJECT_INSERTION_PARAM);
         }
 
+        // TODO: insert user when user context holder is ready
+        User currentUser = null;
+
         Project project = Project.builder()
             .name(request.getName())
             .description(request.getDescription())
             .startDate(request.getStartDate())
             .endDate(request.getEndDate())
-            // TODO: insert user when user context holder is ready
-            .user(null)
+            .user(currentUser)
             .build();
+
+        return ProjectDetailData.from(project);
+    }
+
+    @Override
+    public BaseIdItem deleteProject(long id) {
+        Project project = projectRepository.findById(id).orElseThrow(
+            () -> new BadRequestException(ExceptionInfo.INVALID_PROJECT)
+        );
+
+        // TODO: insert user when user context holder is ready
+        User currentUser = null;
+
+        if (currentUser.getId() != project.getUser().getId()) {
+            throw new UnAuthorizedException(UNAUTHORIZED);
+        }
+
+        BaseIdItem baseIdItem = new BaseIdItem(project.getId());
+        projectRepository.delete(project);
+        return baseIdItem;
+    }
+
+    @Override
+    public ProjectDetailData modifyProject(long id, ProjectModifyRequest request) {
+        Project project = projectRepository.findById(id).orElseThrow(
+            () -> new BadRequestException(ExceptionInfo.INVALID_PROJECT)
+        );
+
+        if (request.getName() != null) {
+            project.setName(request.getName());
+        }
+
+        if (request.getDescription() != null) {
+            project.setDescription(request.getDescription());
+        }
+
+        if (request.getStartDate() != null) {
+            project.setStartDate(request.getStartDate());
+        }
+
+        if (request.getEndDate() != null) {
+            project.setEndDate(request.getEndDate());
+        }
 
         return ProjectDetailData.from(project);
     }
