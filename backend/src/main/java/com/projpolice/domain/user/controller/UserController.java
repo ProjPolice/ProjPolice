@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.projpolice.domain.user.request.UserLoginRequest;
 import com.projpolice.domain.user.response.UserLoginResponse;
 import com.projpolice.global.common.base.BaseResponse;
-import com.projpolice.global.common.base.ResponseCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,20 +21,21 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/users")
 public class UserController {
 
-    @PostMapping("/login")
-    public ResponseEntity<? extends BaseResponse<UserLoginResponse>> login(@RequestBody UserLoginRequest request){
-        // TODO: add Business logic
-        return ResponseEntity.ok()
-            .body(BaseResponse.<UserLoginResponse>builder()
-                .code(ResponseCode.OK)
-                .message("User login success")
-                .body(
-                    UserLoginResponse.builder()
-                        .accessToken("accessToken")
-                        .refreshToken("refreshToken")
-                        .build()
-                )
-                .build()
-            );
-    }
+	@PostMapping("/login")
+	public ResponseEntity<? extends BaseResponse<UserLoginResponse>> login(@RequestBody UserLoginRequest request) {
+		// TODO: add Business logic
+
+		return ResponseEntity.ok()
+			.body(BaseResponse.<UserLoginResponse>builder()
+				.code(200)
+				.message("User login success")
+				.body(
+					UserLoginResponse.builder()
+						.accessToken("accessToken")
+						.refreshToken("refreshToken")
+						.build()
+				)
+				.build()
+			);
+	}
 }
