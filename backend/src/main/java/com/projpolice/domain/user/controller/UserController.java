@@ -21,21 +21,21 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/users")
 public class UserController {
 
-	@PostMapping("/login")
-	public ResponseEntity<? extends BaseResponse<UserLoginResponse>> login(@RequestBody UserLoginRequest request) {
-		// TODO: add Business logic
+    @PostMapping("/login")
+    public ResponseEntity<? extends BaseResponse<UserLoginResponse>> login(@RequestBody UserLoginRequest request) {
+        // TODO: add Business logic
 
-		return ResponseEntity.ok()
-			.body(BaseResponse.<UserLoginResponse>builder()
-				.code(200)
-				.message("User login success")
-				.body(
-					UserLoginResponse.builder()
-						.accessToken("accessToken")
-						.refreshToken("refreshToken")
-						.build()
-				)
-				.build()
-			);
-	}
+        return ResponseEntity.ok()
+            .body(BaseResponse.<UserLoginResponse>builder()
+                .code(200)
+                .message("User login success")
+                .body(
+                    UserLoginResponse.builder()
+                        .accessToken("accessToken")
+                        .refreshToken("refreshToken")
+                        .build()
+                )
+                .build()
+            );
+    }
 }

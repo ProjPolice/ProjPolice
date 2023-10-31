@@ -7,7 +7,7 @@ import com.projpolice.global.common.error.info.ExceptionInfo;
  * This exception is a subclass of the BaseException class.
  */
 public class UnAuthorizedException extends BaseException {
-	public UnAuthorizedException(ExceptionInfo exceptionInfo) {
-		super(exceptionInfo.getStatus(), exceptionInfo.getCode(), exceptionInfo.getMessage());
-	}
+    public UnAuthorizedException(ExceptionInfo exceptionInfo) {
+        super(exceptionInfo.getStatus(), exceptionInfo.getCode(), exceptionInfo.getMessage());
+    }
 }

@@ -7,19 +7,19 @@ import com.projpolice.global.common.meta.domain.TaskStatus;
 import jakarta.persistence.AttributeConverter;
 
 public class TaskStatusConverter implements AttributeConverter<TaskStatus, String> {
-	@Override
-	public String convertToDatabaseColumn(TaskStatus attribute) {
-		return attribute.name();
-	}
+    @Override
+    public String convertToDatabaseColumn(TaskStatus attribute) {
+        return attribute.name();
+    }
 
-	@Override
-	public TaskStatus convertToEntityAttribute(String dbData) {
-		TaskStatus taskStatus = null;
-		try {
-			taskStatus = TaskStatus.valueOf(dbData.toUpperCase());
-		} catch (IllegalArgumentException e) {
-			throw new MetaException(ExceptionInfo.INVALID_METADATA);
-		}
-		return taskStatus;
-	}
+    @Override
+    public TaskStatus convertToEntityAttribute(String dbData) {
+        TaskStatus taskStatus = null;
+        try {
+            taskStatus = TaskStatus.valueOf(dbData.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new MetaException(ExceptionInfo.INVALID_METADATA);
+        }
+        return taskStatus;
+    }
 }

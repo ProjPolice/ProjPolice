@@ -40,17 +40,17 @@ import lombok.Data;
 @Data
 @MappedSuperclass
 abstract public class BaseEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id = null;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id = null;
 
-	@CreationTimestamp
-	@ColumnDefault("CURRENT_TIMESTAMP")
-	@Column(updatable = false, nullable = false)
-	private LocalDateTime createdAt;
+    @CreationTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdAt;
 
-	@UpdateTimestamp
-	@ColumnDefault("CURRENT_TIMESTAMP")
-	@Column(nullable = false)
-	private LocalDateTime updatedAt;
+    @UpdateTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 }

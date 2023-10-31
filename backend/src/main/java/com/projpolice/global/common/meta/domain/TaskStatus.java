@@ -9,14 +9,14 @@ import lombok.Getter;
  */
 @Getter
 public enum TaskStatus {
-	TODO(0),
-	PROCEEDING(1),
-	DONE(2);
+    TODO(0),
+    PROCEEDING(1),
+    DONE(2);
 
-	@JsonValue
-	private final int code;
+    @JsonValue
+    private final int code;
 
-	TaskStatus(int code) {
-		this.code = code;
-	}
+    TaskStatus(int code) {
+        this.code = code;
+    }
 }

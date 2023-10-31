@@ -32,28 +32,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Task extends BaseEntity {
-	@NotNull
-	@Size(max = 25)
-	private String name;
+    @NotNull
+    @Size(max = 25)
+    private String name;
 
-	@Size(max = 255)
-	private String description;
+    @Size(max = 255)
+    private String description;
 
-	@Column
-	private LocalDate startDate;
+    @Column
+    private LocalDate startDate;
 
-	@Column
-	private LocalDate endDate;
+    @Column
+    private LocalDate endDate;
 
-	@NotNull
-	@Convert(converter = TaskStatusConverter.class)
-	private TaskStatus status;
+    @NotNull
+    @Convert(converter = TaskStatusConverter.class)
+    private TaskStatus status;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_task_to_user_user_id"))
-	private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_task_to_user_user_id"))
+    private User user;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "epic_id", foreignKey = @ForeignKey(name = "fk_task_to_epic_epic_id"))
-	private Epic epic;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "epic_id", foreignKey = @ForeignKey(name = "fk_task_to_epic_epic_id"))
+    private Epic epic;
 }
