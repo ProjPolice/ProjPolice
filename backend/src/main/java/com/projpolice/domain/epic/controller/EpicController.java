@@ -2,6 +2,8 @@ package com.projpolice.domain.epic.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +26,7 @@ public class EpicController {
      * 할일 생성하는 요청 처리
      *
      * @param epicCreateRequest
-     * @return ResponseEntity<BaseResponse < EpicDetailData>>
+     * @return 저장한 할일의 상세 내용
      */
     @PostMapping()
     public ResponseEntity<BaseResponse<EpicDetailData>> createEpic(@RequestBody EpicCreateRequest epicCreateRequest) {
@@ -32,8 +34,25 @@ public class EpicController {
         return ResponseEntity.ok()
             .body(BaseResponse.<EpicDetailData>builder()
                 .code(HttpStatus.OK.value())
-                .message("할일 생성 완료")
+                .message("할일 생성 성공")
                 .data(epicService.createEpic(epicCreateRequest))
+                .build());
+    }
+
+    /**
+     * 해당 할일 상세 조회 요청 처리
+     *
+     * @param epiceId
+     * @return 조회한 할일의 상세 내용
+     */
+    @GetMapping("/{epiceId}")
+    public ResponseEntity<BaseResponse<EpicDetailData>> getEpicDetail(@PathVariable("epiceId") Long epiceId) {
+
+        return ResponseEntity.ok()
+            .body(BaseResponse.<EpicDetailData>builder()
+                .code(HttpStatus.OK.value())
+                .message("할일 상세 조회 성공")
+                .data(epicService.getEpic(epiceId))
                 .build());
     }
 }
