@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/projpolice-api/**").permitAll()
                 .requestMatchers("/v3/**").permitAll()
+                .requestMatchers("/**").permitAll() // todo: 테스트 후 삭제 필요
             )
             .headers(headers ->
                 headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
@@ -40,6 +41,5 @@ public class SecurityConfig {
             // .addFilterBefore() // exception Handler
             .getOrBuild();
     }
-
 
 }
