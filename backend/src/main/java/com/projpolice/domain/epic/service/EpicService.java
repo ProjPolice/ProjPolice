@@ -5,4 +5,6 @@ import com.projpolice.domain.epic.request.EpicCreateRequest;
 
 public interface EpicService {
     EpicDetailData createEpic(EpicCreateRequest epicCreateRequest);
+
+    EpicDetailData getEpic(Long id);
 }

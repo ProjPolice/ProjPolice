@@ -10,7 +10,9 @@ public enum ExceptionInfo {
     // Meta
     INVALID_METADATA(HttpStatus.BAD_REQUEST, 1900, "유효하지 않은 메타데이터 입니다."),
     // Project
-    INVALID_PROJECT(HttpStatus.BAD_REQUEST, 1901, "존재하지 않는 프로젝트입니다.");
+    INVALID_PROJECT(HttpStatus.BAD_REQUEST, 1901, "존재하지 않는 프로젝트입니다."),
+    // Epic
+    INVALID_EPIC(HttpStatus.BAD_REQUEST, 1800, "존재하지 않는 할 일입니다.");
 
     private final HttpStatus status;
     private final Integer code;
