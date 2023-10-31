@@ -29,7 +29,7 @@ public class UserController {
             .body(BaseResponse.<UserLoginResponse>builder()
                 .code(200)
                 .message("User login success")
-                .body(
+                .data(
                     UserLoginResponse.builder()
                         .accessToken("accessToken")
                         .refreshToken("refreshToken")
