@@ -3,10 +3,10 @@ package com.projpolice.domain.project.request;
 import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProjectModifyRequest {
