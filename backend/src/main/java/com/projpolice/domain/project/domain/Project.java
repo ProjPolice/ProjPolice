@@ -2,6 +2,9 @@ package com.projpolice.domain.project.domain;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import com.projpolice.global.common.base.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -52,6 +55,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE project SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class Project extends BaseEntity {
 
     @Size(max = 25)

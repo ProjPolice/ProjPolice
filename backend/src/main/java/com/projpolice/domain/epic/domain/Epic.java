@@ -2,6 +2,9 @@ package com.projpolice.domain.epic.domain;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import com.projpolice.domain.project.domain.Project;
 import com.projpolice.global.common.base.BaseEntity;
 
@@ -27,6 +30,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE epic SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class Epic extends BaseEntity {
     @NotNull
     @Size(max = 25)

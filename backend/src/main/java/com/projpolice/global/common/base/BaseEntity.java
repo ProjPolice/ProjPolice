@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -53,4 +54,9 @@ abstract public class BaseEntity {
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @NotNull
+    @ColumnDefault("false")
+    @Column
+    private boolean deleted = Boolean.FALSE;
 }

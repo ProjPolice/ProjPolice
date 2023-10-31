@@ -2,6 +2,9 @@ package com.projpolice.domain.task.domain;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import com.projpolice.domain.epic.domain.Epic;
 import com.projpolice.domain.user.domain.User;
 import com.projpolice.global.common.base.BaseEntity;
@@ -31,6 +34,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE task SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class Task extends BaseEntity {
     @NotNull
     @Size(max = 25)
