@@ -1,9 +1,9 @@
 package com.projpolice.domain.project.service;
 
-import static com.projpolice.domain.project.domain.Project.*;
 import static com.projpolice.global.common.error.info.ExceptionInfo.*;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projpolice.domain.project.domain.Project;
@@ -31,7 +31,7 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findById(id).orElseThrow(
             () -> new BadRequestException(ExceptionInfo.INVALID_PROJECT)
         );
-        return toDetailData(project);
+        return ProjectDetailData.from(project);
     }
 
     /**
@@ -42,6 +42,7 @@ public class ProjectServiceImpl implements ProjectService {
      * @throws BadRequestException if the project insertion parameters are invalid
      */
     @Override
+    @Transactional
     public ProjectDetailData insertProject(ProjectInsertRequest request) {
         if (request == null || request.getName() == null) {
             throw new BadRequestException(INVALID_PROJECT_INSERTION_PARAM);
@@ -56,6 +57,6 @@ public class ProjectServiceImpl implements ProjectService {
             .user(null)
             .build();
 
-        return toDetailData(project);
+        return ProjectDetailData.from(project);
     }
 }

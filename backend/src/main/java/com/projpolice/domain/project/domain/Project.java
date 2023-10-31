@@ -5,9 +5,7 @@ import java.time.LocalDate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import com.projpolice.domain.project.dto.ProjectDetailData;
 import com.projpolice.domain.user.domain.User;
-import com.projpolice.domain.user.dto.UserIdNameItem;
 import com.projpolice.global.common.base.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -89,18 +87,4 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_project_to_user_user_id"))
     private User user;
 
-    public static ProjectDetailData toDetailData(Project project) {
-        User owner = project.getUser();
-        return ProjectDetailData.builder()
-            .id(project.getId())
-            .name(project.getName())
-            .description(project.getDescription())
-            .startDate(project.getStartDate())
-            .endDate(project.getEndDate())
-            .owner(UserIdNameItem.builder()
-                .id(owner.getId())
-                .name(owner.getName())
-                .build())
-            .build();
-    }
 }
