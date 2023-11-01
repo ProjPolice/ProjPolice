@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.projpolice.domain.project.dto.ProjectDetailData;
 import com.projpolice.domain.project.request.ProjectInsertRequest;
 import com.projpolice.domain.project.request.ProjectModifyRequest;
+import com.projpolice.domain.project.request.ProjectUserAddRequest;
 import com.projpolice.domain.project.response.ProjectUserListResponse;
 import com.projpolice.domain.project.service.ProjectService;
 import com.projpolice.domain.user.dto.UserIdNameImgItem;
@@ -121,6 +122,28 @@ public class ProjectController {
                     .code(HttpStatus.OK.value())
                     .message("프로젝트 멤버 조회 성공")
                     .data(new ProjectUserListResponse(members))
+                    .build()
+            );
+    }
+
+    /**
+     * Adds a user to a project.
+     *
+     * @param id      The ID of the project.
+     * @param request The request object containing the details of the user to be added.
+     * @return ResponseEntity<BaseResponse < UserIdNameImgItem>> The response entity containing the added project user.
+     */
+    @PostMapping("/{project_id}/users")
+    public ResponseEntity<BaseResponse<UserIdNameImgItem>> addProjectUser(@PathVariable("project_id") long id,
+        @RequestBody
+        ProjectUserAddRequest request) {
+
+        return ResponseEntity.ok()
+            .body(
+                BaseResponse.<UserIdNameImgItem>builder()
+                    .code(HttpStatus.OK.value())
+                    .message("프로젝트에 멤버 추가 성공")
+                    .data(projectService.addProjectUser(id, request))
                     .build()
             );
     }
