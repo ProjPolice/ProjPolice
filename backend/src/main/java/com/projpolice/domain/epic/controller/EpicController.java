@@ -2,6 +2,7 @@ package com.projpolice.domain.epic.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import com.projpolice.domain.epic.dto.EpicDetailData;
 import com.projpolice.domain.epic.request.EpicCreateRequest;
 import com.projpolice.domain.epic.request.EpicUpdateRequest;
 import com.projpolice.domain.epic.service.EpicService;
+import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.base.BaseResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -48,7 +50,7 @@ public class EpicController {
      * @return 조회한 할일의 상세 내용
      */
     @GetMapping("/{epiceId}")
-    public ResponseEntity<BaseResponse<EpicDetailData>> getEpicDetail(@PathVariable("epiceId") Long epiceId) {
+    public ResponseEntity<BaseResponse<EpicDetailData>> getEpicDetail(@PathVariable("epiceId") long epiceId) {
 
         return ResponseEntity.ok()
             .body(BaseResponse.<EpicDetailData>builder()
@@ -66,7 +68,7 @@ public class EpicController {
      * @return 수정된 할일 상세 정보 조회
      */
     @PatchMapping("/{epiceId}")
-    public ResponseEntity<BaseResponse<EpicDetailData>> updateEpic(@PathVariable("epiceId") Long epiceId
+    public ResponseEntity<BaseResponse<EpicDetailData>> updateEpic(@PathVariable("epiceId") long epiceId
         , @RequestBody EpicUpdateRequest epicUpdateRequest) {
 
         return ResponseEntity.ok()
@@ -74,6 +76,22 @@ public class EpicController {
                 .code(HttpStatus.OK.value())
                 .message("할일 수정 성공")
                 .data(epicService.updateEpic(epiceId, epicUpdateRequest))
+                .build());
+    }
+
+    /**
+     * 해당 할일을 삭제하는 요청 처리
+     * @param epiceId
+     * @return 삭제한 할일의 id
+     */
+    @DeleteMapping("/{epiceId}")
+    public ResponseEntity<BaseResponse<BaseIdItem>> deleteEpic(@PathVariable("epiceId") long epiceId) {
+
+        return ResponseEntity.ok()
+            .body(BaseResponse.<BaseIdItem>builder()
+                .code(HttpStatus.OK.value())
+                .message("할일 삭제 성공")
+                .data(epicService.deleteEpic(epiceId))
                 .build());
     }
 }

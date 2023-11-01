@@ -50,15 +50,19 @@ public class Task extends BaseEntity {
     @Column
     private LocalDate endDate;
 
+    // todo: 값 잘 들어있는지 확인 필요. 아니면 Converter/Enum 수정 필요.
     @NotNull
     @Convert(converter = TaskStatusConverter.class)
     private TaskStatus status;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_task_to_user_user_id"))
     private User user;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
+    // @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "epic_id", foreignKey = @ForeignKey(name = "fk_task_to_epic_epic_id"))
     private Epic epic;
 }
