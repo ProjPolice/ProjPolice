@@ -147,4 +147,24 @@ public class ProjectController {
                     .build()
             );
     }
+
+    /**
+     * Deletes a user from a project.
+     *
+     * @param projectId The ID of the project.
+     * @param userId    The ID of the user to be deleted.
+     * @return ResponseEntity<BaseResponse < BaseIdItem>> The response entity indicating the success of the user deletion.
+     */
+    @PostMapping("/{project_id}/users/{user_id}")
+    public ResponseEntity<BaseResponse<BaseIdItem>> deleteProjectUser(@PathVariable("project_id") long projectId,
+        @PathVariable("user_id") long userId) {
+        return ResponseEntity.ok()
+            .body(
+                BaseResponse.<BaseIdItem>builder()
+                    .code(HttpStatus.OK.value())
+                    .message("프로젝트 멤버 삭제 성공")
+                    .data(projectService.deleteProjectUser(projectId, userId))
+                    .build()
+            );
+    }
 }
