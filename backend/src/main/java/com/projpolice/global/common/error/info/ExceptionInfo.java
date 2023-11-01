@@ -17,7 +17,10 @@ public enum ExceptionInfo {
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, 1902, "권한이 존재하지 않습니다."),
 
     // Epic
-    INVALID_EPIC(HttpStatus.BAD_REQUEST, 1800, "존재하지 않는 할 일입니다.")
+    INVALID_EPIC(HttpStatus.BAD_REQUEST, 1800, "존재하지 않는 할 일입니다."),
+
+    // User
+    INVALID_USER(HttpStatus.BAD_REQUEST, 3000, "존재하지 않는 사용자 입니다.")
     ,;
 
     private final HttpStatus status;

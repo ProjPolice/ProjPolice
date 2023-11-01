@@ -10,13 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projpolice.domain.project.domain.Project;
+import com.projpolice.domain.project.domain.UserProject;
 import com.projpolice.domain.project.dto.ProjectDetailData;
 import com.projpolice.domain.project.repository.ProjectRepository;
 import com.projpolice.domain.project.repository.UserProjectRepository;
 import com.projpolice.domain.project.request.ProjectInsertRequest;
 import com.projpolice.domain.project.request.ProjectModifyRequest;
+import com.projpolice.domain.project.request.ProjectUserAddRequest;
 import com.projpolice.domain.user.domain.User;
 import com.projpolice.domain.user.dto.UserIdNameImgItem;
+import com.projpolice.domain.user.repository.UserRepository;
 import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.error.exception.BadRequestException;
 import com.projpolice.global.common.error.exception.UnAuthorizedException;
@@ -32,6 +35,8 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
 
     private final UserProjectRepository userProjectRepository;
+
+    private final UserRepository userRepository;
 
     /**
      * Retrieves the detailed information of a project based on its id.
@@ -134,6 +139,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<UserIdNameImgItem> listProjectUser(long id) {
         List<User> users = userProjectRepository.findByProjectId(id);
+
+        // TODO: 권한 체크
+
         return users.stream()
             .map(user -> UserIdNameImgItem.builder()
                 .id(user.getId())
@@ -141,5 +149,37 @@ public class ProjectServiceImpl implements ProjectService {
                 .image(user.getImage())
                 .build()
             ).collect(Collectors.toList());
+    }
+
+    /**
+     * Adds a user to the specified project.
+     *
+     * @param projectId the ID of the project
+     * @param request the request object containing the email of the user to be added
+     * @return a {@link UserIdNameImgItem} object representing the user added to the project
+     * @throws BadRequestException if the user or project is invalid
+     */
+    @Override
+    public UserIdNameImgItem addProjectUser(long projectId, ProjectUserAddRequest request) {
+        User newUser = userRepository.findByEmail(request.getMemberEmail()).orElseThrow(
+            () -> new BadRequestException(INVALID_USER)
+        );
+        Project project = projectRepository.findById(projectId).orElseThrow(
+            () -> new BadRequestException(INVALID_PROJECT)
+        );
+
+        // TODO: 로그인한 유저가 프로젝트 주인인지 확인
+        // if(project.getUser().equals(loggedUser)){
+        //
+        // }
+
+        UserProject userProject = new UserProject(newUser, project);
+        userProjectRepository.save(userProject);
+
+        return UserIdNameImgItem.builder()
+            .id(newUser.getId())
+            .name(newUser.getName())
+            .image(newUser.getImage())
+            .build();
     }
 }

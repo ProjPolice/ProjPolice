@@ -5,6 +5,7 @@ import java.util.List;
 import com.projpolice.domain.project.dto.ProjectDetailData;
 import com.projpolice.domain.project.request.ProjectInsertRequest;
 import com.projpolice.domain.project.request.ProjectModifyRequest;
+import com.projpolice.domain.project.request.ProjectUserAddRequest;
 import com.projpolice.domain.user.dto.UserIdNameImgItem;
 import com.projpolice.global.common.base.BaseIdItem;
 
@@ -18,4 +19,6 @@ public interface ProjectService {
     ProjectDetailData modifyProject(long id, ProjectModifyRequest request);
 
     List<UserIdNameImgItem> listProjectUser(long id);
+
+    UserIdNameImgItem addProjectUser(long projectId, ProjectUserAddRequest request);
 }
