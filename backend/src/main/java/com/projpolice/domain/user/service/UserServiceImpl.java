@@ -47,15 +47,15 @@ public class UserServiceImpl implements UserService {
      * @return UserLoginResponse
      */
     public UserLoginResponse login(UserLoginRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+            .orElseThrow();
+
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
-                request.getEmail(),
+                user.getId(),
                 request.getPassword()
             )
         );
-
-        User user = userRepository.findByEmail(request.getEmail())
-            .orElseThrow();
 
         String jwtToken = jwtService.generateToken(user);
         return UserLoginResponse.builder()

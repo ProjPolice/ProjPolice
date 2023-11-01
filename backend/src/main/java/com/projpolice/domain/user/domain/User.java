@@ -3,6 +3,7 @@ package com.projpolice.domain.user.domain;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import org.checkerframework.common.aliasing.qual.Unique;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
@@ -57,6 +58,7 @@ public class User implements UserDetails {
 
     @NotNull
     @Size(max = 50)
+    @Unique
     private String email;
 
     @NotNull
@@ -76,7 +78,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return id.toString();
     }
 
     @Override
