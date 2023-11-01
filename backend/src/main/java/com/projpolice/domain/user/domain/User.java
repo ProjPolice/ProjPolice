@@ -1,10 +1,17 @@
 package com.projpolice.domain.user.domain;
 
+import java.time.LocalDateTime;
+import java.util.Collection;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import com.projpolice.global.common.base.BaseEntity;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,7 +34,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE `user` SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class User extends BaseEntity {
+public class User implements UserDetails {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @CreationTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    @NotNull
+    @ColumnDefault("false")
+    @Column
+    private boolean deleted = Boolean.FALSE;
 
     @NotNull
     @Size(max = 50)
@@ -36,6 +62,8 @@ public class User extends BaseEntity {
     @NotNull
     @Size(max = 25)
     private String name;
+
+    private String image;
 
     @NotNull
     @Size(max = 50)
@@ -48,7 +76,7 @@ public class User extends BaseEntity {
 
     @Override
     public String getUsername() {
-        return name;
+        return email;
     }
 
     @Override
