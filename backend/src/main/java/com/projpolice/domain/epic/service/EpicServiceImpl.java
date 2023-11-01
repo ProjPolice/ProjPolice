@@ -91,7 +91,7 @@ public class EpicServiceImpl implements EpicService {
     @Override
     @Transactional
     public BaseIdItem deleteEpic(Long id) {
-        // taskRepository.deleteAllByEpicId(id);
+        taskRepository.deleteAllByEpicId(id);
         epicRepository.deleteById(id);
         return BaseIdItem.from(id);
     }
