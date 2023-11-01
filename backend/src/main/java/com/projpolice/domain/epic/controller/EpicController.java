@@ -2,6 +2,7 @@ package com.projpolice.domain.epic.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import com.projpolice.domain.epic.dto.EpicDetailData;
 import com.projpolice.domain.epic.request.EpicCreateRequest;
 import com.projpolice.domain.epic.request.EpicUpdateRequest;
 import com.projpolice.domain.epic.service.EpicService;
+import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.base.BaseResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -74,6 +76,22 @@ public class EpicController {
                 .code(HttpStatus.OK.value())
                 .message("할일 수정 성공")
                 .data(epicService.updateEpic(epiceId, epicUpdateRequest))
+                .build());
+    }
+
+    /**
+     * 해당 할일을 삭제하는 요청 처리
+     * @param epiceId
+     * @return 삭제한 할일의 id
+     */
+    @DeleteMapping("/{epiceId}")
+    public ResponseEntity<BaseResponse<BaseIdItem>> deleteEpic(@PathVariable("epiceId") Long epiceId) {
+
+        return ResponseEntity.ok()
+            .body(BaseResponse.<BaseIdItem>builder()
+                .code(HttpStatus.OK.value())
+                .message("할일 삭제 성공")
+                .data(epicService.deleteEpic(epiceId))
                 .build());
     }
 }
