@@ -6,6 +6,9 @@ import static com.projpolice.global.common.error.info.ExceptionInfo.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.projpolice.domain.project.domain.Project;
 import com.projpolice.domain.project.domain.UserProject;
 import com.projpolice.domain.project.dto.ProjectDetailData;
+import com.projpolice.domain.project.dto.ProjectIdNameDescData;
 import com.projpolice.domain.project.repository.ProjectRepository;
 import com.projpolice.domain.project.repository.UserProjectRepository;
 import com.projpolice.domain.project.request.ProjectInsertRequest;
@@ -59,7 +63,7 @@ public class ProjectServiceImpl implements ProjectService {
         /*
         TODO: implement sharing
          */
-        List<User> users = userProjectRepository.findByProjectId(id);
+        List<User> users = userProjectRepository.findUserByProjectId(id);
         checkMembership(users, getLoggedUser());
 
         return ProjectDetailData.from(project);
@@ -228,6 +232,27 @@ public class ProjectServiceImpl implements ProjectService {
         userProjectRepository.delete(userProject);
 
         return removedUserId;
+    }
+
+    /**
+     * Retrieves a list of projects associated with the specified user.
+     *
+     * @param userId the ID of the user
+     * @param page the page number to retrieve
+     * @param numOfRows the number of projects per page
+     * @return a list of {@link ProjectIdNameDescData} objects representing the ID, name, and description of each project
+     */
+    @Override
+    public List<ProjectIdNameDescData> selectProjectOfUser(long userId, int page, int numOfRows) {
+        Pageable pageable = PageRequest.of(page, numOfRows);
+        Page<Project> projects = projectRepository.findByUserId(userId, pageable);
+        return projects.stream()
+            .map(project -> ProjectIdNameDescData.builder()
+                .id(project.getId())
+                .name(project.getName())
+                .description(project.getDescription())
+                .build()
+            ).collect(Collectors.toList());
     }
 
     /**
