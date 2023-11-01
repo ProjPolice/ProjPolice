@@ -14,7 +14,7 @@ export const Box = styled.div<{ backgroundColor: string }>`
   justify-content: center;
   align-items: center;
   background: linear-gradient(to right, ${(props) => props.backgroundColor} 10%, #FAFAFA 0%);
-  border-radius: 5%;
+  border-radius: 10px;
   box-sizing: border-box;
   width: 30%;
   height: 80%;
