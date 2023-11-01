@@ -3,6 +3,7 @@ package com.projpolice.domain.project.service;
 import java.util.List;
 
 import com.projpolice.domain.project.dto.ProjectDetailData;
+import com.projpolice.domain.project.dto.ProjectIdNameDescData;
 import com.projpolice.domain.project.request.ProjectInsertRequest;
 import com.projpolice.domain.project.request.ProjectModifyRequest;
 import com.projpolice.domain.project.request.ProjectUserAddRequest;
@@ -26,4 +27,6 @@ public interface ProjectService {
     UserIdNameImgItem addProjectUser(long projectId, ProjectUserAddRequest request);
 
     BaseIdItem deleteProjectUser(long projectId, long userId);
+
+    List<ProjectIdNameDescData> selectProjectOfUser(long userId, int page, int numOfPages);
 }
