@@ -1,6 +1,7 @@
 package com.projpolice.domain.project.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,5 +19,7 @@ public interface UserProjectRepository extends JpaRepository<UserProject, Long> 
             from UserProject
             where project.id =: projectId
         """)
-    List<User> findByProjectId(@Param("projectId") Long projectId);
+    List<User> findUserByProjectId(@Param("projectId") Long projectId);
+
+    Optional<UserProject> findByProjectIdAndUserId(long projectId, long userId);
 }

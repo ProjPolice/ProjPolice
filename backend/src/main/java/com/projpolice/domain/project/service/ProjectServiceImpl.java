@@ -159,7 +159,7 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public List<UserIdNameImgItem> listProjectUser(long id) {
-        List<User> users = userProjectRepository.findByProjectId(id);
+        List<User> users = userProjectRepository.findUserByProjectId(id);
 
         User loggedUser = getLoggedUser();
         checkMembership(users, loggedUser);
@@ -200,6 +200,34 @@ public class ProjectServiceImpl implements ProjectService {
             .name(newUser.getName())
             .image(newUser.getImage())
             .build();
+    }
+
+    /**
+     * Deletes a user from the specified project.
+     *
+     * @param projectId the ID of the project
+     * @param userId the ID of the user to be deleted
+     * @return a {@link BaseIdItem} object representing the ID of the user that was deleted
+     * @throws BadRequestException if the user project is invalid
+     * @throws UnAuthorizedException if the logged-in user is not the owner of the project
+     */
+    @Override
+    public BaseIdItem deleteProjectUser(long projectId, long userId) {
+        UserProject userProject = userProjectRepository.findByProjectIdAndUserId(projectId, userId).orElseThrow(
+            () -> new BadRequestException(INVALID_USER_PROJECT)
+        );
+
+        User owner = userProject.getProject().getUser();
+
+        // TODO: 로그인한 유저 확인 추가
+        // if (!owner.equals(loggedUser)) {
+        //     throw new UnAuthorizedException(UNAUTHORIZED);
+        // }
+
+        BaseIdItem removedUserId = new BaseIdItem(userProject.getUser().getId());
+        userProjectRepository.delete(userProject);
+
+        return removedUserId;
     }
 
     /**

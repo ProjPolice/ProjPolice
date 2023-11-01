@@ -24,4 +24,6 @@ public interface ProjectService {
     List<UserIdNameImgItem> listProjectUser(long id);
 
     UserIdNameImgItem addProjectUser(long projectId, ProjectUserAddRequest request);
+
+    BaseIdItem deleteProjectUser(long projectId, long userId);
 }
