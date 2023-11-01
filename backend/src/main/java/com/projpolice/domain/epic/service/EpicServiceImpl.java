@@ -32,6 +32,7 @@ public class EpicServiceImpl implements EpicService {
      * @return EpicDetailData
      */
     @Override
+    @Transactional
     public EpicDetailData createEpic(EpicCreateRequest epicCreateRequest) {
         // todo: 인증인가 추가 후 해당 프로젝트의 팀원인지 확인 필요
         Project project = projectRepository.findById(epicCreateRequest.getProjectId())
@@ -48,6 +49,7 @@ public class EpicServiceImpl implements EpicService {
      * @return EpicDetailData
      */
     @Override
+    @Transactional(readOnly = true)
     public EpicDetailData getEpic(Long id) {
         // todo: 인증인가 후 해당 epic의 프로젝트 멤버인지 확인 필요
         Epic epic = epicRepository.findById(id).orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC));

@@ -50,7 +50,7 @@ public class EpicController {
      * @return 조회한 할일의 상세 내용
      */
     @GetMapping("/{epiceId}")
-    public ResponseEntity<BaseResponse<EpicDetailData>> getEpicDetail(@PathVariable("epiceId") Long epiceId) {
+    public ResponseEntity<BaseResponse<EpicDetailData>> getEpicDetail(@PathVariable("epiceId") long epiceId) {
 
         return ResponseEntity.ok()
             .body(BaseResponse.<EpicDetailData>builder()
@@ -68,7 +68,7 @@ public class EpicController {
      * @return 수정된 할일 상세 정보 조회
      */
     @PatchMapping("/{epiceId}")
-    public ResponseEntity<BaseResponse<EpicDetailData>> updateEpic(@PathVariable("epiceId") Long epiceId
+    public ResponseEntity<BaseResponse<EpicDetailData>> updateEpic(@PathVariable("epiceId") long epiceId
         , @RequestBody EpicUpdateRequest epicUpdateRequest) {
 
         return ResponseEntity.ok()
@@ -85,7 +85,7 @@ public class EpicController {
      * @return 삭제한 할일의 id
      */
     @DeleteMapping("/{epiceId}")
-    public ResponseEntity<BaseResponse<BaseIdItem>> deleteEpic(@PathVariable("epiceId") Long epiceId) {
+    public ResponseEntity<BaseResponse<BaseIdItem>> deleteEpic(@PathVariable("epiceId") long epiceId) {
 
         return ResponseEntity.ok()
             .body(BaseResponse.<BaseIdItem>builder()
