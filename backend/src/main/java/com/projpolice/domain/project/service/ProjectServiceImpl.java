@@ -2,8 +2,15 @@ package com.projpolice.domain.project.service;
 
 import static com.projpolice.global.common.error.info.ExceptionInfo.*;
 
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,7 +76,8 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         // TODO: insert user when user context holder is ready
-        User currentUser = null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
 
         Project project = Project.builder()
             .name(request.getName())
@@ -78,6 +86,8 @@ public class ProjectServiceImpl implements ProjectService {
             .endDate(request.getEndDate())
             .user(currentUser)
             .build();
+
+        projectRepository.save(project);
 
         return ProjectDetailData.from(project);
     }

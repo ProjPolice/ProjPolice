@@ -1,11 +1,22 @@
 package com.projpolice.domain.user.domain;
 
+import java.time.LocalDateTime;
+import java.util.Collection;
+
+import org.checkerframework.common.aliasing.qual.Unique;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import com.projpolice.global.common.base.BaseEntity;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -24,18 +35,72 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE `user` SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class User extends BaseEntity {
+public class User implements UserDetails {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @CreationTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 
     @NotNull
+    @ColumnDefault("false")
+    @Column
+    private boolean deleted = Boolean.FALSE;
+
+    @NotNull
+    @Size(max = 50)
+    @Unique
     private String email;
 
-    @Size(max = 25)
     @NotNull
+    @Size(max = 25)
     private String name;
 
     private String image;
 
-    // TODO: implement
+
+    @NotNull
+    @Size(max = 50)
+    private String password;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return id.toString();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
     // TODO: make hashcode and equals
 }
