@@ -67,6 +67,7 @@ public class User implements UserDetails {
 
     private String image;
 
+
     @NotNull
     @Size(max = 50)
     private String password;
@@ -100,4 +101,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    // TODO: make hashcode and equals
 }
