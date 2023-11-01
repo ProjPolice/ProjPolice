@@ -33,5 +33,9 @@ public class User extends BaseEntity {
     @NotNull
     private String name;
 
+    private String image;
+
     // TODO: implement
+
+    // TODO: make hashcode and equals
 }

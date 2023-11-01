@@ -1,5 +1,7 @@
 package com.projpolice.domain.project.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.projpolice.domain.project.dto.ProjectDetailData;
 import com.projpolice.domain.project.request.ProjectInsertRequest;
 import com.projpolice.domain.project.request.ProjectModifyRequest;
+import com.projpolice.domain.project.response.ProjectUserListResponse;
 import com.projpolice.domain.project.service.ProjectService;
+import com.projpolice.domain.user.dto.UserIdNameImgItem;
 import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.base.BaseResponse;
 
@@ -36,7 +40,6 @@ public class ProjectController {
     @GetMapping("/{projectId}")
     public ResponseEntity<BaseResponse<ProjectDetailData>> selectProject(@PathVariable("projectId") long projectId) {
         ProjectDetailData projectDetailData = projectService.selectProjectDetail(projectId);
-
         return ResponseEntity.status(HttpStatus.OK)
             .body(
                 BaseResponse.<ProjectDetailData>builder()
@@ -79,6 +82,13 @@ public class ProjectController {
             );
     }
 
+    /**
+     * Modifies an existing project.
+     *
+     * @param id      The unique identifier of the project to be modified.
+     * @param request The request object containing the updated project details.
+     * @return ResponseEntity<BaseResponse < ProjectDetailData>> The response entity containing the modified project details.
+     */
     @PatchMapping("/{project_id}")
     public ResponseEntity<BaseResponse<ProjectDetailData>> modifyProject(@PathVariable("project_id") long id,
         @RequestBody
@@ -91,6 +101,26 @@ public class ProjectController {
                     .code(HttpStatus.OK.value())
                     .message("프로젝트 수정 성공")
                     .data(projectDetailData)
+                    .build()
+            );
+    }
+
+    /**
+     * Lists the users of a project.
+     *
+     * @param id The ID of the project.
+     * @return ResponseEntity<BaseResponse < ProjectUserListResponse>> The response entity containing the list of project users.
+     */
+    @GetMapping("/{project_id}/users")
+    public ResponseEntity<BaseResponse<ProjectUserListResponse>> listProjectUser(@PathVariable("project_id") long id) {
+        List<UserIdNameImgItem> members = projectService.listProjectUser(id);
+
+        return ResponseEntity.ok()
+            .body(
+                BaseResponse.<ProjectUserListResponse>builder()
+                    .code(HttpStatus.OK.value())
+                    .message("프로젝트 멤버 조회 성공")
+                    .data(new ProjectUserListResponse(members))
                     .build()
             );
     }
