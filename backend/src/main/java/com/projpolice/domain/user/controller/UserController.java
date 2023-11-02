@@ -42,10 +42,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK)
             .body(
                 BaseResponse.<UserJoinResponse>builder()
-                .code(HttpStatus.OK.value())
-                .message("회원가입 성공")
-                .data(userService.join(request))
-                .build()
+                    .code(HttpStatus.OK.value())
+                    .message("회원가입 성공")
+                    .data(userService.join(request))
+                    .build()
             );
     }
 
