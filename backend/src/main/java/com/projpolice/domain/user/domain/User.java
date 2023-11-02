@@ -67,9 +67,7 @@ public class User implements UserDetails {
 
     private String image;
 
-
     @NotNull
-    @Size(max = 50)
     private String password;
 
     @Override

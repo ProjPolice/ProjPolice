@@ -2,7 +2,6 @@ package com.projpolice.global.common.error.exception;
 
 import javax.ws.rs.core.MediaType;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -33,12 +32,13 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         FilterChain filterChain) {
         try {
             filterChain.doFilter(request, response);
-        } catch (BadRequestException exception) {
-            responseError(request, response, HttpStatus.BAD_REQUEST.value(), exception);
-        } catch (NotFoundException exception) {
-            responseError(request, response, HttpStatus.NOT_FOUND.value(), exception);
-        } catch (UnAuthorizedException exception) {
-            responseError(request, response, HttpStatus.UNAUTHORIZED.value(), exception);
+        }
+        // catch (HttpMessageNotReadableException exception) {
+        //     responseError(request, response, HttpStatus.BAD_REQUEST.value(),
+        //         new BaseException(HttpStatus.BAD_REQUEST, 0, "!!!!"));
+        // }
+        catch (BaseException exception) {
+            responseError(request, response, exception.getStatus().value(), exception);
         } catch (Exception exception) {
             responseError(request, response, 500,
                 BaseException.builder()
