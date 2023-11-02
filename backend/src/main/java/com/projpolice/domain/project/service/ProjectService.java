@@ -7,6 +7,7 @@ import com.projpolice.domain.project.request.ProjectInsertRequest;
 import com.projpolice.domain.project.request.ProjectModifyRequest;
 import com.projpolice.domain.project.request.ProjectUserAddRequest;
 import com.projpolice.domain.user.dto.UserIdNameImgItem;
+import com.projpolice.domain.user.response.UserProjectPagingResponse;
 import com.projpolice.global.common.base.BaseIdItem;
 
 /**
@@ -24,4 +25,8 @@ public interface ProjectService {
     List<UserIdNameImgItem> listProjectUser(long id);
 
     UserIdNameImgItem addProjectUser(long projectId, ProjectUserAddRequest request);
+
+    BaseIdItem deleteProjectUser(long projectId, long userId);
+
+    UserProjectPagingResponse selectProjectOfUser(long userId, int page, int numOfPages);
 }
