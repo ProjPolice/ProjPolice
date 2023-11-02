@@ -10,7 +10,9 @@ function Main() {
     <Page>
       <NavigationBar/>
       <Header />
+        <div style={{ margin: '2%', alignSelf : 'start' }}>최근프로젝트</div>
       <ProjectList />
+        <div style={{ margin: '2%', alignSelf : 'start' }}>임박한 프로젝트</div>
       <TaskList />
     </Page>
   );

@@ -31,7 +31,7 @@ export const ProjectBox = styled.div<{ backgroundColor : string; }>`
   border-radius: 10px;
   box-sizing: border-box;
   width: 30%;
-  height: 80%;
+  height: 100%;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
@@ -66,4 +66,27 @@ export const NavBar = styled.div`
 
 export const Segment = styled.div`
   flex: 1;
+`;
+
+
+export const TastkContainer = styled.div<{ height: string, background: string; }>`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 95vw;
+  background-color: ${(props) => props.background};
+  height: ${(props) => props.height};
+`;
+
+export const TaskBox = styled.div<{ backgroundColor : string; }>`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to bottom, ${(props) => props.backgroundColor} 10%, #FAFAFA 0%);
+  border-radius: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 `;
