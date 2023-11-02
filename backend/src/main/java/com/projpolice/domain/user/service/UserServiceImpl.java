@@ -1,5 +1,7 @@
 package com.projpolice.domain.user.service;
 
+import static com.projpolice.domain.user.service.JwtService.*;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,6 +11,8 @@ import com.projpolice.domain.user.domain.User;
 import com.projpolice.domain.user.repository.UserRepository;
 import com.projpolice.domain.user.request.UserJoinRequest;
 import com.projpolice.domain.user.request.UserLoginRequest;
+import com.projpolice.domain.user.request.UserUpdateRequest;
+import com.projpolice.domain.user.response.UserInfoResponse;
 import com.projpolice.domain.user.response.UserJoinResponse;
 import com.projpolice.domain.user.response.UserLoginResponse;
 
@@ -36,10 +40,56 @@ public class UserServiceImpl implements UserService {
             .build();
 
         userRepository.save(user);
+
         return UserJoinResponse.builder()
             .id(user.getId())
             .build();
     }
+
+    /**
+     * 인증된 사용자의 정보를 가져온다.
+     *
+     * @return UserInfoResponse
+     */
+    public UserInfoResponse getUserInfo() {
+        User user = getLoggedUser();
+
+        return UserInfoResponse.builder()
+            .id(user.getId())
+            .name(user.getName())
+            .email(user.getEmail())
+            .image(user.getImage())
+            .build();
+    }
+
+    /**
+     * 인증된 사용자의 정보를 가져온다.
+     *
+     * @return UserInfoResponse
+     */
+    public UserInfoResponse updateUserInfo(UserUpdateRequest request) {
+        User user = getLoggedUser();
+
+        if (request.getName() != null) {
+            user.setName(request.getName());
+        }
+        if (request.getEmail() != null) {
+            user.setEmail(request.getEmail());
+        }
+        if (request.getImage() != null) {
+            user.setImage(request.getImage());
+        }
+
+        userRepository.save(user);
+
+        return UserInfoResponse.builder()
+            .id(user.getId())
+            .name(user.getName())
+            .email(user.getEmail())
+            .image(user.getImage())
+            .build();
+    }
+
 
     /**
      * 사용자 정보의 유효성을 점검하고 인증을 한다.
