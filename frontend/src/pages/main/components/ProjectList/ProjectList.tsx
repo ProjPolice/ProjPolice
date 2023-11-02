@@ -1,4 +1,4 @@
-import ProjectItem from './ProjectList/ProjectItem';
+import ProjectItem from './ProjectItem';
 
 import { ProjectContainer } from '@main/MainStyle';
 

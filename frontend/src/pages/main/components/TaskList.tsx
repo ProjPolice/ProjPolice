@@ -1,6 +1,6 @@
 import { TastkContainer } from '@main/MainStyle';
 
-import TaskItem from '@main/TaskItem/TaskItem';
+import TaskItem from '@main/components/TaskList/TaskItem';
 
 
 
@@ -11,7 +11,6 @@ function TaskList() {
       <TaskItem projectname={'프로젝트 2'} membercount={2} backgroundColor="#3056D3"/>
       <TaskItem projectname={'프로젝트 3'} membercount={3} backgroundColor="#000000"/>
     </TastkContainer>
-      
   </div>;
 }
 
