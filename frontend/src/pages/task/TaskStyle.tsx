@@ -34,10 +34,13 @@ export const BoardSection = styled.div<{ backgroundColor : string; }>`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background: ${(props) => props.backgroundColor}
+  background: ${(props) => props.backgroundColor};
   border-radius: 10px;
   box-sizing: border-box;
   width: 100%;
-  height: 100%;
+  height: 85%;
+  margin-left: 0.5%;
+  margin-right: 0.5%;
+  margin-top: 5%;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 `;
