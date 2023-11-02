@@ -31,8 +31,8 @@ export const Task = styled.div<{ backgroundColor : string; }>`
 
 export const BoardSection = styled.div<{ backgroundColor : string; }>`
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: start;
   align-items: center;
   background: ${(props) => props.backgroundColor};
   border-radius: 10px;
@@ -42,5 +42,17 @@ export const BoardSection = styled.div<{ backgroundColor : string; }>`
   margin-left: 0.5%;
   margin-right: 0.5%;
   margin-top: 5%;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+`;
+
+export const BoardBox = styled.div<{ backgroundColor : string; }>`
+  display: flex;
+  flex-direction: row;
+  background: linear-gradient(to right, ${(props) => props.backgroundColor} 10%, #FAFAFA 0%);
+  border-radius: 10px;
+  box-sizing: border-box;
+  width: 95%;
+  height: 20%;
+  margin-Top: 3%;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 `;

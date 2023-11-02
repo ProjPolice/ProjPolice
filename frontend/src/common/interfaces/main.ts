@@ -10,3 +10,7 @@ export interface ProjectItemListProps {
   projectname: string;
   membercount: number;
 }
+
+export interface BoardItemProps {
+  name?: string;
+}

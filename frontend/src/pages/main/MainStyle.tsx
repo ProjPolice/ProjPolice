@@ -8,7 +8,7 @@ export const Page = styled.div`
   align-items: center;
 `;
 
-export const Box = styled.div<{ backgroundColor : string; }>`
+export const Box = styled.div<{ backgroundColor? : string; }>`
   display: flex;
   flex-direction: row;
   justify-content: center;
