@@ -37,7 +37,7 @@ public class UserController {
      * @return 회원의 아이디
      */
     @PostMapping("/join")
-    public ResponseEntity<? extends BaseResponse<UserJoinResponse>> join(@RequestBody UserJoinRequest request){
+    public ResponseEntity<? extends BaseResponse<UserJoinResponse>> join(@RequestBody UserJoinRequest request) {
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(
@@ -73,7 +73,8 @@ public class UserController {
      * @return 수정된 사용자의 정보
      */
     @PatchMapping()
-    public ResponseEntity<? extends BaseResponse<UserInfoResponse>> updateUserInfo(@RequestBody UserUpdateRequest request) {
+    public ResponseEntity<? extends BaseResponse<UserInfoResponse>> updateUserInfo(
+        @RequestBody UserUpdateRequest request) {
 
         return ResponseEntity.ok()
             .body(BaseResponse.<UserInfoResponse>builder()
