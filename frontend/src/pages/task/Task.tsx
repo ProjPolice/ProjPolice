@@ -1,5 +1,16 @@
+import { Page } from './TaskStyle';
+import NavigationBar from '../../common/widgets/NavigationBar';
+import Board from './Board/Board';
+
+
 function Task() {
-  return <div>내가 해야하는 작업 페이지</div>;
+  return (
+    <Page>
+      <NavigationBar/>
+        <div style={{ margin: '1% 0% 1% 10%', alignSelf : 'start' }}>내 작업 관리</div>
+      <Board/>
+    </Page>
+  );
 }
 
 export default Task;

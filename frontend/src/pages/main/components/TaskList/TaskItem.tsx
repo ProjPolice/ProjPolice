@@ -1,11 +1,11 @@
 import { ProjectItemListProps } from '@interfaces/main';
 
-import { ProjectBox } from '@main/MainStyle';
+import { TaskBox } from '@main/MainStyle';
 
 
-function ProjectItem({ backgroundColor, projectname, membercount }: ProjectItemListProps) {
+function TaskItem({ backgroundColor, projectname, membercount }: ProjectItemListProps) {
   return (
-    <ProjectBox backgroundColor={backgroundColor}>
+    <TaskBox backgroundColor={backgroundColor}>
       <div style={{ flex: 1 }}>
       </div>
       <div style={{ flex: 1, alignSelf : 'start' }}>
@@ -17,9 +17,9 @@ function ProjectItem({ backgroundColor, projectname, membercount }: ProjectItemL
       <div style={{ flex: 3 }}>
         <p>{projectname}</p>
       </div>
-    </ProjectBox>
+    </TaskBox>
   );
 }
 
 
-export default ProjectItem;
+export default TaskItem;

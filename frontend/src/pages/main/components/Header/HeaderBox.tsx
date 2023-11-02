@@ -4,7 +4,7 @@ import { Box } from '@main/MainStyle';
 
 function HeaderBox({ count, name, icon, backgroundColor }: HeaderBoxProps) {
   return (
-    <Box backgroundColor={backgroundColor} direction='row'>
+    <Box backgroundColor={backgroundColor}>
       <div style={{ flex: 1 }}>
         <img src={icon} alt="Icon" />
       </div>
