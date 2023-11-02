@@ -14,7 +14,8 @@ import com.projpolice.domain.user.request.UserJoinRequest;
 import com.projpolice.domain.user.request.UserLoginRequest;
 import com.projpolice.domain.user.response.UserJoinResponse;
 import com.projpolice.domain.user.response.UserLoginResponse;
-import com.projpolice.domain.user.response.UserProjectPageResponse;
+import com.projpolice.domain.user.response.UserProjectPagingResponse;
+import com.projpolice.domain.user.service.JwtService;
 import com.projpolice.domain.user.service.UserService;
 import com.projpolice.global.common.base.BaseResponse;
 
@@ -34,7 +35,6 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity<? extends BaseResponse<UserJoinResponse>> join(@RequestBody UserJoinRequest request){
-
         return ResponseEntity.status(HttpStatus.OK)
             .body(
                 BaseResponse.<UserJoinResponse>builder()
@@ -66,20 +66,17 @@ public class UserController {
      * @return The ResponseEntity containing the paginated list of user projects.
      */
     @GetMapping("/projects")
-    public ResponseEntity<BaseResponse<UserProjectPageResponse>> pageUserProject(
+    public ResponseEntity<BaseResponse<UserProjectPagingResponse>> pageUserProject(
         @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int numOfRows) {
 
-        // TODO: logged user 추가
-        long userId = 1;
+        long userId = JwtService.getLoggedUser().getId();
 
         return ResponseEntity.ok()
             .body(
-                BaseResponse.<UserProjectPageResponse>builder()
+                BaseResponse.<UserProjectPagingResponse>builder()
                     .code(HttpStatus.OK.value())
                     .message("내 프로젝트 리스트 조회 성공")
-                    .data(
-                        new UserProjectPageResponse(projectService.selectProjectOfUser(userId, page, numOfRows))
-                    )
+                    .data(projectService.selectProjectOfUser(userId, page, numOfRows))
                     .build()
             );
     }
