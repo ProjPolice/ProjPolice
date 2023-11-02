@@ -6,6 +6,7 @@ import static com.projpolice.global.common.error.info.ExceptionInfo.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.jboss.resteasy.spi.UnauthorizedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -64,12 +65,7 @@ public class ProjectServiceImpl implements ProjectService {
             () -> new BadRequestException(INVALID_PROJECT)
         );
 
-        /*
-        TODO: implement sharing
-         */
-        if (!projectAuthManager.checkProjectOwnership(project)) {
-            throw new UnAuthorizedException(UNAUTHORIZED);
-        }
+        projectAuthManager.checkProjectOwnershipOrThrow(project);
 
         return ProjectDetailData.from(project);
     }
@@ -114,10 +110,7 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findById(id).orElseThrow(
             () -> new BadRequestException(ExceptionInfo.INVALID_PROJECT)
         );
-
-        if (!projectAuthManager.checkProjectOwnership(project)) {
-            throw new UnAuthorizedException(UNAUTHORIZED);
-        }
+        projectAuthManager.checkProjectOwnershipOrThrow(project);
 
         BaseIdItem baseIdItem = new BaseIdItem(project.getId());
         projectRepository.delete(project);
@@ -127,7 +120,7 @@ public class ProjectServiceImpl implements ProjectService {
     /**
      * Modifies a project in the system.
      *
-     * @param id the ID of the project to be modified
+     * @param id      the ID of the project to be modified
      * @param request the modification request containing the new project details
      * @return the modified project details
      * @throws BadRequestException if the project ID is invalid
@@ -139,9 +132,7 @@ public class ProjectServiceImpl implements ProjectService {
             () -> new BadRequestException(ExceptionInfo.INVALID_PROJECT)
         );
 
-        if (!projectAuthManager.checkProjectOwnership(project)) {
-            throw new UnAuthorizedException(UNAUTHORIZED);
-        }
+        projectAuthManager.checkProjectOwnershipOrThrow(project);
 
         if (request.getName() != null) {
             project.setName(request.getName());
@@ -167,12 +158,11 @@ public class ProjectServiceImpl implements ProjectService {
      *
      * @param id the ID of the project
      * @return a list of {@link UserIdNameImgItem} objects representing the users associated with the project
+     * @throws UnauthorizedException if the user is not a member of the project
      */
     @Override
     public List<UserIdNameImgItem> listProjectUser(long id) {
-        if (!projectAuthManager.checkProjectMembership(id)) {
-            throw new UnAuthorizedException(UNAUTHORIZED);
-        }
+        projectAuthManager.checkProjectMembershipOrThrow(id);
         return userProjectRepository.findUserByProjectId(id).stream()
             .map(user -> UserIdNameImgItem.builder()
                 .id(user.getId())
@@ -193,7 +183,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public UserIdNameImgItem addProjectUser(long projectId, ProjectUserAddRequest request) {
-        checkProjectOwnershipOrElseThrow(projectId);
+        projectAuthManager.checkProjectOwnershipOrThrow(projectId);
 
         User newUser = userRepository.findByEmail(request.getMemberEmail()).orElseThrow(
             () -> new BadRequestException(INVALID_USER)
@@ -224,7 +214,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public BaseIdItem deleteProjectUser(long projectId, long userId) {
-        checkProjectOwnershipOrElseThrow(projectId);
+        projectAuthManager.checkProjectOwnershipOrThrow(projectId);
 
         UserProject userProject = userProjectRepository.findByProjectIdAndUserId(projectId, userId).orElseThrow(
             () -> new BadRequestException(INVALID_USER_PROJECT)
@@ -261,17 +251,4 @@ public class ProjectServiceImpl implements ProjectService {
             .numOfRows(numOfRows)
             .build();
     }
-
-    /**
-     * Checks the ownership of the specified project by the authenticated user.
-     *
-     * @param projectId the ID of the project to check ownership for
-     * @throws UnAuthorizedException if the authenticated user does not have ownership of the project
-     */
-    private void checkProjectOwnershipOrElseThrow(long projectId) {
-        if (!projectAuthManager.checkProjectOwnership(projectId)) {
-            throw new UnAuthorizedException(UNAUTHORIZED);
-        }
-    }
-
 }

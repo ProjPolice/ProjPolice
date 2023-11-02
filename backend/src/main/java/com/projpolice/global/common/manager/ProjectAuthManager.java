@@ -1,6 +1,7 @@
 package com.projpolice.global.common.manager;
 
 import static com.projpolice.domain.user.service.JwtService.*;
+import static com.projpolice.global.common.error.info.ExceptionInfo.*;
 
 import org.springframework.stereotype.Component;
 
@@ -10,9 +11,14 @@ import com.projpolice.domain.project.repository.ProjectRepository;
 import com.projpolice.domain.project.repository.UserProjectRepository;
 import com.projpolice.domain.task.repository.TaskRepository;
 import com.projpolice.domain.user.domain.User;
+import com.projpolice.global.common.error.exception.UnAuthorizedException;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * The ProjectAuthManager class provides methods for checking the authorization
+ * of the logged user for various operations related to projects, epics, and tasks.
+ */
 @Component
 @RequiredArgsConstructor
 public class ProjectAuthManager {
@@ -28,66 +34,78 @@ public class ProjectAuthManager {
     /**
      * Checks if the logged user is the owner of the specified project.
      *
-     * @param projectId The ID of the project to be checked.
-     * @return true if the logged user is the owner of the project, false otherwise.
+     * @param projectId The ID of the project to be checked. (non-negative long value)
+     * @throws UnAuthorizedException if the logged user is not the owner of the project.
      */
-    public boolean checkProjectOwnership(long projectId) {
+    public void checkProjectOwnershipOrThrow(long projectId) {
         User loggedUser = getLoggedUser();
-        return projectRepository.checkOwnership(projectId, loggedUser.getId());
+        if (!projectRepository.checkOwnership(projectId, loggedUser.getId())) {
+            throw new UnAuthorizedException(UNAUTHORIZED);
+        }
     }
 
     /**
      * Checks if the logged user is the owner of the specified project.
      *
      * @param project The project to be checked.
-     * @return true if the logged user is the owner of the project, false otherwise.
+     * @throws UnAuthorizedException if the logged user is not the owner of the project.
      */
-    public boolean checkProjectOwnership(Project project) {
+    public void checkProjectOwnershipOrThrow(Project project) {
         User loggedUser = getLoggedUser();
-        return project.getUser().getId().equals(loggedUser.getId());
+        if (!project.getUser().getId().equals(loggedUser.getId())) {
+            throw new UnAuthorizedException(UNAUTHORIZED);
+        }
     }
 
     /**
      * Checks if the logged user is a member of the specified project.
      *
      * @param projectId The ID of the project to be checked.
-     * @return true if the logged user is a member of the project, false otherwise.
+     * @throws UnAuthorizedException if the logged user is not a member of the project.
      */
-    public boolean checkProjectMembership(long projectId) {
+    public void checkProjectMembershipOrThrow(long projectId) {
         User loggedUser = getLoggedUser();
-        return userProjectRepository.checkMembership(projectId, loggedUser.getId());
+        if (!userProjectRepository.checkMembership(projectId, loggedUser.getId())) {
+            throw new UnAuthorizedException(UNAUTHORIZED);
+        }
     }
 
     /**
      * Checks if the logged user is a member of the specified epic.
      *
      * @param epicId The ID of the epic to be checked.
-     * @return true if the logged user is a member of the epic, false otherwise.
+     * @throws UnAuthorizedException if the logged user is not a member of the epic.
      */
-    public boolean checkEpicMembership(long epicId) {
+    public void checkEpicMembershipOrThrow(long epicId) {
         User loggedUser = getLoggedUser();
-        return epicRepository.checkMembership(epicId, loggedUser.getId());
+        if (!epicRepository.checkMembership(epicId, loggedUser.getId())) {
+            throw new UnAuthorizedException(UNAUTHORIZED);
+        }
     }
 
     /**
      * Checks if the logged user is the owner of the specified task.
      *
      * @param taskId The ID of the task to be checked.
-     * @return True if the logged user is the owner of the task, false otherwise.
+     * @throws UnAuthorizedException if the logged user is not the owner of the task.
      */
-    public boolean checkTaskOwnership(long taskId) {
+    public void checkTaskOwnershipOrThrow(long taskId) {
         User loggedUser = getLoggedUser();
-        return taskRepository.checkOwnership(taskId, loggedUser.getId());
+        if (!taskRepository.checkOwnership(taskId, loggedUser.getId())) {
+            throw new UnAuthorizedException(UNAUTHORIZED);
+        }
     }
 
     /**
      * Checks if the logged user is a member of the specified task.
      *
      * @param taskId The ID of the task to be checked.
-     * @return True if the logged user is a member of the task, false otherwise.
+     * @throws UnAuthorizedException if the logged user is not a member of the task.
      */
-    public boolean checkTaskMembership(long taskId) {
+    public void checkTaskMembershipOrThrow(long taskId) {
         User loggedUser = getLoggedUser();
-        return taskRepository.checkMembership(taskId, loggedUser.getId());
+        if (!taskRepository.checkMembership(taskId, loggedUser.getId())) {
+            throw new UnAuthorizedException(UNAUTHORIZED);
+        }
     }
 }
