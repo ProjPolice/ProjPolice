@@ -30,6 +30,7 @@ import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.error.exception.BadRequestException;
 import com.projpolice.global.common.error.exception.UnAuthorizedException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
+import com.projpolice.global.common.manager.ProjectAuthManager;
 
 import lombok.RequiredArgsConstructor;
 
@@ -48,6 +49,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final UserRepository userRepository;
 
+    private final ProjectAuthManager projectAuthManager;
+
     /**
      * Retrieves the detailed information of a project based on its id.
      *
@@ -58,14 +61,15 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectDetailData selectProjectDetail(long id) {
         Project project = projectRepository.findById(id).orElseThrow(
-            () -> new BadRequestException(ExceptionInfo.INVALID_PROJECT)
+            () -> new BadRequestException(INVALID_PROJECT)
         );
 
         /*
         TODO: implement sharing
          */
-        List<User> users = userProjectRepository.findUserByProjectId(id);
-        checkMembership(users, getLoggedUser());
+        if (!projectAuthManager.checkProjectOwnership(project)) {
+            throw new UnAuthorizedException(UNAUTHORIZED);
+        }
 
         return ProjectDetailData.from(project);
     }
@@ -105,13 +109,15 @@ public class ProjectServiceImpl implements ProjectService {
      * @throws BadRequestException if the project ID is invalid
      */
     @Override
+    @Transactional
     public BaseIdItem deleteProject(long id) {
         Project project = projectRepository.findById(id).orElseThrow(
             () -> new BadRequestException(ExceptionInfo.INVALID_PROJECT)
         );
 
-        User loggedUser = getLoggedUser();
-        checkOwnership(loggedUser, project);
+        if (!projectAuthManager.checkProjectOwnership(project)) {
+            throw new UnAuthorizedException(UNAUTHORIZED);
+        }
 
         BaseIdItem baseIdItem = new BaseIdItem(project.getId());
         projectRepository.delete(project);
@@ -127,15 +133,15 @@ public class ProjectServiceImpl implements ProjectService {
      * @throws BadRequestException if the project ID is invalid
      */
     @Override
+    @Transactional
     public ProjectDetailData modifyProject(long id, ProjectModifyRequest request) {
         Project project = projectRepository.findById(id).orElseThrow(
             () -> new BadRequestException(ExceptionInfo.INVALID_PROJECT)
         );
 
-        User loggedUser = getLoggedUser();
-
-        // TODO: determine whether only the owner can modify or member of project can modify or not.
-        checkOwnership(loggedUser, project);
+        if (!projectAuthManager.checkProjectOwnership(project)) {
+            throw new UnAuthorizedException(UNAUTHORIZED);
+        }
 
         if (request.getName() != null) {
             project.setName(request.getName());
@@ -164,12 +170,10 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public List<UserIdNameImgItem> listProjectUser(long id) {
-        List<User> users = userProjectRepository.findUserByProjectId(id);
-
-        User loggedUser = getLoggedUser();
-        checkMembership(users, loggedUser);
-
-        return users.stream()
+        if (!projectAuthManager.checkProjectMembership(id)) {
+            throw new UnAuthorizedException(UNAUTHORIZED);
+        }
+        return userProjectRepository.findUserByProjectId(id).stream()
             .map(user -> UserIdNameImgItem.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -187,15 +191,16 @@ public class ProjectServiceImpl implements ProjectService {
      * @throws BadRequestException if the user or project is invalid
      */
     @Override
+    @Transactional
     public UserIdNameImgItem addProjectUser(long projectId, ProjectUserAddRequest request) {
+        checkProjectOwnershipOrElseThrow(projectId);
+
         User newUser = userRepository.findByEmail(request.getMemberEmail()).orElseThrow(
             () -> new BadRequestException(INVALID_USER)
         );
         Project project = projectRepository.findById(projectId).orElseThrow(
             () -> new BadRequestException(INVALID_PROJECT)
         );
-
-        checkOwnership(getLoggedUser(), project);
 
         UserProject userProject = new UserProject(newUser, project);
         userProjectRepository.save(userProject);
@@ -217,12 +222,13 @@ public class ProjectServiceImpl implements ProjectService {
      * @throws UnAuthorizedException if the logged-in user is not the owner of the project
      */
     @Override
+    @Transactional
     public BaseIdItem deleteProjectUser(long projectId, long userId) {
+        checkProjectOwnershipOrElseThrow(projectId);
+
         UserProject userProject = userProjectRepository.findByProjectIdAndUserId(projectId, userId).orElseThrow(
             () -> new BadRequestException(INVALID_USER_PROJECT)
         );
-
-        checkOwnership(getLoggedUser(), userProject.getProject());
 
         BaseIdItem removedUserId = new BaseIdItem(userProject.getUser().getId());
         userProjectRepository.delete(userProject);
@@ -257,31 +263,15 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     /**
-     * Checks if the logged-in user is the owner of the specified project.
-     * If the logged-in user is not the owner, an exception is thrown.
+     * Checks the ownership of the specified project by the authenticated user.
      *
-     * @param loggedUser the logged-in user
-     * @param project the project to be checked for ownership
-     * @throws UnAuthorizedException if the logged-in user is not the owner of the project
+     * @param projectId the ID of the project to check ownership for
+     * @throws UnAuthorizedException if the authenticated user does not have ownership of the project
      */
-    private static void checkOwnership(User loggedUser, Project project) {
-        if (!loggedUser.getId().equals(project.getUser().getId())) {
+    private void checkProjectOwnershipOrElseThrow(long projectId) {
+        if (!projectAuthManager.checkProjectOwnership(projectId)) {
             throw new UnAuthorizedException(UNAUTHORIZED);
         }
     }
 
-    /**
-     * Checks if the logged-in user is a member of the specified list of users.
-     * If the logged-in user is not a member, an exception is thrown.
-     *
-     * @param users the list of users to check membership against
-     * @param loggedUser the logged-in user
-     * @throws UnAuthorizedException if the logged-in user is not a member of the list of users
-     */
-    private static void checkMembership(List<User> users, User loggedUser) {
-        users.stream()
-            .filter(user -> user.getId().equals(loggedUser.getId()))
-            .findAny()
-            .orElseThrow(() -> new UnAuthorizedException(UNAUTHORIZED));
-    }
 }
