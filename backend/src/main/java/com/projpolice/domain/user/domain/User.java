@@ -69,7 +69,6 @@ public class User implements UserDetails {
 
 
     @NotNull
-    @Size(max = 50)
     private String password;
 
     @Override
