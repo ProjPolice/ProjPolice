@@ -4,7 +4,6 @@ import static com.projpolice.domain.user.service.JwtService.*;
 import static com.projpolice.global.common.error.info.ExceptionInfo.*;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -226,12 +225,9 @@ public class ProjectServiceImpl implements ProjectService {
      * @throws UnAuthorizedException if the logged-in user is not a member of the list of users
      */
     private static void checkMembership(List<User> users, User loggedUser) {
-        Set<Long> userIdSet = users.stream()
-            .map(User::getId)
-            .collect(Collectors.toSet());
-
-        if (!userIdSet.contains(loggedUser.getId())) {
-            throw new UnAuthorizedException(UNAUTHORIZED);
-        }
+        users.stream()
+            .filter(user -> user.getId().equals(loggedUser.getId()))
+            .findAny()
+            .orElseThrow(() -> new UnAuthorizedException(UNAUTHORIZED));
     }
 }
