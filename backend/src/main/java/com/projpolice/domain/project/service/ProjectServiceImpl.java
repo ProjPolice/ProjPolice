@@ -25,6 +25,7 @@ import com.projpolice.domain.project.request.ProjectUserAddRequest;
 import com.projpolice.domain.user.domain.User;
 import com.projpolice.domain.user.dto.UserIdNameImgItem;
 import com.projpolice.domain.user.repository.UserRepository;
+import com.projpolice.domain.user.response.UserProjectPagingResponse;
 import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.error.exception.BadRequestException;
 import com.projpolice.global.common.error.exception.UnAuthorizedException;
@@ -221,12 +222,7 @@ public class ProjectServiceImpl implements ProjectService {
             () -> new BadRequestException(INVALID_USER_PROJECT)
         );
 
-        User owner = userProject.getProject().getUser();
-
-        // TODO: 로그인한 유저 확인 추가
-        // if (!owner.equals(loggedUser)) {
-        //     throw new UnAuthorizedException(UNAUTHORIZED);
-        // }
+        checkOwnership(getLoggedUser(), userProject.getProject());
 
         BaseIdItem removedUserId = new BaseIdItem(userProject.getUser().getId());
         userProjectRepository.delete(userProject);
@@ -240,19 +236,24 @@ public class ProjectServiceImpl implements ProjectService {
      * @param userId the ID of the user
      * @param page the page number to retrieve
      * @param numOfRows the number of projects per page
-     * @return a list of {@link ProjectIdNameDescData} objects representing the ID, name, and description of each project
+     * @return a {@link UserProjectPagingResponse} object containing the list of projects and pagination information
      */
     @Override
-    public List<ProjectIdNameDescData> selectProjectOfUser(long userId, int page, int numOfRows) {
-        Pageable pageable = PageRequest.of(page, numOfRows);
+    public UserProjectPagingResponse selectProjectOfUser(long userId, int page, int numOfRows) {
+        Pageable pageable = PageRequest.of(page - 1, numOfRows);
         Page<Project> projects = projectRepository.findByUserId(userId, pageable);
-        return projects.stream()
-            .map(project -> ProjectIdNameDescData.builder()
-                .id(project.getId())
-                .name(project.getName())
-                .description(project.getDescription())
-                .build()
-            ).collect(Collectors.toList());
+        return UserProjectPagingResponse.builder()
+            .projects(projects.stream()
+                .map(project -> ProjectIdNameDescData.builder()
+                    .id(project.getId())
+                    .name(project.getName())
+                    .description(project.getDescription())
+                    .build()
+                ).collect(Collectors.toList())
+            )
+            .pages(projects.getTotalPages() + 1)
+            .numOfRows(numOfRows)
+            .build();
     }
 
     /**

@@ -4,11 +4,13 @@ import java.util.List;
 
 import com.projpolice.domain.project.dto.ProjectIdNameDescData;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
-public class UserProjectPageResponse {
+@Builder
+public class UserProjectPagingResponse {
     private List<ProjectIdNameDescData> projects;
+    private int pages;
+    private int numOfRows;
 }
