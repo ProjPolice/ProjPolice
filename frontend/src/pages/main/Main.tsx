@@ -8,7 +8,7 @@ import NavigationBar from './components/Navigation/NavigationBar';
 function Main() {
   return (
     <Page>
-      <NavigationBar/>
+      <NavigationBar />
       <Header />
       <ProjectList />
       <TaskList />
