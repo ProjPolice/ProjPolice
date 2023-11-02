@@ -4,3 +4,9 @@ export interface HeaderBoxProps {
   icon?: string;
   backgroundColor?: string;
 }
+
+export interface ProjectItemListProps {
+  backgroundColor?: string;
+  projectname: string;
+  membercount: number;
+}
