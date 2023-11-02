@@ -24,7 +24,7 @@ public interface UserProjectRepository extends JpaRepository<UserProject, Long> 
     Optional<UserProject> findByProjectIdAndUserId(long projectId, long userId);
 
     @Query("""
-            select count(userProject.id)
+            select count(userProject.id)>0
             from UserProject userProject
             where userProject.project.id = :project_id
             and userProject.user.id = :user_id

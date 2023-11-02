@@ -20,7 +20,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     int deleteAllByEpicId(@Param("epicId") Long epicId);
 
     @Query("""
-        select count(task.id)
+        select count(task.id)>0
         from Task task
         where task.id = :taskId 
         and task.user.id = :userId
@@ -29,7 +29,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     boolean checkOwnership(@Param("taskId") long taskId, @Param("userId") long userId);
 
     @Query("""
-        select count(task.id)
+        select count(task.id)>0
         from Task task
         left join Epic epic on task.epic.id = epic.id
         left join Project project on epic.project.id = project.id

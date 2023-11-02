@@ -14,7 +14,11 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Page<Project> findByUserId(long userId, Pageable pageable);
 
     @Query("""
-        select count(p.id) from Project p where p.id =: project_id and p.user.id =: user_id and p.deleted = false
+        select count(p.id)>0 
+        from Project p 
+        where p.id =: project_id 
+        and p.user.id =: user_id 
+        and p.deleted = false
         """)
     boolean checkOwnership(@Param("project_id") long projectId, @Param("user_id") long userId);
 }
