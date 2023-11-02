@@ -18,6 +18,8 @@ import com.projpolice.domain.user.response.UserLoginResponse;
 import com.projpolice.domain.user.service.UserService;
 import com.projpolice.global.common.base.BaseResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -54,6 +56,7 @@ public class UserController {
      *
      * @return 인증된 사용자의 정보
      */
+    @Operation(summary = "회원 정보 조회", security = @SecurityRequirement(name = "Authorization"))
     @GetMapping()
     public ResponseEntity<? extends BaseResponse<UserInfoResponse>> getUserInfo() {
 

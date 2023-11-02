@@ -36,13 +36,16 @@ public class SecurityConfig {
      */
     @Bean
     protected SecurityFilterChain config(HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable)
+        return http.httpBasic(AbstractHttpConfigurer::disable)
+            .csrf(AbstractHttpConfigurer::disable)
             .cors(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
                 .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/projpolice-api/**").permitAll()
                 .requestMatchers("/v3/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/users").authenticated()
+                .requestMatchers(HttpMethod.PATCH, "/users").authenticated()
                 .requestMatchers("/users/**").permitAll()
                 .anyRequest().authenticated()
             )

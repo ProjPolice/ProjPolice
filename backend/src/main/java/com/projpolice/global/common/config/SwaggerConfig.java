@@ -1,5 +1,6 @@
 package com.projpolice.global.common.config;
 
+import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +37,7 @@ public class SwaggerConfig {
             .description("프로폴리스 API");
 
         Components components = new Components()
-            .addSecuritySchemes("Authroization", getJwtSecurityScheme());
+            .addSecuritySchemes("Authorization", getJwtSecurityScheme());
 
         SecurityRequirement securityRequirement = new SecurityRequirement()
             .addList("Authorization");
@@ -49,8 +50,10 @@ public class SwaggerConfig {
 
     private SecurityScheme getJwtSecurityScheme() {
         return new SecurityScheme()
-            .type(SecurityScheme.Type.APIKEY)
+            .type(SecurityScheme.Type.HTTP)
+            .scheme("Bearer")
+            .bearerFormat("Authorization")
             .in(SecurityScheme.In.HEADER)
-            .name("Authroization");
+            .name(HttpHeaders.AUTHORIZATION);
     }
 }
