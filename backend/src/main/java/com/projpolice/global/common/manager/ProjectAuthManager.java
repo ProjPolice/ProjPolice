@@ -84,6 +84,19 @@ public class ProjectAuthManager {
     }
 
     /**
+     * Checks with userId if the logged user is a member of the specified epic.
+     *
+     * @param epicId The ID of the epic to be checked.
+     * @param userId The ID of the user to be checked.
+     * @throws UnAuthorizedException if the logged user is not a member of the epic.
+     */
+    public void checkEpicMembershipWithUserIdOrThrow(long epicId, long userId) {
+        if (!epicRepository.checkMembership(epicId, userId)) {
+            throw new UnAuthorizedException(UNAUTHORIZED);
+        }
+    }
+
+    /**
      * Checks if the logged user is the owner of the specified task.
      *
      * @param taskId The ID of the task to be checked.
