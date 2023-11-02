@@ -67,7 +67,6 @@ public class User implements UserDetails {
 
     private String image;
 
-
     @NotNull
     private String password;
 
