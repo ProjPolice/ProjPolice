@@ -13,6 +13,7 @@ import com.projpolice.domain.user.repository.UserRepository;
 import com.projpolice.global.common.error.exception.EpicException;
 import com.projpolice.global.common.error.exception.UserException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
+import com.projpolice.global.common.manager.ProjectAuthManager;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +23,7 @@ public class TaskServiceImpl implements TaskService {
     private final UserRepository userRepository;
     private final EpicRepository epicRepository;
     private final TaskRepository taskRepository;
+    private final ProjectAuthManager projectAuthManager;
 
     /**
      * 상세 작업 생성
