@@ -18,4 +18,24 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
         WHERE t.epic.id = :epicId
         """)
     int deleteAllByEpicId(@Param("epicId") Long epicId);
+
+    @Query("""
+        select count(task.id)
+        from Task task
+        where task.id = :taskId 
+        and task.user.id = :userId
+        and task.deleted = false 
+        """)
+    boolean checkOwnership(@Param("taskId") long taskId, @Param("userId") long userId);
+
+    @Query("""
+        select count(task.id)
+        from Task task
+        left join Epic epic on task.epic.id = epic.id
+        left join Project project on epic.project.id = project.id
+        where task.deleted = false
+        and task.id = :taskId
+        and project.user.id = :userId
+        """)
+    boolean checkMembership(@Param("taskId") long taskId, @Param("userId") long userId);
 }

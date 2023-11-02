@@ -17,9 +17,18 @@ public interface UserProjectRepository extends JpaRepository<UserProject, Long> 
     @Query("""
             select user
             from UserProject
-            where project.id =: projectId
+            where project.id = :project_id
         """)
-    List<User> findUserByProjectId(@Param("projectId") Long projectId);
+    List<User> findUserByProjectId(@Param("project_id") Long projectId);
 
     Optional<UserProject> findByProjectIdAndUserId(long projectId, long userId);
+
+    @Query("""
+            select count(userProject.id)
+            from UserProject userProject
+            where userProject.project.id = :project_id
+            and userProject.user.id = :user_id
+            and userProject.deleted = false
+        """)
+    boolean checkMembership(@Param("project_id") long projectId, @Param("user_id") long userId);
 }
