@@ -22,11 +22,11 @@ const router = createBrowserRouter([
         element: <Project />,
       },
       {
-        path: ':user_id',
+        path: 'profile',
         element: <Profile />,
       },
       {
-        path: ':user_id/task',
+        path: 'task',
         element: <Task />,
       },
     ],
