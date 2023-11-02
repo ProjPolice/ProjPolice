@@ -6,6 +6,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import com.projpolice.domain.epic.domain.Epic;
+import com.projpolice.domain.task.request.TaskCreateRequest;
 import com.projpolice.domain.user.domain.User;
 import com.projpolice.global.common.base.BaseEntity;
 import com.projpolice.global.common.meta.converter.TaskStatusConverter;
@@ -65,4 +66,16 @@ public class Task extends BaseEntity {
     // @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "epic_id", foreignKey = @ForeignKey(name = "fk_task_to_epic_epic_id"))
     private Epic epic;
+
+    public static Task of(TaskCreateRequest taskCreateRequest, User user, Epic epic) {
+        return Task.builder()
+            .name(taskCreateRequest.getName())
+            .description(taskCreateRequest.getDescription())
+            .status(taskCreateRequest.getStatus())
+            .startDate(taskCreateRequest.getStartDate())
+            .endDate(taskCreateRequest.getEndDate())
+            .user(user)
+            .epic(epic)
+            .build();
+    }
 }
