@@ -19,6 +19,8 @@ import com.projpolice.domain.file.request.FileUploadRequest;
 import com.projpolice.domain.file.service.FileService;
 import com.projpolice.global.common.base.BaseResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -35,6 +37,7 @@ public class FileController {
      * @return List<FIleDetailItem>
      */
     @GetMapping
+    @Operation(summary = "세부작업의 파일들 조회", security = @SecurityRequirement(name = "Authroization"), description = "세부작업의 파일들을 조회하는 메소드입니다.")
     public ResponseEntity<BaseResponse<List<FileDetailItem>>> getTaskFile(@RequestParam(name = "task_id") long taskId) {
 
         return ResponseEntity.ok()
@@ -53,6 +56,7 @@ public class FileController {
      * @return FIleDetailItem
      */
     @PostMapping
+    @Operation(summary = "파일 업로드", security = @SecurityRequirement(name = "Authroization"), description = "파일을 업로드 하는 메서드입니다.")
     public ResponseEntity<BaseResponse<FileDetailItem>> uploadFile(@RequestBody FileUploadRequest request, @RequestParam(name = "task_id") long taskId) {
 
         return ResponseEntity.ok()
@@ -70,6 +74,7 @@ public class FileController {
      * @return FIleBaseItem
      */
     @DeleteMapping
+    @Operation(summary = "파일 삭제", security = @SecurityRequirement(name = "Authroization"), description = "파일들을 삭제하는 메소드입니다.")
     public ResponseEntity<BaseResponse<FileBaseItem>> deleteFile(@RequestParam(name = "file_id") long fileId) {
 
         return ResponseEntity.ok()
