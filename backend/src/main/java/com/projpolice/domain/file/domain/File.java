@@ -2,6 +2,7 @@ package com.projpolice.domain.file.domain;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
@@ -63,7 +64,7 @@ public class File extends BaseEntity {
         return File.builder()
             .name(fileUploadRequest.getName())
             .comment(fileUploadRequest.getComment())
-            .uuid(fileUploadRequest.getUuid())
+            .uuid(UUID.randomUUID().toString())
             .version(fileUploadRequest.getVersion())
             .extension(fileUploadRequest.getExtension())
             .task(task)

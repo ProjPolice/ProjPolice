@@ -21,7 +21,6 @@ public class FileDetailItem {
             .id(file.getId())
             .name(file.getName())
             .comment(file.getComment())
-            .uuid(file.getUuid())
             .version(file.getVersion())
             .extension(file.getExtension())
             .taskId(file.getTask().getId())
