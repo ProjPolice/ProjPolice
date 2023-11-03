@@ -32,10 +32,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
         select count(task.id)>0
         from Task task
         left join Epic epic on task.epic.id = epic.id
-        left join Project project on epic.project.id = project.id
+        left join UserProject userProject on epic.project.id = userProject.project.id
         where task.deleted = false
         and task.id = :taskId
-        and project.user.id = :userId
+        and userProject.user.id = :userId
         """)
     boolean checkMembership(@Param("taskId") long taskId, @Param("userId") long userId);
 }
