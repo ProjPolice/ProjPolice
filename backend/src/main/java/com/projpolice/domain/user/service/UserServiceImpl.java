@@ -15,6 +15,8 @@ import com.projpolice.domain.user.request.UserUpdateRequest;
 import com.projpolice.domain.user.response.UserInfoResponse;
 import com.projpolice.domain.user.response.UserJoinResponse;
 import com.projpolice.domain.user.response.UserLoginResponse;
+import com.projpolice.global.common.error.exception.BaseException;
+import com.projpolice.global.common.error.info.ExceptionInfo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -90,7 +92,6 @@ public class UserServiceImpl implements UserService {
             .build();
     }
 
-
     /**
      * 사용자 정보의 유효성을 점검하고 인증을 한다.
      *
@@ -98,7 +99,7 @@ public class UserServiceImpl implements UserService {
      */
     public UserLoginResponse login(UserLoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-            .orElseThrow();
+            .orElseThrow(() -> new BaseException(ExceptionInfo.LOGIN_FAIL));
 
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(

@@ -23,11 +23,15 @@ import com.projpolice.domain.user.dto.UserIdNameImgItem;
 import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.base.BaseResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/projects")
 @RequiredArgsConstructor
+@Tag(name = "프로젝트 컨트롤러", description = "프로젝트를 담당하는 컨트롤러입니다.")
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -39,6 +43,7 @@ public class ProjectController {
      * @return ResponseEntity<BaseResponse < ProjectDetailData>> The response entity containing the project details.
      */
     @GetMapping("/{projectId}")
+    @Operation(summary = "프로젝트 조회", security = @SecurityRequirement(name = "Authorization"), description = "사용자의 Access Token과 projectId를 받아 프로젝트를 조회합니다.")
     public ResponseEntity<BaseResponse<ProjectDetailData>> selectProject(@PathVariable("projectId") long projectId) {
         ProjectDetailData projectDetailData = projectService.selectProjectDetail(projectId);
         return ResponseEntity.status(HttpStatus.OK)
@@ -58,6 +63,7 @@ public class ProjectController {
      * @return ResponseEntity<BaseResponse < ProjectDetailData>> The response entity containing the newly created project details.
      */
     @PostMapping
+    @Operation(summary = "프로젝트 생성", security = @SecurityRequirement(name = "Authorization"), description = "사용자의 Access Token과 생성할 프로젝트의 정보를 받아 프로젝트를 생성합니다.")
     public ResponseEntity<BaseResponse<ProjectDetailData>> insertProject(@RequestBody ProjectInsertRequest request) {
         ProjectDetailData projectDetailData = projectService.insertProject(request);
 
@@ -71,7 +77,14 @@ public class ProjectController {
             );
     }
 
+    /**
+     * Deletes a project.
+     *
+     * @param id The ID of the project to delete.
+     * @return ResponseEntity<BaseResponse < BaseIdItem>> The response entity indicating the success of the project deletion.
+     */
     @DeleteMapping("/{project_id}")
+    @Operation(summary = "프로젝트 삭제", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 Project Id를 받아 해당 프로젝트를 삭제합니다.")
     public ResponseEntity<BaseResponse<BaseIdItem>> deleteProject(@PathVariable("project_id") long id) {
         return ResponseEntity.status(HttpStatus.OK)
             .body(
@@ -91,6 +104,7 @@ public class ProjectController {
      * @return ResponseEntity<BaseResponse < ProjectDetailData>> The response entity containing the modified project details.
      */
     @PatchMapping("/{project_id}")
+    @Operation(summary = "프로젝트 수정", security = @SecurityRequirement(name = "Authroization"), description = "Access Token과 project Id, 그리고 수정할 데이터를 받아 해당 프로젝트를 수정합니다.")
     public ResponseEntity<BaseResponse<ProjectDetailData>> modifyProject(@PathVariable("project_id") long id,
         @RequestBody
         ProjectModifyRequest request) {
@@ -113,6 +127,7 @@ public class ProjectController {
      * @return ResponseEntity<BaseResponse < ProjectUserListResponse>> The response entity containing the list of project users.
      */
     @GetMapping("/{project_id}/users")
+    @Operation(summary = "프로젝트 멤버 조회", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 project id를 받아 해당 프로젝트에 속한 멤버들을 조회합니다.")
     public ResponseEntity<BaseResponse<ProjectUserListResponse>> listProjectUser(@PathVariable("project_id") long id) {
         List<UserIdNameImgItem> members = projectService.listProjectUser(id);
 
@@ -134,6 +149,7 @@ public class ProjectController {
      * @return ResponseEntity<BaseResponse < UserIdNameImgItem>> The response entity containing the added project user.
      */
     @PostMapping("/{project_id}/users")
+    @Operation(summary = "프로젝트 멤버 등록", security = @SecurityRequirement(name = "Authorization"), description = "Access Toekn과 project Id와 추가할 사용자의 이메일을 받아 해당 사용자를 프로젝트에 멤버로 추가합니다.")
     public ResponseEntity<BaseResponse<UserIdNameImgItem>> addProjectUser(@PathVariable("project_id") long id,
         @RequestBody
         ProjectUserAddRequest request) {
@@ -156,6 +172,7 @@ public class ProjectController {
      * @return ResponseEntity<BaseResponse < BaseIdItem>> The response entity indicating the success of the user deletion.
      */
     @PostMapping("/{project_id}/users/{user_id}")
+    @Operation(summary = "프로젝트 멤버 삭제", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 user Id를 받아 프로젝트 멤버를 삭제합니다.")
     public ResponseEntity<BaseResponse<BaseIdItem>> deleteProjectUser(@PathVariable("project_id") long projectId,
         @PathVariable("user_id") long userId) {
         return ResponseEntity.ok()

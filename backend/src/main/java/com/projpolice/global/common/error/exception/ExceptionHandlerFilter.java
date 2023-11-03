@@ -32,12 +32,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         FilterChain filterChain) {
         try {
             filterChain.doFilter(request, response);
-        }
-        // catch (HttpMessageNotReadableException exception) {
-        //     responseError(request, response, HttpStatus.BAD_REQUEST.value(),
-        //         new BaseException(HttpStatus.BAD_REQUEST, 0, "!!!!"));
-        // }
-        catch (BaseException exception) {
+        } catch (BaseException exception) {
             responseError(request, response, exception.getStatus().value(), exception);
         } catch (Exception exception) {
             responseError(request, response, 500,
