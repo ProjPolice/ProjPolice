@@ -32,7 +32,7 @@ public enum ExceptionInfo {
     // Oracle
     FAILED_FILE_UPLOAD(HttpStatus.BAD_REQUEST, 7000, "파일 업로드를 실패했습니다."),
     FAILED_FILE_DOWNLOAD(HttpStatus.BAD_REQUEST, 7001, "파일 불러오기를 실패했습니다."),
-    FAILED_FILE_DELETE(HttpStatus.BAD_REQUEST, 7001, "파일 삭제를 실패했습니다."),
+    FAILED_FILE_DELETE(HttpStatus.BAD_REQUEST, 7002, "파일 삭제를 실패했습니다."),
     ;
 
     private final HttpStatus status;
