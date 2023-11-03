@@ -27,8 +27,13 @@ public enum ExceptionInfo {
     INVALID_USER_PROJECT(HttpStatus.BAD_REQUEST, 5000, "유효하지 않은 프로젝트 멤버입니다."),
 
     // Epic
-    INVALID_EPIC(HttpStatus.BAD_REQUEST, 6000, "존재하지 않는 할 일입니다.")
-    ,;
+    INVALID_EPIC(HttpStatus.BAD_REQUEST, 6000, "존재하지 않는 할 일입니다."),
+
+    // Oracle
+    FAILED_FILE_UPLOAD(HttpStatus.BAD_REQUEST, 7000, "파일 업로드를 실패했습니다."),
+    FAILED_FILE_DOWNLOAD(HttpStatus.BAD_REQUEST, 7001, "파일 불러오기를 실패했습니다."),
+    FAILED_FILE_DELETE(HttpStatus.BAD_REQUEST, 7002, "파일 삭제를 실패했습니다."),
+    ;
 
     private final HttpStatus status;
     private final Integer code;
