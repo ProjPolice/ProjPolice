@@ -1,5 +1,8 @@
 package com.projpolice.domain.epic.controller;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,9 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projpolice.domain.epic.dto.EpicDetailData;
+import com.projpolice.domain.epic.dto.EpicProjectedItem;
 import com.projpolice.domain.epic.request.EpicCreateRequest;
 import com.projpolice.domain.epic.request.EpicUpdateRequest;
 import com.projpolice.domain.epic.service.EpicService;
@@ -101,5 +106,19 @@ public class EpicController {
                 .message("할일 삭제 성공")
                 .data(epicService.deleteEpic(epiceId))
                 .build());
+    }
+
+    @GetMapping
+    @Operation(summary = "프로젝트의 할일 리스트 조회", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 Project Id, 조회 기간을 받아 프로젝트의 할일 리스트를 반환합니다.")
+    public ResponseEntity<BaseResponse<List<EpicProjectedItem>>> selectProjectEpicsWithDateRange(
+        @RequestParam("project_id") long projectId, @RequestParam(value = "start", required = false)
+    LocalDate start_date, @RequestParam(value = "end_date", required = false) LocalDate end_date) {
+        return ResponseEntity.ok()
+            .body(BaseResponse.<List<EpicProjectedItem>>builder()
+                .code(HttpStatus.OK.value())
+                .message("프로젝트의 할일 리스트 조회 성공")
+                .data(epicService.selectProjectEpicsWithDateRange(projectId, start_date, end_date))
+                .build()
+            );
     }
 }
