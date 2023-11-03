@@ -10,6 +10,7 @@ public enum ExceptionInfo {
     // Common
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 1000, "서버 에러입니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, 1001, "권한이 존재하지 않습니다."),
+    ACESSTOKEN_EXPIRED(HttpStatus.BAD_REQUEST, 1002, "토큰이 만료되었습니다."),
 
     // User
     UNAUTHORIZED_ERROR(HttpStatus.UNAUTHORIZED, 2000, "권한이 부족합니다."),
@@ -27,7 +28,18 @@ public enum ExceptionInfo {
     INVALID_USER_PROJECT(HttpStatus.BAD_REQUEST, 5000, "유효하지 않은 프로젝트 멤버입니다."),
 
     // Epic
-    INVALID_EPIC(HttpStatus.BAD_REQUEST, 6000, "존재하지 않는 할 일입니다.")
+    INVALID_EPIC(HttpStatus.BAD_REQUEST, 6000, "존재하지 않는 할 일입니다."),
+
+    // Task
+    INVALID_TASK(HttpStatus.BAD_REQUEST, 7000, "존재하지 않는 세부 작업입니다."),
+
+    // Oracle
+    FAILED_FILE_UPLOAD(HttpStatus.BAD_REQUEST, 7000, "파일 업로드를 실패했습니다."),
+    FAILED_FILE_DOWNLOAD(HttpStatus.BAD_REQUEST, 7001, "파일 불러오기를 실패했습니다."),
+    FAILED_FILE_DELETE(HttpStatus.BAD_REQUEST, 7002, "파일 삭제를 실패했습니다.").
+
+    //File
+    INVALID_FILE(HttpStatus.BAD_REQUEST, 8000, "존재하지 않는 파일입니다.")
     ,;
 
     private final HttpStatus status;
