@@ -8,6 +8,6 @@ import com.projpolice.global.common.error.info.ExceptionInfo;
  */
 public class UnAuthorizedException extends BaseException {
     public UnAuthorizedException(ExceptionInfo exceptionInfo) {
-        super(exceptionInfo.getStatus(), exceptionInfo.getCode(), exceptionInfo.getMessage());
+        super(exceptionInfo);
     }
 }

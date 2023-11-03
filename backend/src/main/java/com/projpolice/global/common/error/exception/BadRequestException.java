@@ -13,6 +13,6 @@ import com.projpolice.global.common.error.info.ExceptionInfo;
  */
 public class BadRequestException extends BaseException {
     public BadRequestException(ExceptionInfo exceptionInfo) {
-        super(exceptionInfo.getStatus(), exceptionInfo.getCode(), exceptionInfo.getMessage());
+        super(exceptionInfo);
     }
 }

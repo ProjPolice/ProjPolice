@@ -9,6 +9,6 @@ import com.projpolice.global.common.error.info.ExceptionInfo;
 public class TaskException extends BaseException {
 
     public TaskException(ExceptionInfo exceptionInfo) {
-        super(exceptionInfo.getStatus(), exceptionInfo.getCode(), exceptionInfo.getMessage());
+        super(exceptionInfo);
     }
 }
