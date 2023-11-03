@@ -27,8 +27,11 @@ public enum ExceptionInfo {
     INVALID_USER_PROJECT(HttpStatus.BAD_REQUEST, 5000, "유효하지 않은 프로젝트 멤버입니다."),
 
     // Epic
-    INVALID_EPIC(HttpStatus.BAD_REQUEST, 6000, "존재하지 않는 할 일입니다.")
-    ,;
+    INVALID_EPIC(HttpStatus.BAD_REQUEST, 6000, "존재하지 않는 할 일입니다."),
+
+    // Task
+    INVALID_TASK(HttpStatus.BAD_REQUEST, 7000, "존재하지 않는 세부 작업입니다."),
+    ;
 
     private final HttpStatus status;
     private final Integer code;
