@@ -93,6 +93,7 @@ public class ProjectServiceImpl implements ProjectService {
             .build();
 
         projectRepository.save(project);
+        userProjectRepository.save(new UserProject(getLoggedUser(), project));
 
         return ProjectDetailData.from(project);
     }
