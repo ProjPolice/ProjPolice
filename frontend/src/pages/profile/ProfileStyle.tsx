@@ -3,8 +3,7 @@ import { colors } from '@assets/design/colors';
 import { BoxProps } from './interfaces';
 
 export const Page = styled.div`
-  width: 100%;
-  height: 100vh;
+  flex-grow: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,8 +29,6 @@ export const Header = styled.div`
 
 export const HeaderText = styled.h1`
   margin-left: 3%;
-  font-family: 'light';
-  font-weight: 100;
 `;
 
 export const Row = styled.div`
@@ -52,13 +49,4 @@ export const Box = styled.div<BoxProps>`
   border-style: solid;
   padding-left: 5%;
   justify-content: space-evenly;
-`;
-
-export const BoxTitle = styled.h4`
-  font-family: 'light';
-`;
-
-export const BoxContext = styled.h5`
-  font-family: 'light';
-  font-weight: 100;
 `;

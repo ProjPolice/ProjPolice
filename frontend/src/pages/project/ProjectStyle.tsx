@@ -1,14 +1,15 @@
+import { colors } from '@assets/design/colors';
 import styled from '@emotion/styled';
 
 export const Page = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   align-items: center;
 `;
 
-export const CenterContainer = styled.div<{ background: string; }>`
+export const CenterContainer = styled.div<{ background: string }>`
   display: flex;
   flex-direction: column;
   width: 70%;
@@ -18,7 +19,7 @@ export const CenterContainer = styled.div<{ background: string; }>`
   background-color: ${(props) => props.background};
 `;
 
-export const ProjectSection = styled.div<{ height: string, background: string; }>`
+export const ProjectSection = styled.div<{ height: string; background: string }>`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -28,8 +29,7 @@ export const ProjectSection = styled.div<{ height: string, background: string; }
   height: ${(props) => props.height};
 `;
 
-
-export const Container = styled.div<{ width: string, height: string, background: string; }>`
+export const Container = styled.div<{ width: string; height: string; background: string }>`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -39,12 +39,12 @@ export const Container = styled.div<{ width: string, height: string, background:
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   border-radius: 10px;
-  border: 1px solid #d8d8d8;
+  border: 1px solid ${colors.default};
   box-sizing: border-box;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
-export const SectionHeader = styled.div<{ height: string, background: string, alignitems: string; }>`
+export const SectionHeader = styled.div<{ height: string; background: string; alignitems: string }>`
   display: flex;
   /* justify-content: space-evenly; */
   background-color: ${(props) => props.background};
@@ -53,18 +53,18 @@ export const SectionHeader = styled.div<{ height: string, background: string, al
   align-items: ${(props) => props.alignitems};
 `;
 
-export const ContainerNav = styled.div<{ height: string, background: string }>`
-  display: flex;  
+export const ContainerNav = styled.div<{ height: string; background: string }>`
+  display: flex;
   justify-content: space-between;
-  background-color: ${(props)=> props.background};
+  background-color: ${(props) => props.background};
   height: ${(props) => props.height};
   width: 100% - 35px;
   padding: 0% 35px;
   align-items: center;
 `;
 
-export const ContainerContent = styled.div<{height: string;}>`
-  display: flex;  
+export const ContainerContent = styled.div<{ height: string }>`
+  display: flex;
   height: ${(props) => props.height};
   width: 100%;
   justify-content: center;

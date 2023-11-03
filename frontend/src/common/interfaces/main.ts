@@ -13,4 +13,5 @@ export interface ProjectItemListProps {
 
 export interface BoardItemProps {
   name?: string;
+  backgroundColor: string;
 }

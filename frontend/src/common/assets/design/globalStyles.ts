@@ -4,10 +4,15 @@ import { colors } from './colors';
 import bold from '../fonts/esamanru-Bold.ttf';
 import medium from '../fonts/esamanru-Medium.ttf';
 import light from '../fonts/esamanru-Light.ttf';
+import styled from '@emotion/styled';
 
 export const globalStyle = css`
   * {
     background-color: ${colors.white};
+  }
+
+  html {
+    font-size: 62.5%;
   }
 
   @font-face {
@@ -26,48 +31,48 @@ export const globalStyle = css`
   }
 
   h1 {
-    font-family: 'bold';
-    font-size: 42px;
+    font-family: 'light';
+    font-size: 5.2rem;
     background-color: transparent;
     margin-top: 0;
     margin-bottom: 0;
   }
 
   h2 {
-    font-family: 'bold';
-    font-size: 36px;
+    font-family: 'light';
+    font-size: 3.6rem;
     background-color: transparent;
     margin-top: 0;
     margin-bottom: 0;
   }
 
   h3 {
-    font-family: 'bold';
-    font-size: 30px;
+    font-family: 'light';
+    font-size: 3rem;
     background-color: transparent;
     margin-top: 0;
     margin-bottom: 0;
   }
 
   h4 {
-    font-family: 'bold';
-    font-size: 24px;
+    font-family: 'light';
+    font-size: 2.4rem;
     background-color: transparent;
     margin-top: 0;
     margin-bottom: 0;
   }
 
   h5 {
-    font-family: 'bold';
-    font-size: 18px;
+    font-family: 'medium';
+    font-size: 1.8rem;
     background-color: transparent;
     margin-top: 0;
     margin-bottom: 0;
   }
 
   h6 {
-    font-family: 'medium';
-    font-size: 18px;
+    font-family: 'light';
+    font-size: 1.8rem;
     background-color: transparent;
     margin-top: 0;
     margin-bottom: 0;
@@ -75,9 +80,20 @@ export const globalStyle = css`
 
   p {
     font-family: 'light';
-    font-size: 18px;
+    font-size: 1.8rem;
     background-color: transparent;
     margin-top: 0;
     margin-bottom: 0;
   }
+`;
+
+export const AppContainer = styled.div`
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const Page = styled.div`
+  flex-grow: 1;
 `;

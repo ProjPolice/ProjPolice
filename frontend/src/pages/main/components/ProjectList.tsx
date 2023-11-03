@@ -1,6 +1,5 @@
+import ProjectItem from './ProjectList/ProjectItem';
 import { colors } from '@assets/design/colors';
-import ProjectItem from './ProjectItem';
-
 import { ProjectContainer } from '@main/MainStyle';
 
 function ProjectList() {
