@@ -39,3 +39,6 @@ out/
 *.log
 *.properties
 *.gz
+
+### keys ###
+/src/main/resources/keys/
