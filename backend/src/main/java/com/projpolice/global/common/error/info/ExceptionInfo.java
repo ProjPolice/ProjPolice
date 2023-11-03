@@ -29,11 +29,14 @@ public enum ExceptionInfo {
     // Epic
     INVALID_EPIC(HttpStatus.BAD_REQUEST, 6000, "존재하지 않는 할 일입니다."),
 
+    // Task
+    INVALID_TASK(HttpStatus.BAD_REQUEST, 7000, "존재하지 않는 세부 작업입니다."),
+
     // Oracle
     FAILED_FILE_UPLOAD(HttpStatus.BAD_REQUEST, 7000, "파일 업로드를 실패했습니다."),
     FAILED_FILE_DOWNLOAD(HttpStatus.BAD_REQUEST, 7001, "파일 불러오기를 실패했습니다."),
-    FAILED_FILE_DELETE(HttpStatus.BAD_REQUEST, 7002, "파일 삭제를 실패했습니다."),
-    ;
+    FAILED_FILE_DELETE(HttpStatus.BAD_REQUEST, 7002, "파일 삭제를 실패했습니다.")
+    ,;
 
     private final HttpStatus status;
     private final Integer code;
