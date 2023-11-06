@@ -5,7 +5,7 @@ import { ProjectSection } from './ProjectStyle';
 import { SectionHeader } from './ProjectStyle';
 import ProjectCalendarTimeline from './components/ProjectCalendarTimeline';
 import ProjectDetail from './components/ProjectDetail';
-import ProjectTaskList from './components/ProjectTaskList';
+import ProjectTaskList from './components/ProjectEpicList';
 
 function Project() {
   return (
