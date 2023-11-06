@@ -1,18 +1,10 @@
 import { colors } from '@assets/design/colors';
 import styled from '@emotion/styled';
 
-export const Page = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100vh;
-  align-items: center;
-`;
-
 export const BoardContainer = styled.div<{ height: string; background: string }>`
   display: flex;
   justify-content: space-evenly;
-  width: 80%;
+  width: 70%;
   margin: 0% 10% 0% 10%;
   background-color: ${(props) => props.background};
   height: ${(props) => props.height};
@@ -56,4 +48,9 @@ export const BoardBox = styled.div<{ backgroundColor: string }>`
   height: 20%;
   margin-top: 3%;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+`;
+
+export const TextContainer = styled.div`
+  width: 70%;
+  padding-bottom: 1%;
 `;

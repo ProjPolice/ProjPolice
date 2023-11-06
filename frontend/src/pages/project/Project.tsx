@@ -1,4 +1,4 @@
-import { Page } from './ProjectStyle';
+import { Page } from '@assets/design/globalStyles';
 import { CenterContainer } from './ProjectStyle';
 import { ProjectSection } from './ProjectStyle';
 

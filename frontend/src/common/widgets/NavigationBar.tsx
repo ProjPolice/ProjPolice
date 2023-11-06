@@ -14,6 +14,7 @@ const NavigationBar = () => {
       <Segment></Segment>
       <Segment></Segment>
       <Segment />
+      <Segment />
       <Segment>
         <p>내 작업</p>
       </Segment>

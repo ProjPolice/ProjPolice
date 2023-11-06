@@ -1,4 +1,5 @@
-import { Box, Container, Header, HeaderText, Page, Row } from './ProfileStyle';
+import { Page } from '@assets/design/globalStyles';
+import { Box, Container, Header, HeaderText, Row } from './ProfileStyle';
 
 function Profile() {
   return (

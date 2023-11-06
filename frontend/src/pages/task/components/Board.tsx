@@ -4,7 +4,7 @@ import BoardItem from './BoardItem';
 
 function Board() {
   return (
-    <BoardContainer height={'80%'} background={colors.white}>
+    <BoardContainer height={'90%'} background={colors.white}>
       <Task backgroundColor={colors.primary}>
         <BoardSection backgroundColor={colors.board1}>
           <BoardItem name={'프로젝트명'} backgroundColor={colors.red}></BoardItem>

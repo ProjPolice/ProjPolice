@@ -1,19 +1,11 @@
 import { colors } from '@assets/design/colors';
 import styled from '@emotion/styled';
 
-export const Page = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-`;
-
 export const CenterContainer = styled.div<{ background: string }>`
   display: flex;
   flex-direction: column;
   width: 70%;
-  height: 100vh;
+  height: 100%;
   align-items: center;
   //MUST BE DELETED AFTER
   background-color: ${(props) => props.background};

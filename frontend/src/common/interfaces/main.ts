@@ -6,7 +6,7 @@ export interface HeaderBoxProps {
 }
 
 export interface ProjectItemListProps {
-  backgroundColor?: string;
+  backgroundColor: string;
   projectname: string;
   membercount: number;
 }

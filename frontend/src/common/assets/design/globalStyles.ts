@@ -7,10 +7,6 @@ import light from '../fonts/esamanru-Light.ttf';
 import styled from '@emotion/styled';
 
 export const globalStyle = css`
-  * {
-    background-color: ${colors.white};
-  }
-
   html {
     font-size: 62.5%;
   }
@@ -92,8 +88,13 @@ export const AppContainer = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: ${colors.white};
 `;
 
 export const Page = styled.div`
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;

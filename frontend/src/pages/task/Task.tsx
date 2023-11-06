@@ -1,18 +1,16 @@
-import { Page } from './TaskStyle';
-import Board from './Board/Board';
-// import styled from '@emotion/styled';
+import { Page } from '@assets/design/globalStyles';
+import Board from './components/Board';
+import { TextContainer } from './TaskStyle';
 
 function Task() {
   return (
     <Page>
-      <div style={{ margin: '1% 0% 1% 10%', alignSelf: 'start' }}>
+      <TextContainer>
         <h3>내 작업 관리</h3>
-      </div>
+      </TextContainer>
       <Board />
     </Page>
   );
 }
 
 export default Task;
-
-// const H3 = styled.h3``;
