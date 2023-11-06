@@ -7,6 +7,7 @@ import Project from './pages/project/Project';
 
 import Profile from './pages/profile/Profile';
 import Task from './pages/task/Task';
+import { Test } from '../Test';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: 'task',
         element: <Task />,
+      },
+      {
+        path: 'test',
+        element: <Test />,
       },
     ],
   },

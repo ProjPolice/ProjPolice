@@ -2,13 +2,11 @@ import { ProjectItemListProps } from '@interfaces/main';
 
 import { ProjectBox } from '@main/MainStyle';
 
-
 function ProjectItem({ backgroundColor, projectname, membercount }: ProjectItemListProps) {
   return (
     <ProjectBox backgroundColor={backgroundColor}>
-      <div style={{ flex: 1 }}>
-      </div>
-      <div style={{ flex: 1, alignSelf : 'start' }}>
+      <div style={{ flex: 1 }}></div>
+      <div style={{ flex: 1, alignSelf: 'start' }}>
         <p>{projectname}</p>
       </div>
       <div style={{ flex: 2 }}>
@@ -20,6 +18,5 @@ function ProjectItem({ backgroundColor, projectname, membercount }: ProjectItemL
     </ProjectBox>
   );
 }
-
 
 export default ProjectItem;

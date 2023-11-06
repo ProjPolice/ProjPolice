@@ -1,17 +1,15 @@
-import { Page } from "./ProjectStyle";
-import { CenterContainer } from "./ProjectStyle";
-import { ProjectSection } from "./ProjectStyle";
+import { Page } from '@assets/design/globalStyles';
+import { CenterContainer } from './ProjectStyle';
+import { ProjectSection } from './ProjectStyle';
 
-import NavigationBar from "@widgets/NavigationBar";
-import { SectionHeader } from "./ProjectStyle";
-import ProjectCalendarTimeline from "./components/ProjectCalendarTimeline";
-import ProjectDetail from "./components/ProjectDetail";
-import ProjectTaskList from "./components/ProjectTaskList";
+import { SectionHeader } from './ProjectStyle';
+import ProjectCalendarTimeline from './components/ProjectCalendarTimeline';
+import ProjectDetail from './components/ProjectDetail';
+import ProjectTaskList from './components/ProjectTaskList';
 
 function Project() {
-  return(
+  return (
     <Page>
-      <NavigationBar/>
       <CenterContainer background="">
         <SectionHeader height={'8%'} background="" alignitems="end">
          <h3 style={{marginBottom:'1%'}}>프로젝트 상세</h3> 

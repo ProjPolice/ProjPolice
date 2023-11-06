@@ -1,8 +1,9 @@
-import { Container } from "@project/ProjectStyle";
-import { ContainerNav } from "@project/ProjectStyle";
-import { ContainerContent } from "@project/ProjectStyle";
+import { Container } from '@project/ProjectStyle';
+import { ContainerNav } from '@project/ProjectStyle';
+import { ContainerContent } from '@project/ProjectStyle';
 
-import ProjectCalendar from "./ProjectCalendar";
+import ProjectCalendar from './ProjectCalendar';
+import { colors } from '@assets/design/colors';
 
 function ProjectCalendarTimeline() {
   return (

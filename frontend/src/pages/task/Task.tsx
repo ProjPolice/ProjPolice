@@ -1,14 +1,14 @@
-import { Page } from './TaskStyle';
-import NavigationBar from '../../common/widgets/NavigationBar';
-import Board from './Board/Board';
-
+import { Page } from '@assets/design/globalStyles';
+import Board from './components/Board';
+import { TextContainer } from './TaskStyle';
 
 function Task() {
   return (
     <Page>
-      <NavigationBar/>
-        <div style={{ margin: '1% 0% 1% 10%', alignSelf : 'start' }}>내 작업 관리</div>
-      <Board/>
+      <TextContainer>
+        <h3>내 작업 관리</h3>
+      </TextContainer>
+      <Board />
     </Page>
   );
 }

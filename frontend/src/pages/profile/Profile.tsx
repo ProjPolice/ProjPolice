@@ -1,4 +1,5 @@
-import { Box, BoxContext, BoxTitle, Container, Header, HeaderText, Page, Row } from './ProfileStyle';
+import { Page } from '@assets/design/globalStyles';
+import { Box, Container, Header, HeaderText, Row } from './ProfileStyle';
 
 function Profile() {
   return (
@@ -9,24 +10,24 @@ function Profile() {
         </Header>
         <Row>
           <Box position="left">
-            <BoxTitle>회원명</BoxTitle>
-            <BoxContext>{'나이키'}</BoxContext>
+            <h4>회원명</h4>
+            <h6>{'나이키'}</h6>
           </Box>
           <Box position="right">
-            <BoxTitle>프로필 사진</BoxTitle>
-            <BoxContext>{'사진'}</BoxContext>
+            <h4>프로필 사진</h4>
+            <h6>{'사진'}</h6>
           </Box>
         </Row>
         <Row>
           <Box>
-            <BoxTitle>이메일</BoxTitle>
-            <BoxContext>{'nikezz@icloud.com'}</BoxContext>
+            <h4>이메일</h4>
+            <h6>{'nikezz@icloud.com'}</h6>
           </Box>
         </Row>
         <Row>
           <Box>
-            <BoxTitle>비밀번호</BoxTitle>
-            <BoxContext>{'비밀번호'}</BoxContext>
+            <h4>비밀번호</h4>
+            <h6>{'비밀번호'}</h6>
           </Box>
         </Row>
       </Container>

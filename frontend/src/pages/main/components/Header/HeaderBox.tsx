@@ -1,10 +1,9 @@
 import { HeaderBoxProps } from '@interfaces/main';
-import { Box } from '@main/MainStyle';
+import { HeaderBox } from '@main/MainStyle';
 
-
-function HeaderBox({ count, name, icon, backgroundColor }: HeaderBoxProps) {
+function HeaderItem({ count, name, icon, backgroundColor }: HeaderBoxProps) {
   return (
-    <Box backgroundColor={backgroundColor}>
+    <HeaderBox backgroundColor={backgroundColor}>
       <div style={{ flex: 1 }}>
         <img src={icon} alt="Icon" />
       </div>
@@ -12,8 +11,8 @@ function HeaderBox({ count, name, icon, backgroundColor }: HeaderBoxProps) {
         <p>{count} 건</p>
         <p>{name}</p>
       </div>
-    </Box>
+    </HeaderBox>
   );
 }
 
-export default HeaderBox;
+export default HeaderItem;
