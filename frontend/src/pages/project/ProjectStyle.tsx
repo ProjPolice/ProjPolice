@@ -1,6 +1,5 @@
 import { colors } from '@assets/design/colors';
 import styled from '@emotion/styled';
-import { colors } from '@assets/design/colors';
 
 export const CenterContainer = styled.div<{ background: string }>`
   display: flex;
