@@ -5,10 +5,17 @@ export interface HeaderBoxProps {
   backgroundColor?: string;
 }
 
-export interface ProjectItemListProps {
+export interface TaskItemProps {
   backgroundColor: string;
   projectname: string;
   membercount: number;
+}
+
+export interface ProjectItemProps {
+  backgroundColor: string;
+  title: string;
+  members: string[];
+  tasks: string[];
 }
 
 export interface BoardItemProps {
