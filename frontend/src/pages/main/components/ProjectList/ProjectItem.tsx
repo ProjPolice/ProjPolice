@@ -1,20 +1,25 @@
-import { ProjectItemListProps } from '@interfaces/main';
+import { ProjectItemProps } from '@interfaces/main';
 
-import { ProjectBox } from '@main/MainStyle';
+import { LeftLinedBox, ProjectBox, ProjectBoxMember, ProjectBoxTask, ProjectBoxTitle } from '@main/MainStyle';
 
-function ProjectItem({ backgroundColor, projectname, membercount }: ProjectItemListProps) {
+function ProjectItem({ backgroundColor, title, members, tasks }: ProjectItemProps) {
   return (
     <ProjectBox backgroundColor={backgroundColor}>
-      <div style={{ flex: 1 }}></div>
-      <div style={{ flex: 1, alignSelf: 'start' }}>
-        <p>{projectname}</p>
-      </div>
-      <div style={{ flex: 2 }}>
-        <p>{membercount}</p>
-      </div>
-      <div style={{ flex: 3 }}>
-        <p>{projectname}</p>
-      </div>
+      <ProjectBoxTitle>
+        <h6>{title}</h6>
+      </ProjectBoxTitle>
+      <ProjectBoxMember>
+        {members.map((member) => (
+          <p>{member}</p>
+        ))}
+      </ProjectBoxMember>
+      <ProjectBoxTask>
+        {tasks.map((task) => (
+          <LeftLinedBox width="45%" height="30%" backgroundColor={backgroundColor}>
+            <p>{task}</p>
+          </LeftLinedBox>
+        ))}
+      </ProjectBoxTask>
     </ProjectBox>
   );
 }

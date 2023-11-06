@@ -10,9 +10,24 @@ function ProjectList() {
         <p>전체보기</p>
       </TextContainer>
       <ProjectBoxContainer>
-        <ProjectItem projectname={'프로젝트 1'} membercount={1} backgroundColor={colors.yellow} />
-        <ProjectItem projectname={'프로젝트 2'} membercount={2} backgroundColor={colors.blue} />
-        <ProjectItem projectname={'프로젝트 3'} membercount={3} backgroundColor={colors.black} />
+        <ProjectItem
+          title={'프로젝트 1'}
+          members={['철수', '영희', '민지']}
+          tasks={['할 일 1', '할 일 2', '할 일 3', '할 일 4']}
+          backgroundColor={colors.yellow}
+        />
+        <ProjectItem
+          title={'프로젝트 2'}
+          members={['철수', '영희', '민지']}
+          tasks={['할 일 1', '할 일 2', '할 일 3', '할 일 4']}
+          backgroundColor={colors.blue}
+        />
+        <ProjectItem
+          title={'프로젝트 3'}
+          members={['철수', '영희', '민지']}
+          tasks={['할 일 1', '할 일 2', '할 일 3', '할 일 4', '할 일 5', '할 일 6']}
+          backgroundColor={colors.black}
+        />
       </ProjectBoxContainer>
     </ProjectContainer>
   );
