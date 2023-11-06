@@ -1,25 +1,17 @@
-import { ProjectItemListProps } from '@interfaces/main';
+import { TaskItemProps } from '@interfaces/main';
 
 import { TaskBox } from '@main/MainStyle';
 
-
-function TaskItem({ backgroundColor, projectname, membercount }: ProjectItemListProps) {
+function TaskItem({ backgroundColor, projectname, membercount }: TaskItemProps) {
   return (
     <TaskBox backgroundColor={backgroundColor}>
-      <div style={{ flex: 1 }}>
-      </div>
-      <div style={{ flex: 1, alignSelf : 'start' }}>
-        <p>{projectname}</p>
-      </div>
-      <div style={{ flex: 2 }}>
-        <p>{membercount}</p>
-      </div>
-      <div style={{ flex: 3 }}>
-        <p>{projectname}</p>
-      </div>
+      <p>{projectname}</p>
+      <p>{membercount}</p>
+      <p>{projectname}</p>
+      <p>{projectname}</p>
+      <p>{projectname}</p>
     </TaskBox>
   );
 }
-
 
 export default TaskItem;

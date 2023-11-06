@@ -18,7 +18,7 @@ export const HeaderContainer = styled.div`
   justify-content: space-between;
 `;
 
-export const HeaderBox = styled.div<{ backgroundColor?: string }>`
+export const LeftLinedBox = styled.div<{ backgroundColor?: string; width?: string; height?: string }>`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -26,8 +26,8 @@ export const HeaderBox = styled.div<{ backgroundColor?: string }>`
   background: linear-gradient(to right, ${(props) => props.backgroundColor} 10%, ${colors.light} 0%);
   border-radius: 10px;
   box-sizing: border-box;
-  width: 30%;
-  height: 70%;
+  width: ${(props) => (props.width ? props.width : '30%')};
+  height: ${(props) => (props.height ? props.height : '70%')};
   padding: 0% 5% 0% 5%;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 `;
@@ -45,13 +45,13 @@ export const ProjectBoxContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 80%;
+  height: 70%;
 `;
 
 export const ProjectBox = styled.div<{ backgroundColor: string }>`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   background: linear-gradient(to bottom, ${(props) => props.backgroundColor} 10%, ${colors.light} 0%);
   border-radius: 10px;
@@ -59,33 +59,59 @@ export const ProjectBox = styled.div<{ backgroundColor: string }>`
   width: 30%;
   height: 100%;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+  padding-top: 4%;
 `;
 
-export const TastkContainer = styled.div`
+export const ProjectBoxTitle = styled.div`
+  display: flex;
+  text-align: start;
+  width: 90%;
+  height: 10%;
+`;
+
+export const ProjectBoxMember = styled.div`
+  display: flex;
+  align-items: center;
+  width: 90%;
+  height: 15%;
+  gap: 3%;
+`;
+
+export const ProjectBoxTask = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  height: 70%;
+  flex-wrap: wrap;
+  padding-bottom: 1%;
+`;
+
+export const TaskContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   width: 70%;
   height: 40%;
+  padding-bottom: 1%;
 `;
 
 export const TaskBoxContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  height: 100%;
+  justify-content: center;
+  height: 60%;
 `;
 
 export const TaskBox = styled.div<{ backgroundColor: string }>`
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   background: linear-gradient(to bottom, ${(props) => props.backgroundColor} 10%, ${colors.light} 0%);
   border-radius: 10px;
   box-sizing: border-box;
   width: 100%;
-  height: 20%;
+  height: 30%;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
@@ -93,4 +119,5 @@ export const TextContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: end;
+  height: 10%;
 `;
