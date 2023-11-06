@@ -6,12 +6,12 @@ import ProjectCalendar from "./ProjectCalendar";
 
 function ProjectCalendarTimeline() {
   return (
-    <Container width={"60%"} height={'90%'} background="white">
+    <Container width={"60%"} height={'90%'}>
       <ContainerNav height={'15%'} background="">
-        <h3>프로젝트 이름</h3> <h3>버튼</h3>
+        <p>프로젝트 이름</p> <p>버튼</p>
       </ContainerNav>
       <ContainerNav height={'0.5%'} background="#d8d8d8"/>
-      <ContainerContent height={'90%'}>
+      <ContainerContent height={'90%'} background="">
         <ProjectCalendar/>
       </ContainerContent>
     </Container>
