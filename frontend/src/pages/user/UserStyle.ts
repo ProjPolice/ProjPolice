@@ -31,7 +31,7 @@ export const HeaderText = styled.h1`
 
 export const Box = styled.div`
   width: 100%;
-  height: 80%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   border-color: ${colors.default};
