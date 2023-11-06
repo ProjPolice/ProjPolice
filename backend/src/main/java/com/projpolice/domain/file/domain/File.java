@@ -1,13 +1,13 @@
 package com.projpolice.domain.file.domain;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
+import org.apache.commons.io.FilenameUtils;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.util.StringUtils;
 
 import com.projpolice.domain.file.request.FileUploadRequest;
 import com.projpolice.domain.task.domain.Task;
@@ -60,13 +60,13 @@ public class File extends BaseEntity {
     @JoinColumn(name = "task_id", foreignKey = @ForeignKey(name = "fk_file_to_task_task_id"))
     private Task task;
 
-    public static File of(FileUploadRequest fileUploadRequest, Task task) {
+    public static File of(FileUploadRequest fileUploadRequest, Task task, String uuid) {
         return File.builder()
-            .name(fileUploadRequest.getName())
+            .name(FilenameUtils.getBaseName(fileUploadRequest.getFile().getOriginalFilename()))
             .comment(fileUploadRequest.getComment())
-            .uuid(UUID.randomUUID().toString())
+            .uuid(uuid)
             .version(fileUploadRequest.getVersion())
-            .extension(fileUploadRequest.getExtension())
+            .extension(StringUtils.getFilenameExtension(fileUploadRequest.getFile().getOriginalFilename()))
             .task(task)
             .build();
     }
