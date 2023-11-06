@@ -1,6 +1,7 @@
 package com.projpolice.domain.task.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.projpolice.domain.epic.domain.Epic;
 import com.projpolice.domain.epic.repository.EpicRepository;
@@ -8,11 +9,14 @@ import com.projpolice.domain.task.domain.Task;
 import com.projpolice.domain.task.dto.TaskDetailItem;
 import com.projpolice.domain.task.repository.TaskRepository;
 import com.projpolice.domain.task.request.TaskCreateRequest;
+import com.projpolice.domain.task.request.TaskUpdateRequest;
+import com.projpolice.domain.task.response.TaskUpdateResponse;
 import com.projpolice.domain.user.domain.User;
 import com.projpolice.domain.user.repository.UserRepository;
 import com.projpolice.global.common.error.exception.EpicException;
 import com.projpolice.global.common.error.exception.UserException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
+import com.projpolice.global.common.manager.ProjectAuthManager;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +26,7 @@ public class TaskServiceImpl implements TaskService {
     private final UserRepository userRepository;
     private final EpicRepository epicRepository;
     private final TaskRepository taskRepository;
+    private final ProjectAuthManager projectAuthManager;
 
     /**
      * 상세 작업 생성
@@ -29,8 +34,11 @@ public class TaskServiceImpl implements TaskService {
      * @return 생성한 상세 작업 상세 내용
      */
     @Override
+    @Transactional
     public TaskDetailItem createTask(TaskCreateRequest taskCreateRequest) {
-        // todo: User가 해당 프로젝트 팀원인지 확인 필요
+        projectAuthManager.checkEpicMembershipOrThrow(taskCreateRequest.getEpicId());
+        projectAuthManager.checkEpicMembershipWithUserIdOrThrow(taskCreateRequest.getEpicId(),
+            taskCreateRequest.getUserId());
 
         User user = userRepository.findById(taskCreateRequest.getUserId())
             .orElseThrow(() -> new UserException(ExceptionInfo.INVALID_USER));
@@ -40,5 +48,45 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.save(Task.of(taskCreateRequest, user, epic));
 
         return TaskDetailItem.from(task);
+    }
+
+    /**
+     * 세부 작업 수정 기능
+     * @param taskId
+     * @param taskUpdateRequest
+     * @return 수정한 세부 작업 값
+     */
+    @Override
+    @Transactional
+    public TaskUpdateResponse updateTask(Long taskId, TaskUpdateRequest taskUpdateRequest) {
+        projectAuthManager.checkTaskOwnershipOrThrow(taskId);
+
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_TASK));
+
+        if (taskUpdateRequest.getName() != null) {
+            task.setName(taskUpdateRequest.getName());
+        }
+        if (taskUpdateRequest.getDescription() != null) {
+            task.setDescription(taskUpdateRequest.getDescription());
+        }
+        if (taskUpdateRequest.getStartDate() != null) {
+            task.setStartDate(taskUpdateRequest.getStartDate());
+        }
+        if (taskUpdateRequest.getEndDate() != null) {
+            task.setEndDate(taskUpdateRequest.getEndDate());
+        }
+        if (taskUpdateRequest.getStatus() != null) {
+            task.setStatus(taskUpdateRequest.getStatus());
+        }
+        if (taskUpdateRequest.getUserId() != null) {
+            task.setUser(userRepository.findById(taskUpdateRequest.getUserId())
+                .orElseThrow(() -> new UserException(ExceptionInfo.INVALID_USER)));
+        }
+        if (taskUpdateRequest.getEpicId() != null) {
+            task.setEpic(epicRepository.findById(taskUpdateRequest.getEpicId())
+                .orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC)));
+        }
+
+        return TaskUpdateResponse.from(task);
     }
 }

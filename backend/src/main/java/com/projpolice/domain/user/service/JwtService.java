@@ -13,8 +13,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.projpolice.domain.user.domain.User;
+import com.projpolice.global.common.error.exception.UnAuthorizedException;
+import com.projpolice.global.common.error.info.ExceptionInfo;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -45,8 +48,12 @@ public class JwtService {
      * @return claim
      */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+        try{
+            final Claims claims = extractAllClaims(token);
+            return claimsResolver.apply(claims);
+        }catch (ExpiredJwtException e){
+            throw new UnAuthorizedException(ExceptionInfo.ACESSTOKEN_EXPIRED );
+        }
     }
 
     /**
@@ -89,7 +96,7 @@ public class JwtService {
      *
      * @return boolean
      */
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 

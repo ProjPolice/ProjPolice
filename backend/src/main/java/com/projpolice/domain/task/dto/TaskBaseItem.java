@@ -15,5 +15,5 @@ public class TaskBaseItem {
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
-    private TaskStatus status = TaskStatus.TODO;
+    private String status = TaskStatus.TODO.name();
 }

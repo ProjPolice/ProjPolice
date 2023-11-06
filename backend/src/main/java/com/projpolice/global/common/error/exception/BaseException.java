@@ -3,6 +3,7 @@ package com.projpolice.global.common.error.exception;
 import org.springframework.http.HttpStatus;
 
 import com.projpolice.global.common.base.BaseResponse;
+import com.projpolice.global.common.error.info.ExceptionInfo;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +19,12 @@ public class BaseException extends RuntimeException {
     Integer code;
     String message;
     String log;
+
+    public BaseException(ExceptionInfo exceptionInfo) {
+        status = exceptionInfo.getStatus();
+        code = exceptionInfo.getCode();
+        message = exceptionInfo.getMessage();
+    }
 
     BaseException(HttpStatus status, Integer code, String message) {
         this.status = status;

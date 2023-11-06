@@ -18,6 +18,9 @@ import com.projpolice.domain.user.response.UserLoginResponse;
 import com.projpolice.domain.user.service.UserService;
 import com.projpolice.global.common.base.BaseResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -27,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@Tag(name = "사용자 컨트롤러", description = "사용자를 담당하는 컨트롤러입니다.")
 public class UserController {
     private final UserService userService;
 
@@ -37,7 +41,8 @@ public class UserController {
      * @return 회원의 아이디
      */
     @PostMapping("/join")
-    public ResponseEntity<? extends BaseResponse<UserJoinResponse>> join(@RequestBody UserJoinRequest request){
+    @Operation(summary = "회원가입", description = "새로운 사용자 정보를 입력 받아 회원가입을 진행합니다.")
+    public ResponseEntity<? extends BaseResponse<UserJoinResponse>> join(@RequestBody UserJoinRequest request) {
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(
@@ -54,7 +59,8 @@ public class UserController {
      *
      * @return 인증된 사용자의 정보
      */
-    @GetMapping()
+    @Operation(summary = "회원 정보 조회", security = @SecurityRequirement(name = "Authorization"), description = "Access Token을 받아 사용자의 정보를 반환합니다.")
+    @GetMapping
     public ResponseEntity<? extends BaseResponse<UserInfoResponse>> getUserInfo() {
 
         return ResponseEntity.ok()
@@ -72,8 +78,10 @@ public class UserController {
      * @param request
      * @return 수정된 사용자의 정보
      */
-    @PatchMapping()
-    public ResponseEntity<? extends BaseResponse<UserInfoResponse>> updateUserInfo(@RequestBody UserUpdateRequest request) {
+    @PatchMapping
+    @Operation(summary = "사용자 정보 수정", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 수정할 정보를 받아 사용자의 정보를 수정합니다.")
+    public ResponseEntity<? extends BaseResponse<UserInfoResponse>> updateUserInfo(
+        @RequestBody UserUpdateRequest request) {
 
         return ResponseEntity.ok()
             .body(BaseResponse.<UserInfoResponse>builder()
@@ -90,9 +98,9 @@ public class UserController {
      * @param request
      * @return 인증에 필요한 Jwt Token 발급
      */
-    @PostMapping()
+    @PostMapping
+    @Operation(summary = "사용자 로그인", security = @SecurityRequirement(name = "Authorization"), description = "이메일과 패스워드를 받아 Access Token을 반환합니다.")
     public ResponseEntity<? extends BaseResponse<UserLoginResponse>> login(@RequestBody UserLoginRequest request) {
-
         return ResponseEntity.ok()
             .body(BaseResponse.<UserLoginResponse>builder()
                 .code(200)

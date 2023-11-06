@@ -16,7 +16,7 @@ public class TaskDetailItem extends TaskBaseItem {
             .id(task.getId())
             .name(task.getName())
             .description(task.getDescription())
-            .status(task.getStatus())
+            .status(task.getStatus().name())
             .startDate(task.getStartDate())
             .endDate(task.getEndDate())
             .user(UserIdNameImgItem.from(task.getUser()))

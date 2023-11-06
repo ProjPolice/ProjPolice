@@ -1,5 +1,6 @@
 import { colors } from '@assets/design/colors';
 import styled from '@emotion/styled';
+import { colors } from '@assets/design/colors';
 
 export const CenterContainer = styled.div<{ background: string }>`
   display: flex;
@@ -21,13 +22,14 @@ export const ProjectSection = styled.div<{ height: string; background: string }>
   height: ${(props) => props.height};
 `;
 
-export const Container = styled.div<{ width: string; height: string; background: string }>`
+
+export const Container = styled.div<{ width: string, height: string}>`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   overflow: hidden;
   margin: 0%;
-  background-color: ${(props) => props.background};
+  background-color: ${colors.blue};
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   border-radius: 10px;
@@ -40,7 +42,7 @@ export const SectionHeader = styled.div<{ height: string; background: string; al
   display: flex;
   /* justify-content: space-evenly; */
   background-color: ${(props) => props.background};
-  width: 90%;
+  width: 92%;
   height: ${(props) => props.height};
   align-items: ${(props) => props.alignitems};
 `;
@@ -55,8 +57,8 @@ export const ContainerNav = styled.div<{ height: string; background: string }>`
   align-items: center;
 `;
 
-export const ContainerContent = styled.div<{ height: string }>`
-  display: flex;
+export const ContainerContent = styled.div<{height: string, background: string}>`
+  display: flex;  
   height: ${(props) => props.height};
   width: 100%;
   justify-content: center;

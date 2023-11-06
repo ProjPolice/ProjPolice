@@ -11,20 +11,20 @@ function Project() {
   return (
     <Page>
       <CenterContainer background="">
-        <SectionHeader height={'10%'} background="" alignitems="center">
-          <h2 style={{ marginTop: '5%' }}>프로젝트 상세</h2>
+        <SectionHeader height={'8%'} background="" alignitems="end">
+         <h3 style={{marginBottom:'1%'}}>프로젝트 상세</h3> 
         </SectionHeader>
 
-        <ProjectSection height={'47%'} background="">
-          <ProjectCalendarTimeline />
-          <ProjectDetail />
+        <ProjectSection height={'50%'} background="">
+          <ProjectCalendarTimeline/>
+          <ProjectDetail/>
         </ProjectSection>
 
-        <SectionHeader height={'6%'} background="" alignitems="bottom">
-          <h2>작업 목록</h2>
+        <SectionHeader height={'8%'} background="" alignitems="end">
+         <h3 style={{marginBottom:'1%'}}>작업 목록</h3> 
         </SectionHeader>
-        <ProjectSection height={'35%'} background="">
-          <ProjectTaskList />
+        <ProjectSection height={'31%'} background="">
+          <ProjectTaskList/>
         </ProjectSection>
       </CenterContainer>
     </Page>

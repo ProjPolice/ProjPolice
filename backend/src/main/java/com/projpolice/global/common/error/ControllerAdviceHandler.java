@@ -1,10 +1,12 @@
 package com.projpolice.global.common.error;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.projpolice.global.common.base.BaseResponse;
+import com.projpolice.global.common.error.exception.BaseException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,10 +36,10 @@ import lombok.extern.slf4j.Slf4j;
 public class ControllerAdviceHandler {
 
     /**
-     * Handles general exceptions and returns a ResponseEntity with a BaseResponse object.
+     * Handles general exceptions and returns a ResponseEntity with a BaseResponse object representing an internal server error.
      *
      * @param exception The exception that is being handled.
-     * @return A ResponseEntity with a BaseResponse object representing an internal server error.
+     * @return A ResponseEntity containing a BaseResponse object with the status, code, and message of the internal error.
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BaseResponse<Void>> handleGeneralException(Exception exception) {
@@ -58,5 +60,36 @@ public class ControllerAdviceHandler {
             );
     }
 
-    // todo: ExceptionHandlerExceptionResolver/TaskException 만들어야함
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<BaseResponse<Void>> handleBaseException(BaseException exception) {
+        log.error("[ {} exception occurred ]", exception.getClass().getName());
+
+        return ResponseEntity.status(exception.getStatus())
+            .body(
+                BaseResponse.<Void>builder()
+                    .code(exception.getCode())
+                    .message(exception.getMessage())
+                    .build()
+            );
+    }
+
+    /**
+     * Meta Data error
+     * Handles base exceptions and returns a ResponseEntity with a BaseResponse object representing a meta data error.
+     *
+     * @param exception The exception that is being handled.
+     * @return A ResponseEntity containing a BaseResponse object with the status, code, and message of the meta data error.
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<BaseResponse<Void>> handleBaseException(HttpMessageNotReadableException exception) {
+        log.error("[ {} exception occurred ]", exception.getClass().getName());
+        final ExceptionInfo info = ExceptionInfo.INVALID_METADATA;
+        return ResponseEntity.status(info.getStatus())
+            .body(
+                BaseResponse.<Void>builder()
+                    .code(info.getCode())
+                    .message(info.getMessage())
+                    .build()
+            );
+    }
 }

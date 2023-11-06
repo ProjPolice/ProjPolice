@@ -9,6 +9,6 @@ import com.projpolice.global.common.error.info.ExceptionInfo;
 public class MetaException extends BaseException {
 
     public MetaException(ExceptionInfo exceptionInfo) {
-        super(exceptionInfo.getStatus(), exceptionInfo.getCode(), exceptionInfo.getMessage());
+        super(exceptionInfo);
     }
 }

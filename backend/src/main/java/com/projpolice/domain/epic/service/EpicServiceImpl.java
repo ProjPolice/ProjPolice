@@ -1,10 +1,19 @@
 package com.projpolice.domain.epic.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.projpolice.domain.epic.domain.Epic;
 import com.projpolice.domain.epic.dto.EpicDetailData;
+import com.projpolice.domain.epic.dto.EpicProjectedItem;
+import com.projpolice.domain.epic.dto.EpicProjectionDataItem;
+import com.projpolice.domain.epic.dto.TaskProjectedItem;
 import com.projpolice.domain.epic.repository.EpicRepository;
 import com.projpolice.domain.epic.request.EpicCreateRequest;
 import com.projpolice.domain.epic.request.EpicUpdateRequest;
@@ -15,6 +24,7 @@ import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.error.exception.EpicException;
 import com.projpolice.global.common.error.exception.TaskException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
+import com.projpolice.global.common.manager.ProjectAuthManager;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +34,7 @@ public class EpicServiceImpl implements EpicService {
     private final EpicRepository epicRepository;
     private final ProjectRepository projectRepository;
     private final TaskRepository taskRepository;
+    private final ProjectAuthManager projectAuthManager;
 
     /**
      * 해당 프로젝트에 할일 생성하는 메소드
@@ -34,7 +45,8 @@ public class EpicServiceImpl implements EpicService {
     @Override
     @Transactional
     public EpicDetailData createEpic(EpicCreateRequest epicCreateRequest) {
-        // todo: 인증인가 추가 후 해당 프로젝트의 팀원인지 확인 필요
+        projectAuthManager.checkProjectMembershipOrThrow(epicCreateRequest.getProjectId());
+
         Project project = projectRepository.findById(epicCreateRequest.getProjectId())
             .orElseThrow(() -> new TaskException(ExceptionInfo.INVALID_PROJECT));
 
@@ -51,7 +63,8 @@ public class EpicServiceImpl implements EpicService {
     @Override
     @Transactional(readOnly = true)
     public EpicDetailData getEpic(Long id) {
-        // todo: 인증인가 후 해당 epic의 프로젝트 멤버인지 확인 필요
+        projectAuthManager.checkEpicMembershipOrThrow(id);
+
         Epic epic = epicRepository.findById(id).orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC));
 
         return EpicDetailData.from(epic);
@@ -67,7 +80,8 @@ public class EpicServiceImpl implements EpicService {
     @Override
     @Transactional
     public EpicDetailData updateEpic(Long id, EpicUpdateRequest epicUpdateRequest) {
-        // todo: 인증인가 후 해당 epic의 프로젝트 멤버인지 확인 필요
+        projectAuthManager.checkEpicMembershipOrThrow(id);
+
         Epic epic = epicRepository.findById(id).orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC));
         if (epicUpdateRequest.getName() != null) {
             epic.setName(epicUpdateRequest.getName());
@@ -93,8 +107,57 @@ public class EpicServiceImpl implements EpicService {
     @Override
     @Transactional
     public BaseIdItem deleteEpic(Long id) {
+        projectAuthManager.checkEpicMembershipOrThrow(id);
+
         taskRepository.deleteAllByEpicId(id);
         epicRepository.deleteById(id);
         return BaseIdItem.from(id);
+    }
+
+    /**
+     * Selects project epics with a date range.
+     *
+     * @param project_id the ID of the project
+     * @param startDate the start date of the date range (if null, defaults to one month ago)
+     * @param endDate the end date of the date range (if null, defaults to one month from now)
+     * @return a list of EpicProjectedItem objects representing the selected epics and their associated tasks
+     */
+    @Override
+    public List<EpicProjectedItem> selectProjectEpicsWithDateRange(long project_id, LocalDate startDate,
+        LocalDate endDate) {
+        projectAuthManager.checkProjectMembershipOrThrow(project_id);
+        if (startDate == null) {
+            startDate = LocalDate.now().minusMonths(1);
+        }
+        if (endDate == null) {
+            endDate = LocalDate.now().plusMonths(1);
+        }
+        Map<Long, EpicProjectedItem> map = new TreeMap<>();
+        List<EpicProjectionDataItem> items = epicRepository.selectProjectEpicsWithDateRange(project_id,
+            startDate, endDate);
+        for (EpicProjectionDataItem item : items) {
+            EpicProjectedItem epicItem = map.get(item.getEpicId());
+            if (epicItem == null) {
+                epicItem = EpicProjectedItem.builder()
+                    .id(item.getEpicId())
+                    .name(item.getEpicName())
+                    .startDate(item.getEpicStartDate())
+                    .endDate(item.getEpicEndDate())
+                    .build();
+                map.put(item.getEpicId(), epicItem);
+            }
+            TaskProjectedItem taskItem = TaskProjectedItem.builder()
+                .id(item.getTaskId())
+                .name(item.getTaskName())
+                .startDate(item.getTaskStartDate())
+                .endDate(item.getTaskEndDate())
+                .build();
+            epicItem.getTasks().add(taskItem);
+        }
+
+        List<EpicProjectedItem> result = new ArrayList<>(map.size());
+        result.addAll(map.values());
+
+        return result;
     }
 }

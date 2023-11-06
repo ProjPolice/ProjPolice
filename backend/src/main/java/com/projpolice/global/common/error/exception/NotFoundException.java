@@ -8,6 +8,6 @@ import com.projpolice.global.common.error.info.ExceptionInfo;
  */
 public class NotFoundException extends BaseException {
     public NotFoundException(ExceptionInfo exceptionInfo) {
-        super(exceptionInfo.getStatus(), exceptionInfo.getCode(), exceptionInfo.getMessage());
+        super(exceptionInfo);
     }
 }
