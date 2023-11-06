@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-@RedisHash(value = "user", timeToLive = 4 * 60 * 60) // 4시간
+@RedisHash(value = "refresh-token", timeToLive = 4 * 60 * 60) // 4시간
 @AllArgsConstructor
 public class RefreshTokenEntity {
     @Id
