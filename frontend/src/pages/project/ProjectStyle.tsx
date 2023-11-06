@@ -21,8 +21,7 @@ export const ProjectSection = styled.div<{ height: string; background: string }>
   height: ${(props) => props.height};
 `;
 
-
-export const Container = styled.div<{ width: string, height: string}>`
+export const Container = styled.div<{ width: string; height: string }>`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -56,8 +55,8 @@ export const ContainerNav = styled.div<{ height: string; background: string }>`
   align-items: center;
 `;
 
-export const ContainerContent = styled.div<{height: string, background: string}>`
-  display: flex;  
+export const ContainerContent = styled.div<{ height: string; background: string }>`
+  display: flex;
   height: ${(props) => props.height};
   width: 100%;
   justify-content: center;
