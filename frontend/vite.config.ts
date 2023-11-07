@@ -14,5 +14,5 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
-  // cacheDir: './.vite',
+  cacheDir: './.vite',
 });

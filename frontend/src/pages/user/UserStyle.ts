@@ -1,13 +1,6 @@
 import styled from '@emotion/styled';
 import { colors } from '@assets/design/colors';
-
-export const Page = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
+import { ColumnProps, InputBoxProps } from '@interfaces/user';
 
 export const Container = styled.div`
   display: flex;
@@ -19,7 +12,7 @@ export const Container = styled.div`
 
 export const Header = styled.div`
   height: 10%;
-  margin-left : 4%;
+  margin-left: 4%;
   background-color: ${colors.white};
   color: ${colors.primary};
   display: flex;
@@ -48,23 +41,23 @@ export const Row = styled.div`
   flex-direction: row;
 `;
 
-export const Column = styled.div`
+export const Column = styled.div<ColumnProps>`
   width: 100%;
-  height: ${props => props.height};
+  height: ${(props) => props.height};
   display: flex;
-  align-items : center;
+  align-items: center;
   flex-direction: Column;
 `;
 
-export const InputBox = styled.div`
+export const InputBox = styled.div<InputBoxProps>`
   width: 90%;
   height: 100%;
   padding: 10px;
   border: 1px solid #ccc;
-  border-top-left-radius: ${props => props.topLeftRadius || '4px'};
-  border-top-right-radius: ${props => props.topRightRadius || '4px'};
-  border-bottom-left-radius: ${props => props.bottomLeftRadius || '4px'};
-  border-bottom-right-radius: ${props => props.bottomRightRadius || '4px'};
+  border-top-left-radius: ${(props) => props.topLeftRadius || '4px'};
+  border-top-right-radius: ${(props) => props.topRightRadius || '4px'};
+  border-bottom-left-radius: ${(props) => props.bottomLeftRadius || '4px'};
+  border-bottom-right-radius: ${(props) => props.bottomRightRadius || '4px'};
 `;
 
 export const Button = styled.button`
@@ -75,12 +68,18 @@ export const Button = styled.button`
   cursor: pointer;
 
   @media (max-width: 768px) {
-    padding : 5% 30%;
+    padding: 5% 30%;
   }
 
   @media (min-width: 769px) {
-    padding : 3% 30%;
+    padding: 3% 30%;
   }
 `;
 
-
+export const LoginFooter = styled.div`
+  display: flex;
+  width: 35%;
+  height: 10%;
+  align-items: center;
+  justify-content: space-between;
+`;

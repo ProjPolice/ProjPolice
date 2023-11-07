@@ -1,5 +1,5 @@
 import { colors } from '@assets/design/colors';
-import { css } from '@emotion/react';
+import { link } from '@assets/design/globalStyles';
 import styled from '@emotion/styled';
 import { userState } from 'State';
 import { Link } from 'react-router-dom';
@@ -31,6 +31,11 @@ const NavigationBar = () => {
           <Link to={'/profile'} css={link}>
             <p>마이페이지</p>
           </Link>
+        </Segment>
+        <Segment>
+          <a href={''} css={link}>
+            <p>알림</p>
+          </a>
         </Segment>
         {user.token === '' ? (
           <Segment>
@@ -79,9 +84,4 @@ const Segment = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const link = css`
-  text-decoration: none;
-  color: ${colors.primary};
 `;
