@@ -2,6 +2,7 @@ package com.projpolice.domain.task.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projpolice.domain.task.dto.TaskDetailItem;
+import com.projpolice.domain.task.response.TaskGetResponse;
 import com.projpolice.domain.task.request.TaskCreateRequest;
 import com.projpolice.domain.task.request.TaskUpdateRequest;
 import com.projpolice.domain.task.response.TaskUpdateResponse;
@@ -59,6 +61,23 @@ public class TaskController {
                 .code(HttpStatus.OK.value())
                 .message("세부 작업 수정 성공")
                 .data(taskService.updateTask(taskId, taskUpdateRequest))
+                .build());
+    }
+
+    /**
+     * 세부작업 조회 요청 처리
+     * @param taskId
+     * @return 세부 작업의 값
+     */
+    @GetMapping("/{task_id}")
+    @Operation(summary = "세부작업 조회", security = @SecurityRequirement(name = "Authorization"), description = "세부 작업 조회합니다.")
+    public ResponseEntity<BaseResponse<TaskGetResponse>> getTask(@PathVariable("task_id") Long taskId) {
+
+        return ResponseEntity.ok()
+            .body(BaseResponse.<TaskGetResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("세부 작업 조회 성공")
+                .data(taskService.getTask(taskId))
                 .build());
     }
 }

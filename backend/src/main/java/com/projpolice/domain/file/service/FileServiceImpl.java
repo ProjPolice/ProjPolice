@@ -2,6 +2,7 @@ package com.projpolice.domain.file.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -39,22 +40,10 @@ public class FileServiceImpl implements FileService {
     @Override
     @Transactional
     public List<FileDetailItem> getTaskFile(long taskId) {
-        List<File> files = fileRepository.findByTaskId(taskId);
-        List<FileDetailItem> fileDetailItems = new ArrayList<>();
 
-        for (File file : files) {
-            fileDetailItems.add(FileDetailItem.builder()
-                .id(file.getId())
-                .name(file.getName())
-                .comment(file.getComment())
-                .uuid(file.getUuid())
-                .version(file.getVersion())
-                .extension(file.getExtension())
-                .taskId(taskId)
-                .build());
-        }
-
-        return fileDetailItems;
+        return fileRepository.findByTaskId(taskId).stream()
+            .map(FileDetailItem::from)
+            .collect(Collectors.toList());
     }
 
     /**
