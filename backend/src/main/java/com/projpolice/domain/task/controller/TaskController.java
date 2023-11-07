@@ -29,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "세부작업 컨트롤러", description = "세부작업을 담당하는 컨트롤러입니다.")
 public class TaskController {
     private final TaskService taskService;
+    
 
     /**
      * 세부 작업 생성 요청 처리
@@ -70,7 +71,7 @@ public class TaskController {
      * @return 삭제된 세부작업의 Id
      */
     @DeleteMapping("/{task_id}")
-    @Operation(summary = "세부작업 수정", security = @SecurityRequirement(name = "Authorization"), description = "세부 작업 수정합니다.")
+    @Operation(summary = "세부작업 삭제", security = @SecurityRequirement(name = "Authorization"), description = "세부 작업을 삭제합니다.")
     public ResponseEntity<BaseResponse<TaskDeleteResponse>> deleteTask(@PathVariable("task_id") Long taskId) {
         return ResponseEntity.ok()
             .body(BaseResponse.<TaskDeleteResponse>builder()
