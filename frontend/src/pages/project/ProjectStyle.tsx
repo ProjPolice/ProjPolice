@@ -7,16 +7,14 @@ export const CenterContainer = styled.div<{ background: string }>`
   width: 70%;
   height: 100%;
   align-items: center;
-  //MUST BE DELETED AFTER
   background-color: ${(props) => props.background};
 `;
 
-export const ProjectSection = styled.div<{ height: string, background: string }>`
+export const ProjectSection = styled.div<{ height: string; background: string }>`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   width: 100%;
-  /* margin : 0% 10% 0% 10%; */
   background-color: ${(props) => props.background};
   height: ${(props) => props.height};
 `;
@@ -24,7 +22,6 @@ export const ProjectSection = styled.div<{ height: string, background: string }>
 export const Container = styled.div<{ width: string; height: string }>`
   display: flex;
   flex-direction: column;
-  /* justify-content: space-evenly; */
   align-content: center;
   overflow: hidden;
   margin: 0%;
@@ -37,16 +34,15 @@ export const Container = styled.div<{ width: string; height: string }>`
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
-export const SectionHeader = styled.div<{ height: string, background: string, alignitems: string }>`
+export const SectionHeader = styled.div<{ height: string; background: string; alignitems: string }>`
   display: flex;
-  /* justify-content: space-evenly; */
   background-color: ${(props) => props.background};
   width: 92%;
   height: ${(props) => props.height};
   align-items: ${(props) => props.alignitems};
 `;
 
-export const ContainerNav = styled.div<{ height: string, background: string }>`
+export const ContainerNav = styled.div<{ height: string; background: string }>`
   display: flex;
   justify-content: space-between;
   background-color: ${(props) => props.background};
@@ -56,7 +52,7 @@ export const ContainerNav = styled.div<{ height: string, background: string }>`
   align-items: center;
 `;
 
-export const ContainerContent = styled.div<{ height: string; background: string }>`
+export const ContainerContent = styled.div<{ width: string; height: string; background: string }>`
   display: flex;
   height: ${(props) => props.height};
   width: 100%;
@@ -67,13 +63,16 @@ export const ContainerContent = styled.div<{ height: string; background: string 
   width: ${(props) => props.width};
 `;
 
-export const PositionContainer = styled.div<{width: string, height: string}>`
+export const PositionContainer = styled.div<{ width: string; height: string }>`
   position: relative;
+  display: flex;
+  flex-direction: column;
   height: ${(props) => props.height};
   width: ${(props) => props.width};
+  justify-content: end;
 `;
 
-export const DayContainer = styled.div<{width: string, height: string, background: string}>`
+export const DayContainer = styled.div<{ width: string; height: string; background: string }>`
   position: absolute;
   display: flex;
   justify-content: center;
@@ -83,21 +82,38 @@ export const DayContainer = styled.div<{width: string, height: string, backgroun
   width: ${(props) => props.width};
 `;
 
-export const TimeLineContainer = styled.div<{width: string, height: string, background: string}>`
+export const TimeLineContainer = styled.div<{ width: string; height: string; background: string }>`
   position: absolute;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  /* align-items: center; */
   background-color: ${(props) => props.background};
   height: ${(props) => props.height};
   width: ${(props) => props.width};
   z-index: 1;
 `;
 
+export const TimeLineBar = styled.div<{ width: string; height: string; background: string }>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2%;
+  background-color: ${(props) => props.background};
+  height: ${(props) => props.height};
+  width: ${(props) => props.width};
+  z-index: 1;
+  border-radius: 0px 5px 5px 0px;
+`;
+
+export const TimelineInfoLeft = styled.div`
+  display: flex;
+  width: 80px;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 13px;
+`;
+
 export const CalendarDayBox = styled.div`
-  display: flex;  
-  flex-direction: column;
+  display: flex;
   justify-content: space-between;
   /* align-items: center; */
   /* width: 14.3%; */
@@ -106,7 +122,8 @@ export const CalendarDayBox = styled.div`
   box-sizing: border-box;
   border-right: 1px solid ${colors.default};
 `;
-export const DayNav = styled.div<{width: string, height: string, background: string}>`
+
+export const DayNav = styled.div<{ width: string; height: string; background: string }>`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -116,9 +133,9 @@ export const DayNav = styled.div<{width: string, height: string, background: str
   border-bottom: 2px solid ${colors.default};
 `;
 
-export const DetailContainer = styled.div<{width: string, height: string, background: string, flexdirection:string }>`
+export const DetailContainer = styled.div<{ width: string; height: string; background: string; flexdirection: string }>`
   display: flex;
-  flex-direction : ${(props) => props.flexdirection};
+  flex-direction: ${(props) => props.flexdirection};
   /* justify-content: center; */
   /* align-items: center; */
   background-color: ${(props) => props.background};
@@ -126,10 +143,10 @@ export const DetailContainer = styled.div<{width: string, height: string, backgr
   width: ${(props) => props.width};
 `;
 
-export const DetailBox = styled.div<{width: string, height: string, background: string}>`
+export const DetailBox = styled.div<{ width: string; height: string; background: string }>`
   display: flex;
   overflow: hidden;
-  flex-direction : column;
+  flex-direction: column;
   justify-content: space-evenly;
   align-items: space-around;
   padding: 0px 20px 0px;
@@ -139,7 +156,7 @@ export const DetailBox = styled.div<{width: string, height: string, background: 
   border: 1px solid ${colors.default};
 `;
 
-export const EpicContainer = styled.div<{ width: string, height: string}>`
+export const EpicContainer = styled.div<{ width: string; height: string }>`
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
@@ -150,7 +167,7 @@ export const EpicContainer = styled.div<{ width: string, height: string}>`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   box-sizing: border-box;
-   &::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     width: 12px;
   }
   &::-webkit-scrollbar-track {
@@ -164,11 +181,10 @@ export const EpicContainer = styled.div<{ width: string, height: string}>`
   &::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
-
 `;
 
-export const EpicItem = styled.div<{width: string, height: string, background: string}>`
-  display: flex;  
+export const EpicItem = styled.div<{ width: string; height: string; background: string }>`
+  display: flex;
   justify-content: space-around;
   align-items: center;
   background-color: ${(props) => props.background};
@@ -177,8 +193,14 @@ export const EpicItem = styled.div<{width: string, height: string, background: s
   border-bottom: 2px solid ${colors.default};
 `;
 
-export const Photo = styled.div<{width: string, height: string, background: string, imgurl: string}>`
-  display: flex;  
+export const Photo = styled.div<{
+  width: string;
+  height: string;
+  background: string;
+  imgurl: string;
+  borderradius: string;
+}>`
+  display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
@@ -186,23 +208,20 @@ export const Photo = styled.div<{width: string, height: string, background: stri
   height: ${(props) => props.height};
   width: ${(props) => props.width};
   margin: 0% 3% 0% 0%;
-  border-radius: 50%;
-  background: url(${props => props.imgurl}) no-repeat center center;
+  border-radius: ${(props) => props.borderradius};
+  background: url(${(props) => props.imgurl}) no-repeat center center;
   background-size: cover;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
 export const ProfileBox = styled.div`
-  display: flex;  
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   height: 60px;
-  /* width: 100%; */
   margin: 0% 4% 0% 0%;
 `;
-
-
 
 export const Segment = styled.div`
   flex: 1;
