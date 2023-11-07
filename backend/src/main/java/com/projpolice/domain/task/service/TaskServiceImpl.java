@@ -10,6 +10,7 @@ import com.projpolice.domain.task.dto.TaskDetailItem;
 import com.projpolice.domain.task.repository.TaskRepository;
 import com.projpolice.domain.task.request.TaskCreateRequest;
 import com.projpolice.domain.task.request.TaskUpdateRequest;
+import com.projpolice.domain.task.response.TaskDeleteResponse;
 import com.projpolice.domain.task.response.TaskUpdateResponse;
 import com.projpolice.domain.user.domain.User;
 import com.projpolice.domain.user.repository.UserRepository;
@@ -88,5 +89,18 @@ public class TaskServiceImpl implements TaskService {
         }
 
         return TaskUpdateResponse.from(task);
+    }
+
+    /**
+     * 세부 작업 삭제 기능
+     * @param taskId
+     * @return 삭제된 세부 작업의 Id
+     */
+    @Override
+    @Transactional
+    public TaskDeleteResponse deleteTask(Long taskId) {
+        projectAuthManager.checkTaskOwnershipOrThrow(taskId);
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_TASK));
+        return TaskDeleteResponse.from(task);
     }
 }

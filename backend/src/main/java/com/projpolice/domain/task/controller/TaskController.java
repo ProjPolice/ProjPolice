@@ -2,6 +2,7 @@ package com.projpolice.domain.task.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.projpolice.domain.task.dto.TaskDetailItem;
 import com.projpolice.domain.task.request.TaskCreateRequest;
 import com.projpolice.domain.task.request.TaskUpdateRequest;
+import com.projpolice.domain.task.response.TaskDeleteResponse;
 import com.projpolice.domain.task.response.TaskUpdateResponse;
 import com.projpolice.domain.task.service.TaskService;
 import com.projpolice.global.common.base.BaseResponse;
@@ -59,6 +61,22 @@ public class TaskController {
                 .code(HttpStatus.OK.value())
                 .message("세부 작업 수정 성공")
                 .data(taskService.updateTask(taskId, taskUpdateRequest))
+                .build());
+    }
+
+    /**
+     * 세부작업 삭제 요청 처리
+     * @param taskId
+     * @return 삭제된 세부작업의 Id
+     */
+    @DeleteMapping("/{task_id}")
+    @Operation(summary = "세부작업 수정", security = @SecurityRequirement(name = "Authorization"), description = "세부 작업 수정합니다.")
+    public ResponseEntity<BaseResponse<TaskDeleteResponse>> deleteTask(@PathVariable("task_id") Long taskId) {
+        return ResponseEntity.ok()
+            .body(BaseResponse.<TaskDeleteResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("세부 작업 삭제 성공")
+                .data(taskService.deleteTask(taskId))
                 .build());
     }
 }
