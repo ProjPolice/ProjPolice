@@ -1,4 +1,4 @@
-package com.projpolice.domain.project.repository;
+package com.projpolice.domain.project.repository.rdb;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.projpolice.domain.project.domain.UserProject;
+import com.projpolice.domain.project.domain.rdb.UserProject;
 import com.projpolice.domain.user.domain.User;
 
 @Repository

@@ -1,4 +1,4 @@
-package com.projpolice.domain.project.domain;
+package com.projpolice.domain.project.domain.rdb;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
