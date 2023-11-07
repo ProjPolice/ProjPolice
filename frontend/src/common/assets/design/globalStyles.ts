@@ -98,3 +98,8 @@ export const Page = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
+export const link = css`
+  text-decoration: none;
+  color: ${colors.primary};
+`;
