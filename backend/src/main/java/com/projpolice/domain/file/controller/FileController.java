@@ -3,14 +3,13 @@ package com.projpolice.domain.file.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projpolice.domain.file.dto.FileBaseItem;
@@ -55,9 +54,10 @@ public class FileController {
      * @param request
      * @return FIleDetailItem
      */
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "파일 업로드", security = @SecurityRequirement(name = "Authroization"), description = "파일을 업로드 하는 메서드입니다.")
-    public ResponseEntity<BaseResponse<FileDetailItem>> uploadFile(@RequestBody FileUploadRequest request, @RequestParam(name = "task_id") long taskId) {
+    public ResponseEntity<BaseResponse<FileDetailItem>> uploadFile(FileUploadRequest request,
+        @RequestParam(name = "task_id") long taskId) {
 
         return ResponseEntity.ok()
             .body(BaseResponse.<FileDetailItem>builder()
@@ -65,7 +65,6 @@ public class FileController {
                 .message("파일 생성 성공")
                 .data(fileService.uploadFile(request, taskId))
                 .build());
-
     }
 
     /**

@@ -54,7 +54,6 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
                 .requestMatchers("/health").access(this::hasIpAddress)
                 .requestMatchers("/swagger-ui/**").permitAll()
-                .requestMatchers("/projpolice-api/**").permitAll()
                 .requestMatchers("/v3/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/users").authenticated()
                 .requestMatchers(HttpMethod.PATCH, "/users").authenticated()
