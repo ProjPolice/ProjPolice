@@ -33,7 +33,6 @@ public class TaskServiceImpl implements TaskService {
     private final EpicRepository epicRepository;
     private final TaskRepository taskRepository;
     private final ProjectAuthManager projectAuthManager;
-    private final FileRepository fileRepository;
 
     /**
      * 상세 작업 생성

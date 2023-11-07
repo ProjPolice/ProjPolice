@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +32,6 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "세부작업 컨트롤러", description = "세부작업을 담당하는 컨트롤러입니다.")
 public class TaskController {
     private final TaskService taskService;
-    
 
     /**
      * 세부 작업 생성 요청 처리
