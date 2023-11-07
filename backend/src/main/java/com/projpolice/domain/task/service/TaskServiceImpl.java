@@ -1,10 +1,13 @@
 package com.projpolice.domain.task.service;
 
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.projpolice.domain.epic.domain.Epic;
 import com.projpolice.domain.epic.repository.EpicRepository;
+import com.projpolice.domain.file.dto.FileDetailItem;
 import com.projpolice.domain.file.repository.FileRepository;
 import com.projpolice.domain.task.domain.Task;
 import com.projpolice.domain.task.dto.TaskDetailItem;
@@ -30,6 +33,7 @@ public class TaskServiceImpl implements TaskService {
     private final EpicRepository epicRepository;
     private final TaskRepository taskRepository;
     private final ProjectAuthManager projectAuthManager;
+    private final FileRepository fileRepository;
 
     /**
      * 상세 작업 생성
@@ -115,7 +119,9 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public TaskGetResponse getTask(Long taskId) {
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_TASK));
-        TaskGetResponse taskItem = TaskGetResponse.from(task, fileRepository.findByTaskId(taskId));
+        TaskGetResponse taskItem = TaskGetResponse.from(task, fileRepository.findByTaskId(taskId).stream()
+            .map(FileDetailItem::from)
+            .collect(Collectors.toList()));
         return taskItem;
     }
 }
