@@ -11,5 +11,5 @@ import com.projpolice.domain.file.dto.FileDetailItem;
 
 public interface FileRepository extends JpaRepository<File, Long> {
 
-    List<FileDetailItem> findByTaskId(Long taskId);
+    List<File> findByTaskId(Long taskId);
 }
