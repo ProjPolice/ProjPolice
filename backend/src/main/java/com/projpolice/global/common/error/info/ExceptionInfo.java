@@ -39,8 +39,9 @@ public enum ExceptionInfo {
     FAILED_FILE_DELETE(HttpStatus.BAD_REQUEST, 7002, "파일 삭제를 실패했습니다."),
 
     //File
-    INVALID_FILE(HttpStatus.BAD_REQUEST, 8000, "존재하지 않는 파일입니다.")
-    ,;
+    INVALID_FILE(HttpStatus.BAD_REQUEST, 8000, "존재하지 않는 파일입니다."),
+    FAILED_FILE_CONVERSION(HttpStatus.BAD_REQUEST, 8001, "파일 변환에 실패했습니다."),
+    ;
 
     private final HttpStatus status;
     private final Integer code;

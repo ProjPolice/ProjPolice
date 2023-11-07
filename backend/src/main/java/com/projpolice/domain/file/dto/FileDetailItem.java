@@ -20,6 +20,7 @@ public class FileDetailItem {
         return FileDetailItem.builder()
             .id(file.getId())
             .name(file.getName())
+            .uuid(file.getUuid())
             .comment(file.getComment())
             .version(file.getVersion())
             .extension(file.getExtension())

@@ -4,6 +4,7 @@ import static com.projpolice.domain.user.service.JwtService.*;
 import static com.projpolice.global.common.error.info.ExceptionInfo.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.jboss.resteasy.spi.UnauthorizedException;
@@ -14,12 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.projpolice.domain.project.domain.Project;
-import com.projpolice.domain.project.domain.UserProject;
+import com.projpolice.domain.project.domain.rdb.Project;
+import com.projpolice.domain.project.domain.rdb.UserProject;
 import com.projpolice.domain.project.dto.ProjectDetailData;
 import com.projpolice.domain.project.dto.ProjectIdNameDescData;
-import com.projpolice.domain.project.repository.ProjectRepository;
-import com.projpolice.domain.project.repository.UserProjectRepository;
+import com.projpolice.domain.project.repository.rdb.ProjectRepository;
+import com.projpolice.domain.project.repository.rdb.UserProjectRepository;
 import com.projpolice.domain.project.request.ProjectInsertRequest;
 import com.projpolice.domain.project.request.ProjectModifyRequest;
 import com.projpolice.domain.project.request.ProjectUserAddRequest;
@@ -52,6 +53,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectAuthManager projectAuthManager;
 
+    private final ProjectRedisService projectRedisService;
+
     /**
      * Retrieves the detailed information of a project based on its id.
      *
@@ -61,13 +64,18 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public ProjectDetailData selectProjectDetail(long id) {
+        Optional<ProjectDetailData> cache = projectRedisService.findProjectDetailCacheById(id);
+        if (cache.isPresent()) {
+            return cache.get();
+        }
         Project project = projectRepository.findById(id).orElseThrow(
             () -> new BadRequestException(INVALID_PROJECT)
         );
-
+        ProjectDetailData data = ProjectDetailData.from(project);
+        projectRedisService.saveProjectDetailCache(data);
         projectAuthManager.checkProjectOwnershipOrThrow(project);
 
-        return ProjectDetailData.from(project);
+        return data;
     }
 
     /**
@@ -95,6 +103,9 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepository.save(project);
         userProjectRepository.save(new UserProject(getLoggedUser(), project));
 
+        ProjectDetailData data = ProjectDetailData.from(project);
+        projectRedisService.saveProjectDetailCache(data);
+
         return ProjectDetailData.from(project);
     }
 
@@ -115,6 +126,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         BaseIdItem baseIdItem = new BaseIdItem(project.getId());
         projectRepository.delete(project);
+        projectRedisService.invalidateProject(id);
         return baseIdItem;
     }
 
@@ -134,21 +146,30 @@ public class ProjectServiceImpl implements ProjectService {
         );
 
         projectAuthManager.checkProjectOwnershipOrThrow(project);
+        boolean modified = false;
 
         if (request.getName() != null) {
             project.setName(request.getName());
+            modified = true;
         }
 
         if (request.getDescription() != null) {
             project.setDescription(request.getDescription());
+            modified = true;
         }
 
         if (request.getStartDate() != null) {
             project.setStartDate(request.getStartDate());
+            modified = true;
         }
 
         if (request.getEndDate() != null) {
             project.setEndDate(request.getEndDate());
+            modified = true;
+        }
+
+        if (modified) {
+            projectRedisService.invalidateProject(id);
         }
 
         return ProjectDetailData.from(project);
@@ -164,13 +185,21 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<UserIdNameImgItem> listProjectUser(long id) {
         projectAuthManager.checkProjectMembershipOrThrow(id);
-        return userProjectRepository.findUserByProjectId(id).stream()
+        Optional<List<UserIdNameImgItem>> cache = projectRedisService.findProjectUserIdNameImgById(id);
+        if (cache.isPresent()) {
+            return cache.get();
+        }
+
+        List<UserIdNameImgItem> list = userProjectRepository.findUserByProjectId(id).stream()
             .map(user -> UserIdNameImgItem.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .image(user.getImage())
                 .build()
             ).collect(Collectors.toList());
+
+        projectRedisService.saveProjectUserIdNameImgList(id, list);
+        return list;
     }
 
     /**
@@ -195,6 +224,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         UserProject userProject = new UserProject(newUser, project);
         userProjectRepository.save(userProject);
+        projectRedisService.invalidateProjectUser(projectId);
 
         return UserIdNameImgItem.builder()
             .id(newUser.getId())
@@ -223,6 +253,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         BaseIdItem removedUserId = new BaseIdItem(userProject.getUser().getId());
         userProjectRepository.delete(userProject);
+        projectRedisService.invalidateProjectUser(projectId);
 
         return removedUserId;
     }
