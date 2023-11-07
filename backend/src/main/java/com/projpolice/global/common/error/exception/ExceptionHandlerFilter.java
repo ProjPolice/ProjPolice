@@ -11,11 +11,13 @@ import com.projpolice.global.common.error.info.ExceptionInfo;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * An exception handling filter that handles various types of exceptions and returns appropriate error responses.
  * It extends OncePerRequestFilter and overrides the doFilterInternal method to provide the exception handling logic.
  */
+@Slf4j
 @Component
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
@@ -52,6 +54,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
      */
     private void responseError(HttpServletRequest request, HttpServletResponse response, int statusCode,
         BaseException exception) {
+        log.error("exception at filter : {}", exception.getMessage());
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             response.setStatus(statusCode);
