@@ -5,8 +5,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.projpolice.domain.epic.domain.Epic;
 import com.projpolice.domain.epic.repository.EpicRepository;
+import com.projpolice.domain.file.repository.FileRepository;
 import com.projpolice.domain.task.domain.Task;
 import com.projpolice.domain.task.dto.TaskDetailItem;
+import com.projpolice.domain.task.response.TaskGetResponse;
 import com.projpolice.domain.task.repository.TaskRepository;
 import com.projpolice.domain.task.request.TaskCreateRequest;
 import com.projpolice.domain.task.request.TaskUpdateRequest;
@@ -26,6 +28,7 @@ public class TaskServiceImpl implements TaskService {
     private final UserRepository userRepository;
     private final EpicRepository epicRepository;
     private final TaskRepository taskRepository;
+    private final FileRepository fileRepository;
     private final ProjectAuthManager projectAuthManager;
 
     /**
@@ -88,5 +91,18 @@ public class TaskServiceImpl implements TaskService {
         }
 
         return TaskUpdateResponse.from(task);
+    }
+
+    /**
+     * 세부 작업 조회
+     * @param taskId
+     * @return 세부 작업 값
+     */
+    @Override
+    @Transactional
+    public TaskGetResponse getTask(Long taskId) {
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_TASK));
+        TaskGetResponse taskItem = TaskGetResponse.from(task, fileRepository.findByTaskId(taskId));
+        return taskItem;
     }
 }

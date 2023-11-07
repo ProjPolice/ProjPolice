@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.projpolice.domain.file.domain.File;
+import com.projpolice.domain.file.dto.FileDetailItem;
 
 public interface FileRepository extends JpaRepository<File, Long> {
 
-    List<File> findByTaskId(Long taskId);
+    List<FileDetailItem> findByTaskId(Long taskId);
 }
