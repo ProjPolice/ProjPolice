@@ -6,7 +6,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import com.projpolice.domain.epic.request.EpicCreateRequest;
-import com.projpolice.domain.project.domain.Project;
+import com.projpolice.domain.project.domain.rdb.Project;
 import com.projpolice.global.common.base.BaseEntity;
 
 import jakarta.persistence.Column;

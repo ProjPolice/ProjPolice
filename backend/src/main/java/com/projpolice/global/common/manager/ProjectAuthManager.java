@@ -6,9 +6,9 @@ import static com.projpolice.global.common.error.info.ExceptionInfo.*;
 import org.springframework.stereotype.Component;
 
 import com.projpolice.domain.epic.repository.EpicRepository;
-import com.projpolice.domain.project.domain.Project;
-import com.projpolice.domain.project.repository.ProjectRepository;
-import com.projpolice.domain.project.repository.UserProjectRepository;
+import com.projpolice.domain.project.domain.rdb.Project;
+import com.projpolice.domain.project.repository.rdb.ProjectRepository;
+import com.projpolice.domain.project.repository.rdb.UserProjectRepository;
 import com.projpolice.domain.task.repository.TaskRepository;
 import com.projpolice.domain.user.domain.User;
 import com.projpolice.global.common.error.exception.UnAuthorizedException;
