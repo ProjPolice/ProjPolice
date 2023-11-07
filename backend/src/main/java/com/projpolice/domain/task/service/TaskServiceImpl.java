@@ -3,8 +3,8 @@ package com.projpolice.domain.task.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.projpolice.domain.epic.domain.Epic;
-import com.projpolice.domain.epic.repository.EpicRepository;
+import com.projpolice.domain.epic.domain.rdb.Epic;
+import com.projpolice.domain.epic.repository.rdb.EpicRepository;
 import com.projpolice.domain.task.domain.Task;
 import com.projpolice.domain.task.dto.TaskDetailItem;
 import com.projpolice.domain.task.repository.TaskRepository;

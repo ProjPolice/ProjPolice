@@ -1,4 +1,4 @@
-package com.projpolice.domain.epic.repository;
+package com.projpolice.domain.epic.repository.rdb;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.projpolice.domain.epic.domain.Epic;
+import com.projpolice.domain.epic.domain.rdb.Epic;
 import com.projpolice.domain.epic.dto.EpicProjectionDataItem;
 
 @Repository

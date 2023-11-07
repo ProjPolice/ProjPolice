@@ -5,7 +5,7 @@ import static com.projpolice.global.common.error.info.ExceptionInfo.*;
 
 import org.springframework.stereotype.Component;
 
-import com.projpolice.domain.epic.repository.EpicRepository;
+import com.projpolice.domain.epic.repository.rdb.EpicRepository;
 import com.projpolice.domain.project.domain.rdb.Project;
 import com.projpolice.domain.project.repository.rdb.ProjectRepository;
 import com.projpolice.domain.project.repository.rdb.UserProjectRepository;

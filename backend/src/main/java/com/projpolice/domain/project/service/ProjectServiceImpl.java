@@ -33,6 +33,7 @@ import com.projpolice.global.common.error.exception.BadRequestException;
 import com.projpolice.global.common.error.exception.UnAuthorizedException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.manager.ProjectAuthManager;
+import com.projpolice.global.redis.RedisService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -53,7 +54,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectAuthManager projectAuthManager;
 
-    private final ProjectRedisService projectRedisService;
+    private final RedisService redisService;
 
     /**
      * Retrieves the detailed information of a project based on its id.
@@ -64,7 +65,7 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public ProjectDetailData selectProjectDetail(long id) {
-        Optional<ProjectDetailData> cache = projectRedisService.findProjectDetailCacheById(id);
+        Optional<ProjectDetailData> cache = redisService.findProjectDetailById(id);
         if (cache.isPresent()) {
             return cache.get();
         }
@@ -72,7 +73,7 @@ public class ProjectServiceImpl implements ProjectService {
             () -> new BadRequestException(INVALID_PROJECT)
         );
         ProjectDetailData data = ProjectDetailData.from(project);
-        projectRedisService.saveProjectDetailCache(data);
+        redisService.saveProjectDetail(data);
         projectAuthManager.checkProjectOwnershipOrThrow(project);
 
         return data;
@@ -104,7 +105,7 @@ public class ProjectServiceImpl implements ProjectService {
         userProjectRepository.save(new UserProject(getLoggedUser(), project));
 
         ProjectDetailData data = ProjectDetailData.from(project);
-        projectRedisService.saveProjectDetailCache(data);
+        redisService.saveProjectDetail(data);
 
         return ProjectDetailData.from(project);
     }
@@ -126,7 +127,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         BaseIdItem baseIdItem = new BaseIdItem(project.getId());
         projectRepository.delete(project);
-        projectRedisService.invalidateProject(id);
+        redisService.invalidateProject(id);
         return baseIdItem;
     }
 
@@ -169,7 +170,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         if (modified) {
-            projectRedisService.invalidateProject(id);
+            redisService.invalidateProject(id);
         }
 
         return ProjectDetailData.from(project);
@@ -185,7 +186,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<UserIdNameImgItem> listProjectUser(long id) {
         projectAuthManager.checkProjectMembershipOrThrow(id);
-        Optional<List<UserIdNameImgItem>> cache = projectRedisService.findProjectUserIdNameImgById(id);
+        Optional<List<UserIdNameImgItem>> cache = redisService.findProjectUserIdNameImgById(id);
         if (cache.isPresent()) {
             return cache.get();
         }
@@ -198,7 +199,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .build()
             ).collect(Collectors.toList());
 
-        projectRedisService.saveProjectUserIdNameImgList(id, list);
+        redisService.saveProjectUserIdNameImgList(id, list);
         return list;
     }
 
@@ -224,7 +225,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         UserProject userProject = new UserProject(newUser, project);
         userProjectRepository.save(userProject);
-        projectRedisService.invalidateProjectUser(projectId);
+        redisService.invalidateProjectUser(projectId);
 
         return UserIdNameImgItem.builder()
             .id(newUser.getId())
@@ -253,7 +254,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         BaseIdItem removedUserId = new BaseIdItem(userProject.getUser().getId());
         userProjectRepository.delete(userProject);
-        projectRedisService.invalidateProjectUser(projectId);
+        redisService.invalidateProjectUser(projectId);
 
         return removedUserId;
     }
