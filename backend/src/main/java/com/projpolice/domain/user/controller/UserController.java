@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,6 +44,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "사용자 컨트롤러", description = "사용자를 담당하는 컨트롤러입니다.")
 public class UserController {
     private final UserService userService;
+    private final TaskService taskService;
 
     /**
      * 회원가입 처리
