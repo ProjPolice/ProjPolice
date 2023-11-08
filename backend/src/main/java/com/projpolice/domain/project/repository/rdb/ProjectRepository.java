@@ -16,9 +16,10 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("""
         select count(p.id)>0 
         from Project p 
-        where p.id =: project_id 
-        and p.user.id =: user_id 
+        where p.id = :projectId 
+        and p.user.id = :userId 
         and p.deleted = false
         """)
-    boolean checkOwnership(@Param("project_id") long projectId, @Param("user_id") long userId);
+    boolean checkOwnership(@Param("projectId") long projectId, @Param("userId") long userId);
+
 }

@@ -22,6 +22,7 @@ import com.projpolice.domain.project.domain.rdb.Project;
 import com.projpolice.domain.project.repository.rdb.ProjectRepository;
 import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.deletion.DeletionService;
+import com.projpolice.global.common.error.exception.BaseException;
 import com.projpolice.global.common.error.exception.EpicException;
 import com.projpolice.global.common.error.exception.TaskException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
@@ -54,6 +55,7 @@ public class EpicServiceImpl implements EpicService {
             .orElseThrow(() -> new TaskException(ExceptionInfo.INVALID_PROJECT));
 
         Epic epic = epicRepository.save(Epic.of(epicCreateRequest, project));
+        redisService.invalidateProject(epicCreateRequest.getProjectId());
         return EpicDetailData.from(epic);
     }
 
@@ -111,7 +113,8 @@ public class EpicServiceImpl implements EpicService {
         }
 
         if (updated) {
-            redisService.invalidateEpic(id);
+            long projectId = epicRepository.findProjectIdByEpicId(id).getAsLong();
+            redisService.invalidateEpic(id, projectId);
         }
 
         return EpicDetailData.from(epic);
@@ -143,6 +146,10 @@ public class EpicServiceImpl implements EpicService {
     @Override
     public List<EpicProjectedItem> selectProjectEpicsWithDateRange(long projectId, LocalDate startDate,
         LocalDate endDate) {
+        // Project가 존재 하지 않을 수 있음
+        if (!projectRepository.existsById(projectId)) {
+            throw new BaseException(ExceptionInfo.INVALID_PROJECT);
+        }
         projectAuthManager.checkProjectMembershipOrThrow(projectId);
         if (startDate == null) {
             startDate = LocalDate.now().minusMonths(1);
@@ -171,6 +178,8 @@ public class EpicServiceImpl implements EpicService {
                     .build();
                 map.put(item.getEpicId(), epicItem);
             }
+            if (item.getTaskId() == null)
+                continue;
             TaskProjectedItem taskItem = TaskProjectedItem.builder()
                 .id(item.getTaskId())
                 .name(item.getTaskName())

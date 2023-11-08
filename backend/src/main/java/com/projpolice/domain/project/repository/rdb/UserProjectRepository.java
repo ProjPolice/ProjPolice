@@ -28,7 +28,7 @@ public interface UserProjectRepository extends JpaRepository<UserProject, Long> 
             from UserProject userProject
             where userProject.project.id = :project_id
             and userProject.user.id = :user_id
-            and userProject.deleted = false
+            and userProject.deleted = false and userProject.project.deleted = false
         """)
     boolean checkMembership(@Param("project_id") long projectId, @Param("user_id") long userId);
 }

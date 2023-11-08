@@ -2,6 +2,7 @@ package com.projpolice.domain.epic.repository.rdb;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.OptionalLong;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -56,7 +57,7 @@ public interface EpicRepository extends JpaRepository<Epic, Long> {
      *
      * @param project_id The ID of the project.
      * @param start_date The start date of the date range.
-     * @param end_date The end date of the date range.
+     * @param end_date   The end date of the date range.
      * @return A list of EpicProjectionDataItem objects that match the search criteria.
      */
     @Query("""
@@ -68,11 +69,23 @@ public interface EpicRepository extends JpaRepository<Epic, Long> {
         task.name as taskName,
         task.startDate as taskStartDate,
         task.endDate as taskEndDate
-        from Epic epic left join fetch Task task on epic.id = task.epic.id
-        where epic.project.id = :project_id and epic.deleted = false and task.deleted = false
-        and ((task.startDate between :start_date and :end_date) or (task.endDate between :start_date and :end_date))
+        from Epic epic left outer join Task task on epic.id = task.epic.id
+        where epic.project.id = :project_id and epic.deleted = false
+        and
+         (
+          (task.startDate between :start_date and :end_date)
+          or (task.endDate between :start_date and :end_date)
+          or (task.startDate is null and task.endDate is null)
+         )
         """)
     List<EpicProjectionDataItem> selectProjectEpicsWithDateRange(@Param("project_id") long project_id,
         @Param("start_date")
         LocalDate start_date, @Param("end_date") LocalDate end_date);
+
+    @Query("""
+        select epic.project.id
+        from Epic epic
+        where epic.deleted = false and epic.id = :epicId
+        """)
+    OptionalLong findProjectIdByEpicId(@Param("epicId") long epicId);
 }

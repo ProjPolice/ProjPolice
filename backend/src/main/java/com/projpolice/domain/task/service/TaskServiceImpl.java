@@ -24,6 +24,7 @@ import com.projpolice.global.common.error.exception.EpicException;
 import com.projpolice.global.common.error.exception.UserException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.manager.ProjectAuthManager;
+import com.projpolice.global.redis.RedisService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,9 +37,11 @@ public class TaskServiceImpl implements TaskService {
     private final ProjectAuthManager projectAuthManager;
     private final FileRepository fileRepository;
     private final DeletionService deletionService;
+    private final RedisService redisService;
 
     /**
      * 상세 작업 생성
+     *
      * @param taskCreateRequest
      * @return 생성한 상세 작업 상세 내용
      */
@@ -55,12 +58,14 @@ public class TaskServiceImpl implements TaskService {
             .orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC));
 
         Task task = taskRepository.save(Task.of(taskCreateRequest, user, epic));
-
+        long projectId = epicRepository.findProjectIdByEpicId(taskCreateRequest.getEpicId()).getAsLong();
+        redisService.invalidateEpic(taskCreateRequest.getEpicId(), projectId);
         return TaskDetailItem.from(task);
     }
 
     /**
      * 세부 작업 수정 기능
+     *
      * @param taskId
      * @param taskUpdateRequest
      * @return 수정한 세부 작업 값
@@ -71,29 +76,42 @@ public class TaskServiceImpl implements TaskService {
         projectAuthManager.checkTaskOwnershipOrThrow(taskId);
 
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_TASK));
+        boolean updated = false;
 
         if (taskUpdateRequest.getName() != null) {
             task.setName(taskUpdateRequest.getName());
+            updated = true;
         }
         if (taskUpdateRequest.getDescription() != null) {
             task.setDescription(taskUpdateRequest.getDescription());
+            updated = true;
         }
         if (taskUpdateRequest.getStartDate() != null) {
             task.setStartDate(taskUpdateRequest.getStartDate());
+            updated = true;
         }
         if (taskUpdateRequest.getEndDate() != null) {
             task.setEndDate(taskUpdateRequest.getEndDate());
+            updated = true;
         }
         if (taskUpdateRequest.getStatus() != null) {
             task.setStatus(taskUpdateRequest.getStatus());
+            updated = true;
         }
         if (taskUpdateRequest.getUserId() != null) {
             task.setUser(userRepository.findById(taskUpdateRequest.getUserId())
                 .orElseThrow(() -> new UserException(ExceptionInfo.INVALID_USER)));
+            updated = true;
         }
         if (taskUpdateRequest.getEpicId() != null) {
             task.setEpic(epicRepository.findById(taskUpdateRequest.getEpicId())
                 .orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC)));
+            updated = true;
+        }
+
+        if (updated) {
+            long projectId = taskRepository.findProjectIdById(taskId).getAsLong();
+            redisService.invalidateEpic(taskUpdateRequest.getEpicId(), projectId);
         }
 
         return TaskUpdateResponse.from(task);
@@ -118,6 +136,7 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * 세부 작업 조회
+     *
      * @param taskId
      * @return 세부 작업 값
      */
