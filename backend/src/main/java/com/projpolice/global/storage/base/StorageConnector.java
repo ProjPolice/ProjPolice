@@ -12,5 +12,7 @@ public interface StorageConnector {
 
     void deleteObject(String objectName);
 
+    String getPreAuthenticatedUrl();
+
     void deleteObjectByBatchAndIgnore(Collection<String> objectNames);
 }

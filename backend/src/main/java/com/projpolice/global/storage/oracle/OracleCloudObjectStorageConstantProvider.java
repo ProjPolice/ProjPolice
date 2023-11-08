@@ -13,4 +13,5 @@ public class OracleCloudObjectStorageConstantProvider {
     private final String bucket;
     private final String privateKey;
     private final String ociApiConfigPath;
+    private final String preAuthenticatedUrl;
 }
