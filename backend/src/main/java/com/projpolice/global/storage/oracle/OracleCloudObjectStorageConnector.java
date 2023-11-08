@@ -98,4 +98,9 @@ public class OracleCloudObjectStorageConnector implements StorageConnector {
 
         client.getClient().deleteObject(deleteObjectRequest);
     }
+
+    @Override
+    public String getPreAuthenticatedUrl() {
+        return constantProvider.getPreAuthenticatedUrl();
+    }
 }

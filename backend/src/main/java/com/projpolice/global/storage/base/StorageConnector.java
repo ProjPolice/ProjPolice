@@ -10,4 +10,6 @@ public interface StorageConnector {
     Resource getObject(String objectName);
 
     void deleteObject(String objectName);
+
+    String getPreAuthenticatedUrl();
 }
