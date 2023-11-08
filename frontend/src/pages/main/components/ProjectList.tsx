@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import ProjectItem from './ProjectList/ProjectItem';
 import { colors } from '@assets/design/colors';
 import { ProjectBoxContainer, ProjectContainer, TextContainer } from '@main/MainStyle';
-
 
 function ProjectList() {
   const projectItems = [
@@ -65,7 +65,6 @@ function ProjectList() {
 
   const itemsPerPage = 3; // 한 페이지에 보여질 아이템 수
   const [currentPage, setCurrentPage] = useState(0);
-  
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) => prevPage + 1);
@@ -78,25 +77,24 @@ function ProjectList() {
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const visibleItems = projectItems.slice(startIndex, endIndex);
-  
 
   return (
     <ProjectContainer>
       <TextContainer>
-        <div style={{ display: 'flex'}}>
+        <div style={{ display: 'flex' }}>
           <h4>프로젝트</h4>
           <button>프로젝트 생성</button>
         </div>
         <p>
           <div>
-        {currentPage > 0 && <button onClick={handlePrevPage}>이전</button>}
-        {endIndex < projectItems.length && <button onClick={handleNextPage}>다음</button>}
-        </div>
+            {currentPage > 0 && <button onClick={handlePrevPage}>이전</button>}
+            {endIndex < projectItems.length && <button onClick={handleNextPage}>다음</button>}
+          </div>
         </p>
       </TextContainer>
       <ProjectBoxContainer>
         {visibleItems.map((project, index) => (
-          <ProjectItem key={index} {...project} />
+          <ProjectItem {...project} projectId={index} />
         ))}
       </ProjectBoxContainer>
     </ProjectContainer>

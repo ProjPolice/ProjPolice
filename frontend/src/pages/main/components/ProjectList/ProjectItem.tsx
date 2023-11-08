@@ -1,10 +1,17 @@
 import { ProjectItemProps } from '@interfaces/main';
 
 import { LeftLinedBox, ProjectBox, ProjectBoxMember, ProjectBoxTask, ProjectBoxTitle } from '@main/MainStyle';
+import { Navigate, useNavigate } from 'react-router-dom';
 
-function ProjectItem({ backgroundColor, title, members, tasks }: ProjectItemProps) {
+function ProjectItem({ backgroundColor, title, members, tasks, projectId }: ProjectItemProps) {
+  const navigate = useNavigate();
+
+  const moveToDetail = () => {
+    navigate(`project/${projectId}`);
+  };
+
   return (
-    <ProjectBox backgroundColor={backgroundColor}>
+    <ProjectBox backgroundColor={backgroundColor} onClick={moveToDetail}>
       <ProjectBoxTitle>
         <h6>{title}</h6>
       </ProjectBoxTitle>
