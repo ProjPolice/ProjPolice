@@ -8,9 +8,11 @@ import org.springframework.data.redis.core.RedisHash;
 import com.projpolice.domain.epic.dto.EpicDetailData;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @RedisHash(value = "epic-detail", timeToLive = 2 * 60 * 60) // 2시간
+@NoArgsConstructor
 public class EpicDetailRedisData {
     @Id
     private Long id;

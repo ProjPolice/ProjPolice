@@ -9,9 +9,11 @@ import com.projpolice.domain.project.dto.ProjectDetailData;
 import com.projpolice.domain.user.dto.UserIdNameItem;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @RedisHash(value = "project-detail", timeToLive = 2 * 60 * 60) // 2시간
+@NoArgsConstructor
 public class ProjectDetailRedisData {
 
     @Id

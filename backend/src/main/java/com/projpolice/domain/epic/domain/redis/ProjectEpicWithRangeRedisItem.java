@@ -9,9 +9,11 @@ import org.springframework.data.redis.core.RedisHash;
 import com.projpolice.domain.epic.dto.EpicProjectedItem;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @RedisHash(value = "project-epic-withRange", timeToLive = 2 * 60 * 60) // 2시간
+@NoArgsConstructor
 public class ProjectEpicWithRangeRedisItem {
 
     @Id

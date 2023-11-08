@@ -7,9 +7,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @RedisHash(value = "project-epic", timeToLive = 5 * 60) // 5분
+@NoArgsConstructor
 public class ProjectEpicRedisItem {
 
     @Id
