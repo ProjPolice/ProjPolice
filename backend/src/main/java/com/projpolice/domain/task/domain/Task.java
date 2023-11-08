@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import com.projpolice.domain.epic.domain.Epic;
+import com.projpolice.domain.epic.domain.rdb.Epic;
 import com.projpolice.domain.task.request.TaskCreateRequest;
 import com.projpolice.domain.user.domain.User;
 import com.projpolice.global.common.base.BaseEntity;

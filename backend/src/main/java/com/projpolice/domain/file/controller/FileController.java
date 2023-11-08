@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.projpolice.domain.file.dto.FileBaseItem;
 import com.projpolice.domain.file.dto.FileDetailItem;
 import com.projpolice.domain.file.request.FileUploadRequest;
 import com.projpolice.domain.file.service.FileService;
+import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.base.BaseResponse;
+import com.projpolice.global.common.error.exception.BadRequestException;
+import com.projpolice.global.common.error.info.ExceptionInfo;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -37,15 +39,25 @@ public class FileController {
      */
     @GetMapping
     @Operation(summary = "세부작업의 파일들 조회", security = @SecurityRequirement(name = "Authroization"), description = "세부작업의 파일들을 조회하는 메소드입니다.")
-    public ResponseEntity<BaseResponse<List<FileDetailItem>>> getTaskFile(@RequestParam(name = "task_id") long taskId) {
+    public ResponseEntity<BaseResponse<List<FileDetailItem>>> getTaskFile(
+        @RequestParam(name = "project_id") Long projectId, @RequestParam(name = "task_id") Long taskId) {
+        if ((projectId == null && taskId == null) || (projectId != null && taskId != null)) {
+            throw new BadRequestException(ExceptionInfo.INVALID_METADATA);
+        }
+
+        List<FileDetailItem> list;
+        if (projectId == null) {
+            list = fileService.getTaskFileByTaskId(taskId);
+        } else {
+            list = fileService.getTaskFileByProjectId(projectId);
+        }
 
         return ResponseEntity.ok()
             .body(BaseResponse.<List<FileDetailItem>>builder()
                 .code(HttpStatus.OK.value())
                 .message("세부작업의 파일들 조회")
-                .data(fileService.getTaskFile(taskId))
+                .data(list)
                 .build());
-
     }
 
     /**
@@ -74,10 +86,10 @@ public class FileController {
      */
     @DeleteMapping
     @Operation(summary = "파일 삭제", security = @SecurityRequirement(name = "Authroization"), description = "파일들을 삭제하는 메소드입니다.")
-    public ResponseEntity<BaseResponse<FileBaseItem>> deleteFile(@RequestParam(name = "file_id") long fileId) {
+    public ResponseEntity<BaseResponse<BaseIdItem>> deleteFile(@RequestParam(name = "file_id") long fileId) {
 
         return ResponseEntity.ok()
-            .body(BaseResponse.<FileBaseItem>builder()
+            .body(BaseResponse.<BaseIdItem>builder()
                 .code(HttpStatus.OK.value())
                 .message("파일 삭제 성공")
                 .data(fileService.deleteFile(fileId))

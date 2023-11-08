@@ -5,7 +5,7 @@ import static com.projpolice.global.common.error.info.ExceptionInfo.*;
 
 import org.springframework.stereotype.Component;
 
-import com.projpolice.domain.epic.repository.EpicRepository;
+import com.projpolice.domain.epic.repository.rdb.EpicRepository;
 import com.projpolice.domain.project.domain.rdb.Project;
 import com.projpolice.domain.project.repository.rdb.ProjectRepository;
 import com.projpolice.domain.project.repository.rdb.UserProjectRepository;
@@ -118,6 +118,13 @@ public class ProjectAuthManager {
     public void checkTaskMembershipOrThrow(long taskId) {
         User loggedUser = getLoggedUser();
         if (!taskRepository.checkMembership(taskId, loggedUser.getId())) {
+            throw new UnAuthorizedException(UNAUTHORIZED);
+        }
+    }
+
+    public void checkUserIdMatchOrThrow(long userId) {
+        User loggedUser = getLoggedUser();
+        if (!loggedUser.getId().equals(userId)) {
             throw new UnAuthorizedException(UNAUTHORIZED);
         }
     }
