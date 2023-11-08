@@ -16,6 +16,6 @@ public interface UserService {
 
     UserInfoResponse getUserInfo();
 
-    UserInfoResponse updateUserInfo(UserUpdateRequest request);
+    UserInfoResponse updateUserInfo(UserUpdateRequest request, MultipartFile image);
 
 }

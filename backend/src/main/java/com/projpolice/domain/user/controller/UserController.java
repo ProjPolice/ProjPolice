@@ -82,16 +82,16 @@ public class UserController {
      * @param request
      * @return 수정된 사용자의 정보
      */
-    @PatchMapping
+    @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "사용자 정보 수정", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 수정할 정보를 받아 사용자의 정보를 수정합니다.")
-    public ResponseEntity<? extends BaseResponse<UserInfoResponse>> updateUserInfo(
-        @RequestBody UserUpdateRequest request) {
+    public ResponseEntity<? extends BaseResponse<UserInfoResponse>> updateUserInfo(UserUpdateRequest request,
+        @RequestPart(required = false) MultipartFile image) {
 
         return ResponseEntity.ok()
             .body(BaseResponse.<UserInfoResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("사용자 정보 수정 성공")
-                .data(userService.updateUserInfo(request))
+                .data(userService.updateUserInfo(request, image))
                 .build()
             );
     }

@@ -76,7 +76,9 @@ public class UserServiceImpl implements UserService {
      *
      * @return UserInfoResponse
      */
-    public UserInfoResponse updateUserInfo(UserUpdateRequest request) {
+    @Override
+    @Transactional
+    public UserInfoResponse updateUserInfo(UserUpdateRequest request, MultipartFile image) {
         User user = getLoggedUser();
 
         if (request.getName() != null) {
@@ -85,18 +87,15 @@ public class UserServiceImpl implements UserService {
         if (request.getEmail() != null) {
             user.setEmail(request.getEmail());
         }
-        if (request.getImage() != null) {
-            user.setImage(request.getImage());
+        if (image != null) {
+            String imageUuid = String.format("%s_%s", UUID.randomUUID(), image.getOriginalFilename());
+            storageConnector.putObject(FileUtil.generateStreamFromFile(image), imageUuid, CONTENT_TYPE);
+            user.setImage(imageUuid);
         }
 
         userRepository.save(user);
 
-        return UserInfoResponse.builder()
-            .id(user.getId())
-            .name(user.getName())
-            .email(user.getEmail())
-            .image(user.getImage())
-            .build();
+        return UserInfoResponse.of(user, storageConnector.getPreAuthenticatedUrl());
     }
 
     /**
@@ -120,4 +119,5 @@ public class UserServiceImpl implements UserService {
             .accessToken(jwtToken)
             .build();
     }
+
 }
