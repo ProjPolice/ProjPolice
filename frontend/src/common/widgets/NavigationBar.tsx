@@ -1,7 +1,7 @@
 import { colors } from '@assets/design/colors';
 import { link } from '@assets/design/globalStyles';
 import styled from '@emotion/styled';
-import { userState } from 'State';
+import { userState } from 'state/State';
 import { Link } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
@@ -33,9 +33,7 @@ const NavigationBar = () => {
           </Link>
         </Segment>
         <Segment>
-          <a href={''} css={link}>
-            <p>알림</p>
-          </a>
+          <p>알림</p>
         </Segment>
         {user.token === '' ? (
           <Segment>

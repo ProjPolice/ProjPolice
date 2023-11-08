@@ -9,13 +9,13 @@ function ProjectItem({ backgroundColor, title, members, tasks }: ProjectItemProp
         <h6>{title}</h6>
       </ProjectBoxTitle>
       <ProjectBoxMember>
-        {members.map((member) => (
-          <p>{member}</p>
+        {members.map((member, index) => (
+          <p key={index}>{member}</p>
         ))}
       </ProjectBoxMember>
       <ProjectBoxTask>
-        {tasks.map((task) => (
-          <LeftLinedBox width="45%" height="30%" backgroundColor={backgroundColor}>
+        {tasks.map((task, index) => (
+          <LeftLinedBox width="45%" height="30%" backgroundColor={backgroundColor} key={index}>
             <p>{task}</p>
           </LeftLinedBox>
         ))}
