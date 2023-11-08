@@ -16,6 +16,7 @@ export interface ProjectItemProps {
   title: string;
   members: string[];
   tasks: string[];
+  projectId: number;
 }
 
 export interface BoardItemProps {
