@@ -119,5 +119,5 @@ export const TextContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: end;
-  height: 10%;
+  // height: 10%;
 `;
