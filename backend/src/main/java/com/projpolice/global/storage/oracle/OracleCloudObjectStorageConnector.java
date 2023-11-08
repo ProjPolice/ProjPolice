@@ -1,8 +1,10 @@
 package com.projpolice.global.storage.oracle;
 
 import java.io.InputStream;
+import java.util.Collection;
 
 import org.springframework.core.io.Resource;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import com.oracle.bmc.objectstorage.model.StorageTier;
@@ -18,7 +20,9 @@ import com.projpolice.global.common.util.FileUtil;
 import com.projpolice.global.storage.base.StorageConnector;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OracleCloudObjectStorageConnector implements StorageConnector {
@@ -27,8 +31,9 @@ public class OracleCloudObjectStorageConnector implements StorageConnector {
 
     /**
      * Cloud Storage ObjectStorage에 Object 업로드
-     * @param file InputStream
-     * @param objectName String
+     *
+     * @param file        InputStream
+     * @param objectName  String
      * @param contentType String
      * @return Oracle Storage 오브젝트 결과
      * @see PutObjectRequest
@@ -60,6 +65,7 @@ public class OracleCloudObjectStorageConnector implements StorageConnector {
 
     /**
      * Cloud Storage ObjectStorage에 Object 가져오기
+     *
      * @param objectName String
      * @return GetObjectResponse
      * @see GetObjectResponse
@@ -81,6 +87,7 @@ public class OracleCloudObjectStorageConnector implements StorageConnector {
 
     /**
      * Cloud Storage ObjectStorage에 Object 삭제하기
+     *
      * @param objectName String
      * @return DeleteObjectResponse
      * @see DeleteObjectResponse
@@ -97,5 +104,17 @@ public class OracleCloudObjectStorageConnector implements StorageConnector {
         }
 
         client.getClient().deleteObject(deleteObjectRequest);
+    }
+
+    // use thread pool in future
+    @Async
+    public void deleteObjectByBatchAndIgnore(Collection<String> objectNames) {
+        for (String objectName : objectNames) {
+            try {
+                deleteObject(objectName);
+            } catch (Exception e) {
+                log.error("[ObjectStorage batch deletion fail on {}] : {}", objectName, e.getMessage());
+            }
+        }
     }
 }

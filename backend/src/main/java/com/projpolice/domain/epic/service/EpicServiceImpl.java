@@ -20,8 +20,8 @@ import com.projpolice.domain.epic.request.EpicCreateRequest;
 import com.projpolice.domain.epic.request.EpicUpdateRequest;
 import com.projpolice.domain.project.domain.rdb.Project;
 import com.projpolice.domain.project.repository.rdb.ProjectRepository;
-import com.projpolice.domain.task.repository.TaskRepository;
 import com.projpolice.global.common.base.BaseIdItem;
+import com.projpolice.global.common.deletion.DeletionService;
 import com.projpolice.global.common.error.exception.EpicException;
 import com.projpolice.global.common.error.exception.TaskException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
@@ -35,9 +35,9 @@ import lombok.RequiredArgsConstructor;
 public class EpicServiceImpl implements EpicService {
     private final EpicRepository epicRepository;
     private final ProjectRepository projectRepository;
-    private final TaskRepository taskRepository;
     private final ProjectAuthManager projectAuthManager;
     private final RedisService redisService;
+    private final DeletionService deletionService;
 
     /**
      * 해당 프로젝트에 할일 생성하는 메소드
@@ -127,10 +127,8 @@ public class EpicServiceImpl implements EpicService {
     @Transactional
     public BaseIdItem deleteEpic(Long id) {
         projectAuthManager.checkEpicMembershipOrThrow(id);
+        deletionService.deleteEpic(id);
 
-        taskRepository.deleteAllByEpicId(id);
-        epicRepository.deleteById(id);
-        redisService.invalidateEpic(id);
         return BaseIdItem.from(id);
     }
 

@@ -29,6 +29,7 @@ import com.projpolice.domain.user.dto.UserIdNameImgItem;
 import com.projpolice.domain.user.repository.UserRepository;
 import com.projpolice.domain.user.response.UserProjectPagingResponse;
 import com.projpolice.global.common.base.BaseIdItem;
+import com.projpolice.global.common.deletion.DeletionService;
 import com.projpolice.global.common.error.exception.BadRequestException;
 import com.projpolice.global.common.error.exception.UnAuthorizedException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
@@ -47,14 +48,11 @@ import lombok.RequiredArgsConstructor;
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
-
     private final UserProjectRepository userProjectRepository;
-
     private final UserRepository userRepository;
-
     private final ProjectAuthManager projectAuthManager;
-
     private final RedisService redisService;
+    private final DeletionService deletionService;
 
     /**
      * Retrieves the detailed information of a project based on its id.
@@ -120,15 +118,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public BaseIdItem deleteProject(long id) {
-        Project project = projectRepository.findById(id).orElseThrow(
-            () -> new BadRequestException(ExceptionInfo.INVALID_PROJECT)
-        );
-        projectAuthManager.checkProjectOwnershipOrThrow(project);
-
-        BaseIdItem baseIdItem = new BaseIdItem(project.getId());
-        projectRepository.delete(project);
-        redisService.invalidateProject(id);
-        return baseIdItem;
+        projectAuthManager.checkProjectOwnershipOrThrow(id);
+        deletionService.deleteProject(id);
+        return new BaseIdItem(id);
     }
 
     /**
@@ -206,8 +198,8 @@ public class ProjectServiceImpl implements ProjectService {
     /**
      * Adds a user to the specified project.
      *
-     * @param projectId       the ID of the project to add the user to
-     * @param request         the request object containing the email of the user to be added
+     * @param projectId the ID of the project to add the user to
+     * @param request   the request object containing the email of the user to be added
      * @return a {@link UserIdNameImgItem} object representing the user added to the project
      * @throws BadRequestException if the user or project is invalid
      */
@@ -238,9 +230,9 @@ public class ProjectServiceImpl implements ProjectService {
      * Deletes a user from the specified project.
      *
      * @param projectId the ID of the project
-     * @param userId the ID of the user to be deleted
+     * @param userId    the ID of the user to be deleted
      * @return a {@link BaseIdItem} object representing the ID of the user that was deleted
-     * @throws BadRequestException if the user project is invalid
+     * @throws BadRequestException   if the user project is invalid
      * @throws UnAuthorizedException if the logged-in user is not the owner of the project
      */
     @Override
@@ -262,8 +254,8 @@ public class ProjectServiceImpl implements ProjectService {
     /**
      * Retrieves a list of projects associated with the specified user.
      *
-     * @param userId the ID of the user
-     * @param page the page number to retrieve
+     * @param userId    the ID of the user
+     * @param page      the page number to retrieve
      * @param numOfRows the number of projects per page
      * @return a {@link UserProjectPagingResponse} object containing the list of projects and pagination information
      */

@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class BaseIdItem {
-    long id;
+    private long id;
 
     public static BaseIdItem from(Long id) {
         return BaseIdItem.builder()

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,14 @@ public interface EpicRepository extends JpaRepository<Epic, Long> {
         where epic.id = :epic_id and epic.deleted = false and userProject.user.id = :user_id
         """)
     boolean checkMembership(@Param("epic_id") long epicId, @Param("user_id") long userId);
+
+    @Modifying(clearAutomatically = true)
+    @Query("""
+        update Epic epic
+        set epic.deleted = true
+        where epic.deleted = false and epic.project.id = :projectId
+        """)
+    int deleteAllByProjectId(@Param("projectId") long projectId);
 
     /*
     Hibernate에서 생성한 Query를 실행해보았을 때 쿼리 자체는 정상이나

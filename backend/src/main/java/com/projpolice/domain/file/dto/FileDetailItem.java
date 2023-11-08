@@ -1,5 +1,6 @@
 package com.projpolice.domain.file.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.projpolice.domain.file.domain.File;
 
 import lombok.Builder;
@@ -11,6 +12,7 @@ public class FileDetailItem {
     private Long id;
     private String name;
     private String comment;
+    @JsonIgnore
     private String uuid;
     private Integer version;
     private String extension;

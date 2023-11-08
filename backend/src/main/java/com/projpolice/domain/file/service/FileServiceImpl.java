@@ -1,18 +1,18 @@
 package com.projpolice.domain.file.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.projpolice.domain.file.domain.File;
-import com.projpolice.domain.file.dto.FileBaseItem;
 import com.projpolice.domain.file.dto.FileDetailItem;
 import com.projpolice.domain.file.repository.FileRepository;
 import com.projpolice.domain.file.request.FileUploadRequest;
 import com.projpolice.domain.task.domain.Task;
 import com.projpolice.domain.task.repository.TaskRepository;
+import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.error.exception.TaskException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.manager.ProjectAuthManager;
@@ -39,9 +39,18 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     @Transactional
-    public List<FileDetailItem> getTaskFile(long taskId) {
-
+    public List<FileDetailItem> getTaskFileByTaskId(long taskId) {
+        projectAuthManager.checkTaskMembershipOrThrow(taskId);
         return fileRepository.findByTaskId(taskId).stream()
+            .map(FileDetailItem::from)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<FileDetailItem> getTaskFileByProjectId(long projectId) {
+        projectAuthManager.checkProjectMembershipOrThrow(projectId);
+        return fileRepository.findByProjectId(projectId).stream()
             .map(FileDetailItem::from)
             .collect(Collectors.toList());
     }
@@ -55,13 +64,12 @@ public class FileServiceImpl implements FileService {
     @Override
     @Transactional
     public FileDetailItem uploadFile(FileUploadRequest fileUploadRequest, long taskId) {
-        projectAuthManager.checkTaskMembershipOrThrow(taskId);
+        projectAuthManager.checkTaskOwnershipOrThrow(taskId);
 
         Task task = taskRepository.findById(taskId)
             .orElseThrow(() -> new TaskException(ExceptionInfo.INVALID_TASK));
 
-        final String uuid = String.format("%s_%s", System.currentTimeMillis(),
-            fileUploadRequest.getFile().getOriginalFilename());
+        final String uuid = UUID.randomUUID().toString();
 
         // oracle cloud object storage에 파일 업로드
         storageConnector.putObject(FileUtil.generateStreamFromFile(fileUploadRequest.getFile()), uuid, CONTENT_TYPE);
@@ -76,15 +84,13 @@ public class FileServiceImpl implements FileService {
      * @param fileId
      * @return FileBaseItem
      */
-    public FileBaseItem deleteFile(long fileId) {
-        File file = fileRepository.findById(fileId)
+    @Override
+    @Transactional
+    public BaseIdItem deleteFile(long fileId) {
+        long userId = fileRepository.findUserIdById(fileId)
             .orElseThrow(() -> new TaskException(ExceptionInfo.INVALID_FILE));
-
-        projectAuthManager.checkTaskMembershipOrThrow(file.getTask().getId());
-
-        fileRepository.delete(file);
-        return FileBaseItem.builder()
-            .id(fileId)
-            .build();
+        projectAuthManager.checkUserIdMatchOrThrow(userId);
+        fileRepository.deleteById(fileId);
+        return new BaseIdItem(fileId);
     }
 }

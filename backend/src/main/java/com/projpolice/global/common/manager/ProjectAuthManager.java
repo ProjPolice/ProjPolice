@@ -121,4 +121,11 @@ public class ProjectAuthManager {
             throw new UnAuthorizedException(UNAUTHORIZED);
         }
     }
+
+    public void checkUserIdMatchOrThrow(long userId) {
+        User loggedUser = getLoggedUser();
+        if (!loggedUser.getId().equals(userId)) {
+            throw new UnAuthorizedException(UNAUTHORIZED);
+        }
+    }
 }
