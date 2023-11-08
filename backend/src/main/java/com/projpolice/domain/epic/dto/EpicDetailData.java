@@ -2,7 +2,7 @@ package com.projpolice.domain.epic.dto;
 
 import java.time.LocalDate;
 
-import com.projpolice.domain.epic.domain.Epic;
+import com.projpolice.domain.epic.domain.rdb.Epic;
 
 import lombok.Builder;
 import lombok.Data;

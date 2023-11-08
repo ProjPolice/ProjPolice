@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projpolice.domain.task.dto.TaskDetailItem;
-import com.projpolice.domain.task.response.TaskGetResponse;
 import com.projpolice.domain.task.request.TaskCreateRequest;
 import com.projpolice.domain.task.request.TaskUpdateRequest;
-import com.projpolice.domain.task.response.TaskDeleteResponse;
+import com.projpolice.domain.task.response.TaskGetResponse;
 import com.projpolice.domain.task.response.TaskUpdateResponse;
 import com.projpolice.domain.task.service.TaskService;
+import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.base.BaseResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -91,9 +90,9 @@ public class TaskController {
      */
     @DeleteMapping("/{task_id}")
     @Operation(summary = "세부작업 삭제", security = @SecurityRequirement(name = "Authorization"), description = "세부 작업을 삭제합니다.")
-    public ResponseEntity<BaseResponse<TaskDeleteResponse>> deleteTask(@PathVariable("task_id") Long taskId) {
+    public ResponseEntity<BaseResponse<BaseIdItem>> deleteTask(@PathVariable("task_id") Long taskId) {
         return ResponseEntity.ok()
-            .body(BaseResponse.<TaskDeleteResponse>builder()
+            .body(BaseResponse.<BaseIdItem>builder()
                 .code(HttpStatus.OK.value())
                 .message("세부 작업 삭제 성공")
                 .data(taskService.deleteTask(taskId))

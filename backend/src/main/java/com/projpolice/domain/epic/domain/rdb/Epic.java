@@ -1,4 +1,4 @@
-package com.projpolice.domain.epic.domain;
+package com.projpolice.domain.epic.domain.rdb;
 
 import java.time.LocalDate;
 
