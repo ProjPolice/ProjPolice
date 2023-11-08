@@ -109,6 +109,7 @@ public class OracleCloudObjectStorageConnector implements StorageConnector {
     @Override
     public String getPreAuthenticatedUrl() {
         return constantProvider.getPreAuthenticatedUrl();
+    }
 
     // use thread pool in future
     @Async
