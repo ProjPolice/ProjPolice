@@ -2,10 +2,14 @@ package com.projpolice.domain.user.service;
 
 import static com.projpolice.domain.user.service.JwtService.*;
 
+import java.util.UUID;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.projpolice.domain.user.domain.User;
 import com.projpolice.domain.user.repository.UserRepository;
@@ -13,10 +17,12 @@ import com.projpolice.domain.user.request.UserJoinRequest;
 import com.projpolice.domain.user.request.UserLoginRequest;
 import com.projpolice.domain.user.request.UserUpdateRequest;
 import com.projpolice.domain.user.response.UserInfoResponse;
-import com.projpolice.domain.user.response.UserJoinResponse;
 import com.projpolice.domain.user.response.UserLoginResponse;
+import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.error.exception.BaseException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
+import com.projpolice.global.common.util.FileUtil;
+import com.projpolice.global.storage.base.StorageConnector;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,25 +33,29 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final StorageConnector storageConnector;
+
+    private final String CONTENT_TYPE = "multipart/form-data";
 
     /**
      * 사용자 등록을 한다.
      *
      * @return UserJoinResponse
      */
-    public UserJoinResponse join(UserJoinRequest request) {
-        User user = User.builder()
-            .name(request.getName())
-            .email(request.getEmail())
-            .image(request.getImage())
-            .password(passwordEncoder.encode(request.getPassword()))
-            .build();
+    @Override
+    @Transactional
+    public BaseIdItem join(UserJoinRequest request, MultipartFile image) {
+        String imageUuid = null;
 
-        userRepository.save(user);
+        if (image != null) {
+            imageUuid = String.format("%s_%s", UUID.randomUUID(), image.getOriginalFilename());
+            storageConnector.putObject(FileUtil.generateStreamFromFile(image), imageUuid, CONTENT_TYPE);
+        }
 
-        return UserJoinResponse.builder()
-            .id(user.getId())
-            .build();
+        User user = userRepository.save(
+            UserJoinRequest.to(request, imageUuid, passwordEncoder.encode(request.getPassword())));
+
+        return BaseIdItem.from(user.getId());
     }
 
     /**

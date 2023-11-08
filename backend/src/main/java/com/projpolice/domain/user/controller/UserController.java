@@ -1,21 +1,24 @@
 package com.projpolice.domain.user.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.projpolice.domain.user.request.UserJoinRequest;
 import com.projpolice.domain.user.request.UserLoginRequest;
 import com.projpolice.domain.user.request.UserUpdateRequest;
 import com.projpolice.domain.user.response.UserInfoResponse;
-import com.projpolice.domain.user.response.UserJoinResponse;
 import com.projpolice.domain.user.response.UserLoginResponse;
 import com.projpolice.domain.user.service.UserService;
+import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.base.BaseResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,16 +43,17 @@ public class UserController {
      * @param request
      * @return 회원의 아이디
      */
-    @PostMapping("/join")
+    @PostMapping(value = "/join", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "회원가입", description = "새로운 사용자 정보를 입력 받아 회원가입을 진행합니다.")
-    public ResponseEntity<? extends BaseResponse<UserJoinResponse>> join(@RequestBody UserJoinRequest request) {
+    public ResponseEntity<? extends BaseResponse<BaseIdItem>> join(UserJoinRequest request,
+        @RequestPart(required = false) MultipartFile image) {
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(
-                BaseResponse.<UserJoinResponse>builder()
+                BaseResponse.<BaseIdItem>builder()
                     .code(HttpStatus.OK.value())
                     .message("회원가입 성공")
-                    .data(userService.join(request))
+                    .data(userService.join(request, image))
                     .build()
             );
     }
