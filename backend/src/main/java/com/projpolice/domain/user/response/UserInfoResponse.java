@@ -1,5 +1,7 @@
 package com.projpolice.domain.user.response;
 
+import com.projpolice.domain.user.domain.User;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,4 +12,13 @@ public class UserInfoResponse {
     private String name;
     private String email;
     private String image;
+
+    public static UserInfoResponse of(User user, String preAuthenticatedUrl) {
+        return UserInfoResponse.builder()
+            .id(user.getId())
+            .name(user.getName())
+            .email(user.getEmail())
+            .image(String.format("%s%s", preAuthenticatedUrl, user.getImage()))
+            .build();
+    }
 }
