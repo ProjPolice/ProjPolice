@@ -117,12 +117,12 @@ public class RedisService implements ProjectRedisInterface, EpicRedisInterface {
         }
         ProjectEpicRedisItem project = projectRedisCache.get();
         ProjectEpicWithRangeRedisRepository.deleteAllById(project.getFormattedId());
-        projectEpicRedisRepository.delete(project);
+        projectEpicRedisRepository.deleteById(projectId);
     }
 
     @Override
-    public void invalidateEpic(long epicId) {
+    public void invalidateEpic(long epicId, long projectId) {
         epicDetailRedisRepository.deleteById(epicId);
+        invalidateProject(projectId);
     }
-
 }

@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 import com.projpolice.domain.epic.repository.rdb.EpicRepository;
 import com.projpolice.domain.file.repository.FileRepository;
 import com.projpolice.domain.project.repository.rdb.ProjectRepository;
+import com.projpolice.domain.task.dto.ProjectIdEpicIdProjectionData;
 import com.projpolice.domain.task.repository.TaskRepository;
+import com.projpolice.global.common.error.exception.BaseException;
+import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.redis.RedisService;
 import com.projpolice.global.storage.base.StorageConnector;
 
@@ -27,6 +30,10 @@ public class DeletionServiceImpl implements DeletionService {
     public void deleteTask(long taskId) {
         List<String> uuid = fileRepository.listUuidByTaskId(taskId);
         fileRepository.deleteAllByUuid(uuid);
+        ProjectIdEpicIdProjectionData projection = taskRepository.findProjectIdEpicIdById(taskId).orElseThrow(
+            () -> new BaseException(ExceptionInfo.INVALID_TASK)
+        );
+        redisService.invalidateEpic(projection.getEpicId(), projection.getProjectId());
         storageConnector.deleteObjectByBatchAndIgnore(uuid);
     }
 
@@ -36,7 +43,8 @@ public class DeletionServiceImpl implements DeletionService {
         fileRepository.deleteAllByEpicId(epicId);
         taskRepository.deleteAllByEpicId(epicId);
         epicRepository.deleteById(epicId);
-        redisService.invalidateEpic(epicId);
+        long projectId = epicRepository.findProjectIdByEpicId(epicId).getAsLong();
+        redisService.invalidateEpic(epicId, projectId);
         storageConnector.deleteObjectByBatchAndIgnore(uuid); // why last?->if transaction fail, object should be kept
     }
 
