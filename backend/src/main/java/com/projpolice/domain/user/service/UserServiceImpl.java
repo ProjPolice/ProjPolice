@@ -63,15 +63,12 @@ public class UserServiceImpl implements UserService {
      *
      * @return UserInfoResponse
      */
+    @Override
+    @Transactional(readOnly = true)
     public UserInfoResponse getUserInfo() {
         User user = getLoggedUser();
 
-        return UserInfoResponse.builder()
-            .id(user.getId())
-            .name(user.getName())
-            .email(user.getEmail())
-            .image(user.getImage())
-            .build();
+        return UserInfoResponse.of(user, storageConnector.getPreAuthenticatedUrl());
     }
 
     /**
