@@ -1,7 +1,7 @@
 import { ProjectItemProps } from '@interfaces/main';
 
 import { LeftLinedBox, ProjectBox, ProjectBoxMember, ProjectBoxTask, ProjectBoxTitle } from '@main/MainStyle';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function ProjectItem({ backgroundColor, title, members, tasks, projectId }: ProjectItemProps) {
   const navigate = useNavigate();
