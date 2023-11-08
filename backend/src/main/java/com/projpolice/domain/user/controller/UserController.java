@@ -1,5 +1,9 @@
 package com.projpolice.domain.user.controller;
 
+import static com.projpolice.domain.user.service.JwtService.*;
+
+import java.time.LocalDate;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,8 +11,12 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.projpolice.domain.task.response.UserTaskRangeResponse;
+import com.projpolice.domain.task.service.TaskService;
+import com.projpolice.domain.user.domain.User;
 import com.projpolice.domain.user.request.UserJoinRequest;
 import com.projpolice.domain.user.request.UserLoginRequest;
 import com.projpolice.domain.user.request.UserUpdateRequest;
@@ -33,6 +41,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "사용자 컨트롤러", description = "사용자를 담당하는 컨트롤러입니다.")
 public class UserController {
     private final UserService userService;
+    private final TaskService taskService;
 
     /**
      * 회원가입 처리
@@ -100,7 +109,7 @@ public class UserController {
      */
     @PostMapping
     @Operation(summary = "사용자 로그인", security = @SecurityRequirement(name = "Authorization"), description = "이메일과 패스워드를 받아 Access Token을 반환합니다.")
-    public ResponseEntity<? extends BaseResponse<UserLoginResponse>> login(@RequestBody UserLoginRequest request) {
+    public ResponseEntity<BaseResponse<UserLoginResponse>> login(@RequestBody UserLoginRequest request) {
         return ResponseEntity.ok()
             .body(BaseResponse.<UserLoginResponse>builder()
                 .code(200)
@@ -108,5 +117,26 @@ public class UserController {
                 .data(userService.login(request))
                 .build()
             );
+    }
+
+    @GetMapping("/tasks")
+    @Operation(summary = "현재 나의 세부 작업 리스트 조회", security = @SecurityRequirement(name = "Authorization"), description = "Access Token에 해당하는 사용자의 현재 세부 리스트를 조회 기간에 따라 반환합니다.")
+    public ResponseEntity<BaseResponse<UserTaskRangeResponse>> selectUserTaskRelatedDataWithRange(
+        @RequestParam(value = "startDate", required = false) LocalDate startDate,
+        @RequestParam(value = "endDate", required = false) LocalDate endDate
+    ) {
+        User loggedUser = getLoggedUser();
+        if (startDate == null) {
+            startDate = LocalDate.now().minusDays(3);
+        }
+        if (endDate == null) {
+            endDate = LocalDate.now().plusDays(3);
+        }
+        return ResponseEntity.ok()
+            .body(new BaseResponse<>(
+                new UserTaskRangeResponse(
+                    taskService.selectUserTaskRelatedDataWithRange(loggedUser.getId(), startDate, endDate)
+                )
+            ));
     }
 }

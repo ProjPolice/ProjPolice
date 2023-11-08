@@ -185,6 +185,7 @@ public class EpicServiceImpl implements EpicService {
                 .name(item.getTaskName())
                 .startDate(item.getTaskStartDate())
                 .endDate(item.getTaskEndDate())
+                .status(item.getTaskStatus())
                 .build();
             epicItem.getTasks().add(taskItem);
         }
