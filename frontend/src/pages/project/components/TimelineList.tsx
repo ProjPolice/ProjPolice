@@ -6,36 +6,42 @@ import DefaultProfilePhoto from '../../../../src/common/assets/icons/Logo.png';
 import DefaultFileIcon from '../../../../src/common/assets/icons/Stick.png';
 
 function TimelineList() {
+  const items = [
+    {
+      id: 1,
+      title: '할 일 A',
+      width: '16.6%',
+      background: colors.red,
+      profilePhoto: DefaultProfilePhoto,
+      fileIcon: DefaultFileIcon,
+    },
+    {
+      id: 2,
+      title: '할 일 B',
+      width: '60%',
+      background: colors.violet,
+      profilePhoto: DefaultProfilePhoto,
+      fileIcon: DefaultFileIcon,
+    },
+  ];
+
   return (
     <TimeLineContainer width={'100%'} height={'85%'} background="">
-      {/* timeline dummy 1 */}
-      <TimeLineBar width={'16.6%'} height={'33px'} background={colors.red}>
-        <TimelineInfoLeft>
-          <p style={{ fontSize: '15px' }}>할 일 A</p>
-          <Photo
-            width={'25px'}
-            height={'25px'}
-            background={colors.default}
-            imgurl={DefaultProfilePhoto}
-            borderradius={'50%'}
-          />
-        </TimelineInfoLeft>
-        <Photo width={'25px'} height={'25px'} background={colors.default} imgurl={DefaultFileIcon} borderradius="" />
-      </TimeLineBar>
-      {/* timeline dummy 2 */}
-      <TimeLineBar width={'60%'} height={'33px'} background={colors.violet}>
-        <TimelineInfoLeft>
-          <p style={{ fontSize: '15px' }}>할 일 A</p>
-          <Photo
-            width={'25px'}
-            height={'25px'}
-            background={colors.default}
-            imgurl={DefaultProfilePhoto}
-            borderradius={'50%'}
-          />
-        </TimelineInfoLeft>
-        <Photo width={'25px'} height={'25px'} background={colors.default} imgurl={DefaultFileIcon} borderradius="" />
-      </TimeLineBar>
+      {items.map((item, index) => (
+        <TimeLineBar key={index} width={item.width} height={'33px'} background={item.background}>
+          <TimelineInfoLeft>
+            <p style={{ fontSize: '15px' }}>{item.title}</p>
+            <Photo
+              width={'25px'}
+              height={'25px'}
+              background={colors.default}
+              imgurl={item.profilePhoto}
+              borderradius={'50%'}
+            />
+          </TimelineInfoLeft>
+          <Photo width={'25px'} height={'25px'} background={colors.default} imgurl={item.fileIcon} borderradius="" />
+        </TimeLineBar>
+      ))}
     </TimeLineContainer>
   );
 }
