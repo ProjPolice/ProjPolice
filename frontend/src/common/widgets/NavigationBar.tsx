@@ -1,9 +1,11 @@
 import { colors } from '@assets/design/colors';
 import { link } from '@assets/design/globalStyles';
 import styled from '@emotion/styled';
-import { userState } from 'State';
+import { userState } from 'state/State';
 import { Link } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
+
+import Logo from '@assets/images/ProjPoliceIcon.png';
 
 const NavigationBar = () => {
   const [user, setUser] = useRecoilState(userState);
@@ -18,7 +20,7 @@ const NavigationBar = () => {
     <NavBar>
       <LogoContainer>
         <Link to={'/'}>
-          <img src="../../../src/common/assets/icons/Logo.png" />
+          <img src={Logo} height={'55px'} />
         </Link>
       </LogoContainer>
       <ToolBox>
@@ -33,9 +35,7 @@ const NavigationBar = () => {
           </Link>
         </Segment>
         <Segment>
-          <a href={''} css={link}>
-            <p>알림</p>
-          </a>
+          <p>알림</p>
         </Segment>
         {user.token === '' ? (
           <Segment>

@@ -2,7 +2,7 @@ import Axios from 'axios';
 
 export const ROOT = 'https://api.projpolice.com/';
 
-const httpAxios = Axios.create({
+const instance = Axios.create({
   baseURL: ROOT,
 });
 
@@ -18,17 +18,17 @@ const httpAxios = Axios.create({
 // });
 
 export const http = {
-  get: <Response = unknown>(url: string) => httpAxios.get<Response>(url).then((response) => response.data),
+  get: <Response = unknown>(url: string) => instance.get<Response>(url).then((response) => response.data),
   post: <Response = unknown, Request = unknown>(url: string, body?: Request) =>
-    httpAxios.post<Response>(url, body).then((response) => response.data),
+    instance.post<Response>(url, body).then((response) => response.data),
   put: <Response = unknown, Request = unknown>(url: string, body?: Request) =>
-    httpAxios.put<Response>(url, body).then((response) => response.data),
+    instance.put<Response>(url, body).then((response) => response.data),
   patch: <Response = unknown, Request = unknown>(url: string, body?: Request) =>
-    httpAxios.patch<Response>(url, body).then((response) => response.data),
-  delete: <Response = unknown>(url: string) => httpAxios.delete<Response>(url).then((response) => response.data),
+    instance.patch<Response>(url, body).then((response) => response.data),
+  delete: <Response = unknown>(url: string) => instance.delete<Response>(url).then((response) => response.data),
 };
 
 export interface CommonResponse {
-  statusCode: number;
+  code: number;
   messages: string;
 }
