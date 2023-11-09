@@ -1,5 +1,7 @@
 package com.projpolice.domain.task.service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +13,8 @@ import com.projpolice.domain.file.dto.FileDetailItem;
 import com.projpolice.domain.file.repository.FileRepository;
 import com.projpolice.domain.task.domain.Task;
 import com.projpolice.domain.task.dto.TaskDetailItem;
+import com.projpolice.domain.task.dto.TaskRelatedProjectionData;
+import com.projpolice.domain.task.dto.UserTaskProjectionData;
 import com.projpolice.domain.task.repository.TaskRepository;
 import com.projpolice.domain.task.request.TaskCreateRequest;
 import com.projpolice.domain.task.request.TaskUpdateRequest;
@@ -148,5 +152,17 @@ public class TaskServiceImpl implements TaskService {
             .map(FileDetailItem::from)
             .collect(Collectors.toList()));
         return taskItem;
+    }
+
+    @Override
+    public List<TaskRelatedProjectionData> selectUserTaskRelatedDataWithRange(long userId, LocalDate startDate,
+        LocalDate endDate) {
+
+        List<UserTaskProjectionData> projections = taskRepository.findTasksByUserId(userId, startDate, endDate);
+        List<TaskRelatedProjectionData> result = projections.stream()
+            .map(TaskRelatedProjectionData::new)
+            .toList();
+
+        return result;
     }
 }

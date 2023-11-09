@@ -1,6 +1,10 @@
 package com.projpolice.domain.task.service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import com.projpolice.domain.task.dto.TaskDetailItem;
+import com.projpolice.domain.task.dto.TaskRelatedProjectionData;
 import com.projpolice.domain.task.request.TaskCreateRequest;
 import com.projpolice.domain.task.request.TaskUpdateRequest;
 import com.projpolice.domain.task.response.TaskGetResponse;
@@ -14,4 +18,7 @@ public interface TaskService {
 
     BaseIdItem deleteTask(Long taskId);
     TaskGetResponse getTask(Long taskId);
+
+    List<TaskRelatedProjectionData> selectUserTaskRelatedDataWithRange(long userId, LocalDate startDate,
+        LocalDate endDate);
 }

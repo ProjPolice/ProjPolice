@@ -1,5 +1,7 @@
 package com.projpolice.domain.task.repository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.OptionalLong;
 
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.projpolice.domain.task.domain.Task;
 import com.projpolice.domain.task.dto.ProjectIdEpicIdProjectionData;
+import com.projpolice.domain.task.dto.UserTaskProjectionData;
 
 import io.lettuce.core.dynamic.annotation.Param;
 
@@ -73,4 +76,36 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
         where task.deleted = false and task.id = :taskId
         """)
     Optional<ProjectIdEpicIdProjectionData> findProjectIdEpicIdById(@Param("taskId") long taskId);
+
+    @Query("""
+        select 
+            task.id as taskId,
+            task.name as taskName,
+            task.startDate as startDate,
+            task.endDate as endDate,
+            epic.id as epicId,
+            epic.name as epicName,
+            project.id as projectId,
+            project.name as projectName,
+            file.id as fileId,
+            file.name as fileName,
+            task.status as taskStatus
+        from Task task
+        left join Epic epic on task.epic.id = epic.id
+        left join Project project on epic.project.id = project.id
+        left join UserProject userProject on project.id = userProject.project.id
+        left outer join File file on task.id = file.task.id
+        where task.deleted = false and (file.deleted = false or file is null)
+         and userProject.user.id = :userId
+         and 
+          (
+             (task.startDate is null and task.endDate is null)
+            or
+             (task.startDate between :startDate and :endDate)
+            or
+             (task.endDate between :startDate and :endDate)
+          )
+        """)
+    List<UserTaskProjectionData> findTasksByUserId(@Param("userId") long userId,
+        @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }

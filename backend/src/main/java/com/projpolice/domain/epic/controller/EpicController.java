@@ -59,7 +59,7 @@ public class EpicController {
      * @param epiceId
      * @return 조회한 할일의 상세 내용
      */
-    @GetMapping("/{epiceId}")
+    @GetMapping("/{epicId}")
     @Operation(summary = "할일 조회", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 epic id를 받아 할일을 조회합니다.")
     public ResponseEntity<BaseResponse<EpicDetailData>> getEpicDetail(@PathVariable("epiceId") long epiceId) {
 
@@ -78,7 +78,7 @@ public class EpicController {
      * @param epicUpdateRequest
      * @return 수정된 할일 상세 정보 조회
      */
-    @PatchMapping("/{epiceId}")
+    @PatchMapping("/{epicId}")
     @Operation(summary = "할일 수정", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 수정할 할일 정보를 받아 할일을 수정합니다.")
     public ResponseEntity<BaseResponse<EpicDetailData>> updateEpic(@PathVariable("epiceId") long epiceId
         , @RequestBody EpicUpdateRequest epicUpdateRequest) {
@@ -96,7 +96,7 @@ public class EpicController {
      * @param epiceId
      * @return 삭제한 할일의 id
      */
-    @DeleteMapping("/{epiceId}")
+    @DeleteMapping("/{epicId}")
     @Operation(summary = "할일 삭제", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 삭제할 epic id를 받아 할일을 삭제합니다.")
     public ResponseEntity<BaseResponse<BaseIdItem>> deleteEpic(@PathVariable("epiceId") long epiceId) {
 
