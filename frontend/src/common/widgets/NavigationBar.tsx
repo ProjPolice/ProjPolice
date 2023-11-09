@@ -5,6 +5,8 @@ import { userState } from 'state/State';
 import { Link } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
+import Logo from '@assets/images/ProjPoliceIcon.png';
+
 const NavigationBar = () => {
   const [user, setUser] = useRecoilState(userState);
 
@@ -18,7 +20,7 @@ const NavigationBar = () => {
     <NavBar>
       <LogoContainer>
         <Link to={'/'}>
-          <img src="../../../src/common/assets/icons/Logo.png" />
+          <img src={Logo} height={'55px'} />
         </Link>
       </LogoContainer>
       <ToolBox>
