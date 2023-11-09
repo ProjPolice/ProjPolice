@@ -5,10 +5,9 @@ export const Container = styled.div<{ width: string; height: string }>`
   position: absolute;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   overflow: hidden;
-  background-color: ${colors.white};
+  background-color: ${colors.light};
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   border-radius: 10px;
@@ -36,16 +35,51 @@ export const ContainerContent = styled.div<{ width: string; height: string; back
   background-color: ${(props) => props.background};
 `;
 
-export const ContentItem = styled.div<{ width: string; height: string }>`
+export const ContentItem = styled.div<{ width: string; height: string; justifycontent: string }>`
   display: flex;
   height: ${(props) => props.height};
   width: ${(props) => props.width};
-  justify-content: space-between;
+  justify-content: ${(props) => props.justifycontent};
+  align-items: center;
+  margin-bottom: 2px;
+`;
+
+export const ColumnItem = styled.div<{ width: string; height: string }>`
+  display: flex;
+  flex-direction: column;
+  height: ${(props) => props.height};
+  width: ${(props) => props.width};
+  /* justify-content: center; */
   /* align-items: center; */
+  margin: 5% 3px 5%;
+`;
+
+export const ContentName = styled.div<{ width: string }>`
+  display: flex;
+  width: ${(props) => props.width};
+  /* margin: 0% 20px 0% 0%; */
+  /* justify-content: space-between; */
+  align-items: center;
 `;
 
 export const Segment = styled.div<{ width: string; height: string }>`
   display: flex;
   height: ${(props) => props.height};
   width: ${(props) => props.width};
+  justify-content: space-evenly;
+  align-items: center;
+`;
+
+export const InputBox = styled.div<{ width: string; flexgrow: string }>`
+  display: flex;
+  flex-grow: ${(props) => props.flexgrow};
+  width: ${(props) => props.width};
+  height: 80%;
+  padding: 0% 2% 0% 2%;
+  border: 1px solid #ccc;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  background-color: #ffffff;
 `;
