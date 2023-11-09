@@ -193,6 +193,13 @@ export const EpicItem = styled.div<{ width: string; height: string; background: 
   border-bottom: 2px solid ${colors.default};
 `;
 
+export const TaskInfoStyle = styled.p`
+  display: flex;
+  width: 18%;
+  padding: 0% 2% 0%;
+  font-size: 15px;
+`;
+
 export const Photo = styled.div<{
   width: string;
   height: string;
