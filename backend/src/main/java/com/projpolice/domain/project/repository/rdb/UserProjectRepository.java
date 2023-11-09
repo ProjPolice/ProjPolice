@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.projpolice.domain.project.domain.rdb.UserProject;
-import com.projpolice.domain.user.domain.User;
+import com.projpolice.domain.user.domain.rdb.User;
 
 @Repository
 public interface UserProjectRepository extends JpaRepository<UserProject, Long> {

@@ -27,4 +27,6 @@ public interface UserTaskProjectionData {
     String getFileName();
 
     TaskStatus getTaskStatus();
+
+    Long getUserId();
 }

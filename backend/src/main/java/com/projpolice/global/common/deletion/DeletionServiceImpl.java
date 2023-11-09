@@ -8,7 +8,7 @@ import com.projpolice.domain.epic.repository.rdb.EpicRepository;
 import com.projpolice.domain.file.repository.FileRepository;
 import com.projpolice.domain.project.repository.rdb.ProjectRepository;
 import com.projpolice.domain.task.dto.ProjectIdEpicIdProjectionData;
-import com.projpolice.domain.task.repository.TaskRepository;
+import com.projpolice.domain.task.repository.rdb.TaskRepository;
 import com.projpolice.global.common.error.exception.BaseException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.redis.RedisService;
@@ -33,7 +33,7 @@ public class DeletionServiceImpl implements DeletionService {
         ProjectIdEpicIdProjectionData projection = taskRepository.findProjectIdEpicIdById(taskId).orElseThrow(
             () -> new BaseException(ExceptionInfo.INVALID_TASK)
         );
-        redisService.invalidateEpic(projection.getEpicId(), projection.getProjectId());
+        redisService.invalidateProject(projection.getProjectId());
         storageConnector.deleteObjectByBatchAndIgnore(uuid);
     }
 
@@ -44,7 +44,7 @@ public class DeletionServiceImpl implements DeletionService {
         taskRepository.deleteAllByEpicId(epicId);
         epicRepository.deleteById(epicId);
         long projectId = epicRepository.findProjectIdByEpicId(epicId).getAsLong();
-        redisService.invalidateEpic(epicId, projectId);
+        redisService.invalidateProject(projectId);
         storageConnector.deleteObjectByBatchAndIgnore(uuid); // why last?->if transaction fail, object should be kept
     }
 

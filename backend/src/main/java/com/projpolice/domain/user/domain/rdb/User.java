@@ -1,4 +1,4 @@
-package com.projpolice.domain.user.domain;
+package com.projpolice.domain.user.domain.rdb;
 
 import java.time.LocalDateTime;
 import java.util.Collection;

@@ -1,7 +1,5 @@
 package com.projpolice.domain.user.controller;
 
-import static com.projpolice.domain.user.service.JwtService.*;
-
 import java.time.LocalDate;
 
 import org.springframework.http.HttpStatus;
@@ -19,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.projpolice.domain.task.response.UserTaskRangeResponse;
 import com.projpolice.domain.task.service.TaskService;
-import com.projpolice.domain.user.domain.User;
 import com.projpolice.domain.user.request.UserJoinRequest;
 import com.projpolice.domain.user.request.UserLoginRequest;
 import com.projpolice.domain.user.request.UserUpdateRequest;
@@ -129,7 +126,6 @@ public class UserController {
         @RequestParam(value = "startDate", required = false) LocalDate startDate,
         @RequestParam(value = "endDate", required = false) LocalDate endDate
     ) {
-        User loggedUser = getLoggedUser();
         if (startDate == null) {
             startDate = LocalDate.now().minusDays(3);
         }
@@ -139,7 +135,7 @@ public class UserController {
         return ResponseEntity.ok()
             .body(new BaseResponse<>(
                 new UserTaskRangeResponse(
-                    taskService.selectUserTaskRelatedDataWithRange(loggedUser.getId(), startDate, endDate)
+                    taskService.selectUserTaskRelatedDataWithRange(startDate, endDate)
                 )
             ));
     }

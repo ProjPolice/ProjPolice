@@ -1,7 +1,10 @@
 package com.projpolice.domain.task.service;
 
+import static com.projpolice.domain.user.service.JwtService.*;
+
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -11,17 +14,17 @@ import com.projpolice.domain.epic.domain.rdb.Epic;
 import com.projpolice.domain.epic.repository.rdb.EpicRepository;
 import com.projpolice.domain.file.dto.FileDetailItem;
 import com.projpolice.domain.file.repository.FileRepository;
-import com.projpolice.domain.task.domain.Task;
+import com.projpolice.domain.task.domain.rdb.Task;
 import com.projpolice.domain.task.dto.TaskDetailItem;
 import com.projpolice.domain.task.dto.TaskRelatedProjectionData;
 import com.projpolice.domain.task.dto.UserTaskProjectionData;
-import com.projpolice.domain.task.repository.TaskRepository;
+import com.projpolice.domain.task.repository.rdb.TaskRepository;
 import com.projpolice.domain.task.request.TaskCreateRequest;
 import com.projpolice.domain.task.request.TaskUpdateRequest;
 import com.projpolice.domain.task.response.TaskGetResponse;
 import com.projpolice.domain.task.response.TaskUpdateResponse;
-import com.projpolice.domain.user.domain.User;
-import com.projpolice.domain.user.repository.UserRepository;
+import com.projpolice.domain.user.domain.rdb.User;
+import com.projpolice.domain.user.repository.rdb.UserRepository;
 import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.deletion.DeletionService;
 import com.projpolice.global.common.error.exception.EpicException;
@@ -63,7 +66,7 @@ public class TaskServiceImpl implements TaskService {
 
         Task task = taskRepository.save(Task.of(taskCreateRequest, user, epic));
         long projectId = epicRepository.findProjectIdByEpicId(taskCreateRequest.getEpicId()).getAsLong();
-        redisService.invalidateEpic(taskCreateRequest.getEpicId(), projectId);
+        redisService.invalidateProject(projectId);
         return TaskDetailItem.from(task);
     }
 
@@ -115,7 +118,7 @@ public class TaskServiceImpl implements TaskService {
 
         if (updated) {
             long projectId = taskRepository.findProjectIdById(taskId).getAsLong();
-            redisService.invalidateEpic(taskUpdateRequest.getEpicId(), projectId);
+            redisService.invalidateProject(projectId);
         }
 
         return TaskUpdateResponse.from(task);
@@ -147,22 +150,28 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public TaskGetResponse getTask(Long taskId) {
+        projectAuthManager.checkTaskMembershipOrThrow(taskId);
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_TASK));
-        TaskGetResponse taskItem = TaskGetResponse.from(task, fileRepository.findByTaskId(taskId).stream()
+        return TaskGetResponse.from(task, fileRepository.findByTaskId(taskId).stream()
             .map(FileDetailItem::from)
             .collect(Collectors.toList()));
-        return taskItem;
     }
 
     @Override
-    public List<TaskRelatedProjectionData> selectUserTaskRelatedDataWithRange(long userId, LocalDate startDate,
+    public List<TaskRelatedProjectionData> selectUserTaskRelatedDataWithRange(LocalDate startDate,
         LocalDate endDate) {
+        long userId = getLoggedUser().getId();
+        Optional<List<TaskRelatedProjectionData>> cache = redisService.selectUserProjectsWithDateRange(
+            userId, startDate, endDate);
+        if (cache.isPresent()) {
+            return cache.get();
+        }
 
         List<UserTaskProjectionData> projections = taskRepository.findTasksByUserId(userId, startDate, endDate);
         List<TaskRelatedProjectionData> result = projections.stream()
             .map(TaskRelatedProjectionData::new)
             .toList();
-
+        redisService.saveUserProjectsWithDateRange(userId, startDate, endDate, result);
         return result;
     }
 }

@@ -23,6 +23,7 @@ public class TaskRelatedProjectionData {
     private BaseIdName epic;
     private BaseIdName project;
     private BaseIdName file;
+    private Long userId;
 
     public TaskRelatedProjectionData(UserTaskProjectionData data) {
         this.id = data.getTaskId();
@@ -30,6 +31,7 @@ public class TaskRelatedProjectionData {
         this.startDate = data.getStartDate();
         this.endDate = data.getEndDate();
         this.status = data.getTaskStatus();
+        this.userId = data.getUserId();
         if (data.getEpicId() != null) {
             this.epic = new BaseIdName(
                 data.getEpicId(),

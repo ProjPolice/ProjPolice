@@ -1,4 +1,4 @@
-package com.projpolice.domain.task.repository;
+package com.projpolice.domain.task.repository.rdb;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.projpolice.domain.task.domain.Task;
+import com.projpolice.domain.task.domain.rdb.Task;
 import com.projpolice.domain.task.dto.ProjectIdEpicIdProjectionData;
 import com.projpolice.domain.task.dto.UserTaskProjectionData;
 
@@ -89,7 +89,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             project.name as projectName,
             file.id as fileId,
             file.name as fileName,
-            task.status as taskStatus
+            task.status as taskStatus,
+            userProject.id as userId
         from Task task
         left join Epic epic on task.epic.id = epic.id
         left join Project project on epic.project.id = project.id
@@ -104,6 +105,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
              (task.startDate between :startDate and :endDate)
             or
              (task.endDate between :startDate and :endDate)
+            or
+             (epic.startDate between :startDate and :endDate)
+            or
+             (epic.endDate between :startDate and :endDate)
           )
         """)
     List<UserTaskProjectionData> findTasksByUserId(@Param("userId") long userId,

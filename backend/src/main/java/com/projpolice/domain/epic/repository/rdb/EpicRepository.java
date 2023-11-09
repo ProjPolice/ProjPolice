@@ -69,7 +69,8 @@ public interface EpicRepository extends JpaRepository<Epic, Long> {
         task.name as taskName,
         task.startDate as taskStartDate,
         task.endDate as taskEndDate,
-        task.status as taskStatus
+        task.status as taskStatus,
+        task.user.id as userId
         from Epic epic left outer join Task task on epic.id = task.epic.id
         where epic.project.id = :project_id and epic.deleted = false
         and

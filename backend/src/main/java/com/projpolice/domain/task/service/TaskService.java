@@ -17,8 +17,9 @@ public interface TaskService {
     TaskUpdateResponse updateTask(Long taskId, TaskUpdateRequest taskUpdateRequest);
 
     BaseIdItem deleteTask(Long taskId);
+
     TaskGetResponse getTask(Long taskId);
 
-    List<TaskRelatedProjectionData> selectUserTaskRelatedDataWithRange(long userId, LocalDate startDate,
+    List<TaskRelatedProjectionData> selectUserTaskRelatedDataWithRange(LocalDate startDate,
         LocalDate endDate);
 }

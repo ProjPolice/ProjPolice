@@ -114,7 +114,7 @@ public class EpicServiceImpl implements EpicService {
 
         if (updated) {
             long projectId = epicRepository.findProjectIdByEpicId(id).getAsLong();
-            redisService.invalidateEpic(id, projectId);
+            redisService.invalidateProject(projectId);
         }
 
         return EpicDetailData.from(epic);
@@ -186,6 +186,7 @@ public class EpicServiceImpl implements EpicService {
                 .startDate(item.getTaskStartDate())
                 .endDate(item.getTaskEndDate())
                 .status(item.getTaskStatus())
+                .userId(item.getUserId())
                 .build();
             epicItem.getTasks().add(taskItem);
         }

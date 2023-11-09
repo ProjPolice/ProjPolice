@@ -1,7 +1,7 @@
 package com.projpolice.domain.task.response;
 
 import com.projpolice.domain.epic.dto.EpicBaseItem;
-import com.projpolice.domain.task.domain.Task;
+import com.projpolice.domain.task.domain.rdb.Task;
 import com.projpolice.domain.task.dto.TaskBaseItem;
 import com.projpolice.domain.user.dto.UserIdNameImgItem;
 

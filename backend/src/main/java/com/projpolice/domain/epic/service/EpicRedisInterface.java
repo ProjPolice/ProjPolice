@@ -19,5 +19,4 @@ public interface EpicRedisInterface {
     void saveProjectEpicsWithDateRange(long projectId, LocalDate startDate, LocalDate endDate,
         List<EpicProjectedItem> list);
 
-    void invalidateEpic(long epicId, long projectId);
 }
