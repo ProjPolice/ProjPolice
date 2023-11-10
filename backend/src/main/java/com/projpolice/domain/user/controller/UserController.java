@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,6 +22,7 @@ import com.projpolice.domain.user.request.UserLoginRequest;
 import com.projpolice.domain.user.request.UserUpdateRequest;
 import com.projpolice.domain.user.response.UserInfoResponse;
 import com.projpolice.domain.user.response.UserLoginResponse;
+import com.projpolice.domain.user.response.UserLogoutResponse;
 import com.projpolice.domain.user.service.UserService;
 import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.base.BaseResponse;
@@ -101,14 +103,15 @@ public class UserController {
     }
 
     /**
-     * 로그인 처리
+     * 로그인 처리, FCM 토큰 입력받기
      *
      * @param request
      * @return 인증에 필요한 Jwt Token 발급
      */
     @PostMapping
-    @Operation(summary = "사용자 로그인", security = @SecurityRequirement(name = "Authorization"), description = "이메일과 패스워드를 받아 Access Token을 반환합니다.")
+    @Operation(summary = "사용자 로그인", security = @SecurityRequirement(name = "Authorization"), description = "이메일과 패스워드를 받아 Access Token을 반환합니다. 추가적으로 FCM을 위해 토큰 입력을 해야합니다.")
     public ResponseEntity<BaseResponse<UserLoginResponse>> login(@RequestBody UserLoginRequest request) {
+
         return ResponseEntity.ok()
             .body(BaseResponse.<UserLoginResponse>builder()
                 .code(200)
@@ -117,6 +120,21 @@ public class UserController {
                 .build()
             );
     }
+
+    @DeleteMapping
+    @Operation(summary = "사용자 로그아웃", security = @SecurityRequirement(name = "Authorization"), description = "로그아웃 합니다. 추가로 사용자의 FCM 토큰도 삭제합니다.")
+    public ResponseEntity<BaseResponse<UserLogoutResponse>> logout() {
+
+        return ResponseEntity.ok()
+            .body(BaseResponse.<UserLogoutResponse>builder()
+                .code(200)
+                .message("로그아웃 성공")
+                .data(userService.logout())
+                .build()
+            );
+    }
+
+
 
     @GetMapping("/tasks")
     @Operation(summary = "현재 나의 세부 작업 리스트 조회", security = @SecurityRequirement(name = "Authorization"), description = "Access Token에 해당하는 사용자의 현재 세부 리스트를 조회 기간에 따라 반환합니다.")

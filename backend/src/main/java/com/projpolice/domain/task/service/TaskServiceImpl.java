@@ -32,6 +32,7 @@ import com.projpolice.global.common.error.exception.TaskException;
 import com.projpolice.global.common.error.exception.UserException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.manager.ProjectAuthManager;
+import com.projpolice.global.firebase.NotificationService;
 import com.projpolice.global.redis.RedisService;
 import com.projpolice.global.storage.base.StorageConnector;
 
@@ -48,6 +49,7 @@ public class TaskServiceImpl implements TaskService {
     private final DeletionService deletionService;
     private final RedisService redisService;
     private final StorageConnector storageConnector;
+    private final NotificationService notificationService;
 
     /**
      * 상세 작업 생성
@@ -68,8 +70,13 @@ public class TaskServiceImpl implements TaskService {
             .orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC));
 
         Task task = taskRepository.save(Task.of(taskCreateRequest, user, epic));
+
+        if (taskCreateRequest.getUserId().equals(getLoggedUser().getId())) {
+            notificationService.taskAssignedToUser(task.getId(), taskCreateRequest.getUserId());
+        }
         long projectId = epicRepository.findProjectIdByEpicId(taskCreateRequest.getEpicId())
             .orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC));
+        
         redisService.invalidateProject(projectId);
         return TaskDetailItem.of(task, storageConnector.getPreAuthenticatedUrl());
     }

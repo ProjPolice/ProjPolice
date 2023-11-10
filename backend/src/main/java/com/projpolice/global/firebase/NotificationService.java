@@ -1,4 +1,4 @@
-package com.projpolice.global.notification.service;
+package com.projpolice.global.firebase;
 
 public interface NotificationService {
 
