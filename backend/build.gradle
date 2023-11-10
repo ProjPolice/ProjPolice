@@ -125,6 +125,11 @@ dependencies {
     implementation group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.34'
     // https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-multipart-provider
     implementation group: 'org.jboss.resteasy', name: 'resteasy-multipart-provider', version: '2.3.4.Final'
+
+
+    // https://mvnrepository.com/artifact/com.google.firebase/firebase-admin
+    implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.2.0'
+
 }
 
 tasks.named('test') {

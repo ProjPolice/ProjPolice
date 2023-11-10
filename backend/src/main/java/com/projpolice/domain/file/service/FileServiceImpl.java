@@ -1,6 +1,7 @@
 package com.projpolice.domain.file.service;
 
 import java.util.List;
+import java.util.OptionalLong;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -87,8 +88,12 @@ public class FileServiceImpl implements FileService {
     @Override
     @Transactional
     public BaseIdItem deleteFile(long fileId) {
-        long userId = fileRepository.findUserIdById(fileId)
-            .orElseThrow(() -> new TaskException(ExceptionInfo.INVALID_FILE));
+        OptionalLong userIdCandidate = fileRepository.findUserIdById(fileId);
+        if (userIdCandidate.isEmpty()) {
+            throw new TaskException(ExceptionInfo.INVALID_FILE);
+        }
+        long userId = userIdCandidate.getAsLong();
+
         projectAuthManager.checkUserIdMatchOrThrow(userId);
         fileRepository.deleteById(fileId);
         return new BaseIdItem(fileId);
