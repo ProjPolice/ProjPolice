@@ -176,7 +176,7 @@ public class NotificationServiceImpl implements NotificationService {
             .orElseThrow(() -> new BaseException(ExceptionInfo.INVALID_USER));
 
         final String projectName = task.getProjectName();
-        final String title = String.format("%s 프로젝트 할일에 변동 사항이 존재합니다.", projectName);
+        final String title = String.format("%s 프로젝트 작업에 변동 사항이 존재합니다.", projectName);
 
         StringBuilder bodyBuilder = new StringBuilder();
         if (changes.getName() != null) {
@@ -198,7 +198,7 @@ public class NotificationServiceImpl implements NotificationService {
                 .orElseThrow(() -> new BaseException(ExceptionInfo.INVALID_EPIC));
             String beforeName = before.getName();
             String afterName = after.getName();
-            bodyBuilder.append(String.format("할일이 %s에 속했었으나 이제 %s에 속합니다.\n", beforeName, afterName));
+            bodyBuilder.append(String.format("작업에 %s에 속했었으나 이제 %s에 속합니다.\n", beforeName, afterName));
         }
 
         if (changes.getUserId() != null) {
@@ -209,7 +209,7 @@ public class NotificationServiceImpl implements NotificationService {
                 .orElseThrow(() -> new BaseException(ExceptionInfo.INVALID_USER));
             String beforeName = before.getName();
             String afterName = after.getName();
-            bodyBuilder.append(String.format("할일의 담당자가 %s에서 %s으로 바뀌었습니다.\n", beforeName, afterName));
+            bodyBuilder.append(String.format("작업의 담당자가 %s에서 %s으로 바뀌었습니다.\n", beforeName, afterName));
         }
 
         if (changes.getStartDate() != null) {
@@ -218,11 +218,11 @@ public class NotificationServiceImpl implements NotificationService {
             LocalDate after = dates[1];
 
             if (before != null && after != null) {
-                bodyBuilder.append(String.format("할일의 시작일이 %s에서 %s으로 바뀌었습니다.\n", before.toString(), after.toString()));
+                bodyBuilder.append(String.format("작업의 시작일이 %s에서 %s으로 바뀌었습니다.\n", before.toString(), after.toString()));
             } else if (before == null) {
-                bodyBuilder.append(String.format("할일의 시작일이 %s으로 설정되었습니다.\n", after.toString()));
+                bodyBuilder.append(String.format("작업의 시작일이 %s으로 설정되었습니다.\n", after.toString()));
             } else {
-                bodyBuilder.append(String.format("할일의 시작일이 %s에서 해제되었습니다.\n", before.toString()));
+                bodyBuilder.append(String.format("작업의 시작일이 %s에서 해제되었습니다.\n", before.toString()));
             }
         }
 
@@ -232,11 +232,11 @@ public class NotificationServiceImpl implements NotificationService {
             LocalDate after = dates[1];
 
             if (before != null && after != null) {
-                bodyBuilder.append(String.format("할일의 마감일이 %s에서 %s으로 바뀌었습니다.\n", before.toString(), after.toString()));
+                bodyBuilder.append(String.format("작업의 마감일이 %s에서 %s으로 바뀌었습니다.\n", before.toString(), after.toString()));
             } else if (before == null) {
-                bodyBuilder.append(String.format("할일의 마감일이 %s으로 설정되었습니다.\n", after.toString()));
+                bodyBuilder.append(String.format("작업의 마감일이 %s으로 설정되었습니다.\n", after.toString()));
             } else {
-                bodyBuilder.append(String.format("할일의 마감일이 %s에서 해제되었습니다.\n", before.toString()));
+                bodyBuilder.append(String.format("작업의 마감일이 %s에서 해제되었습니다.\n", before.toString()));
             }
         }
 
@@ -244,7 +244,7 @@ public class NotificationServiceImpl implements NotificationService {
             TaskStatus[] status = changes.getStatus();
             TaskStatus before = status[0];
             TaskStatus after = status[1];
-            bodyBuilder.append(String.format("할일의 %s에서 %s으로 변경 되었습니다.", before.toString(), after.toString()));
+            bodyBuilder.append(String.format("작업의 %s에서 %s으로 변경 되었습니다.", before.toString(), after.toString()));
         }
 
         final String body = bodyBuilder.toString();
