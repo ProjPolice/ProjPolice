@@ -4824,6 +4824,7 @@ __metadata:
     react-dom: ^18.2.0
     react-router-dom: ^6.17.0
     recoil: ^0.7.7
+    recoil-persist: ^5.1.0
     rollup-plugin-visualizer: ^5.9.2
     typescript: ^5.2.2
     vite: ^4.4.5
@@ -4977,6 +4978,15 @@ __metadata:
     string_decoder: ^1.1.1
     util-deprecate: ^1.0.1
   checksum: bdcbe6c22e846b6af075e32cf8f4751c2576238c5043169a1c221c92ee2878458a816a4ea33f4c67623c0b6827c8a400409bfb3cf0bf3381392d0b1dfb52ac8d
+  languageName: node
+  linkType: hard
+
+"recoil-persist@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "recoil-persist@npm:5.1.0"
+  peerDependencies:
+    recoil: ^0.7.2
+  checksum: 03ee8417b9bfcb1e5d61af373a304437190da394bf42b0979cf54ec4edeb27e7577f76ae4f9348d131865b87b19dc8dedc158e2bacd3976d4b936be1ab005d18
   languageName: node
   linkType: hard
 
