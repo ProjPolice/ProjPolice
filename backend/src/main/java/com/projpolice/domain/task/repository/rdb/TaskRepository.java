@@ -3,7 +3,6 @@ package com.projpolice.domain.task.repository.rdb;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalLong;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -68,7 +67,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
         left join Epic epic on task.epic.id = task.id
         where task.deleted = false and task.id = :taskId
         """)
-    OptionalLong findProjectIdById(@Param("taskId") long taskId);
+    Optional<Long> findProjectIdById(@Param("taskId") long taskId);
 
     @Query("""
         select epic.project.id as projectId, epic.id as epicId

@@ -35,6 +35,7 @@ import com.projpolice.global.common.error.exception.UnAuthorizedException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.manager.ProjectAuthManager;
 import com.projpolice.global.redis.RedisService;
+import com.projpolice.global.storage.base.StorageConnector;
 
 import lombok.RequiredArgsConstructor;
 
@@ -53,6 +54,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectAuthManager projectAuthManager;
     private final RedisService redisService;
     private final DeletionService deletionService;
+    private final StorageConnector storageConnector;
 
     /**
      * Retrieves the detailed information of a project based on its id.
@@ -183,13 +185,10 @@ public class ProjectServiceImpl implements ProjectService {
             return cache.get();
         }
 
-        List<UserIdNameImgItem> list = userProjectRepository.findUserByProjectId(id).stream()
-            .map(user -> UserIdNameImgItem.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .image(user.getImage())
-                .build()
-            ).collect(Collectors.toList());
+        List<UserIdNameImgItem> list = userProjectRepository.findUserByProjectId(id)
+            .stream()
+            .map(user -> UserIdNameImgItem.of(user, storageConnector.getPreAuthenticatedUrl()))
+            .collect(Collectors.toList());
 
         redisService.saveProjectUserIdNameImgList(id, list);
         return list;
@@ -219,11 +218,7 @@ public class ProjectServiceImpl implements ProjectService {
         userProjectRepository.save(userProject);
         redisService.invalidateProjectUser(projectId);
 
-        return UserIdNameImgItem.builder()
-            .id(newUser.getId())
-            .name(newUser.getName())
-            .image(newUser.getImage())
-            .build();
+        return UserIdNameImgItem.of(newUser, storageConnector.getPreAuthenticatedUrl());
     }
 
     /**

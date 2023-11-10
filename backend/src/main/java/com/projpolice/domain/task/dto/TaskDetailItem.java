@@ -11,7 +11,7 @@ public class TaskDetailItem extends TaskBaseItem {
     private UserIdNameImgItem user;
     private EpicDetailData epic;
 
-    public static TaskDetailItem from(Task task) {
+    public static TaskDetailItem of(Task task, String imageUrl) {
         return TaskDetailItem.builder()
             .id(task.getId())
             .name(task.getName())
@@ -19,7 +19,7 @@ public class TaskDetailItem extends TaskBaseItem {
             .status(task.getStatus().name())
             .startDate(task.getStartDate())
             .endDate(task.getEndDate())
-            .user(UserIdNameImgItem.from(task.getUser()))
+            .user(UserIdNameImgItem.of(task.getUser(), imageUrl))
             .epic(EpicDetailData.from(task.getEpic()))
             .build();
     }
