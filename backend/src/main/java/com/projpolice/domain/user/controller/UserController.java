@@ -1,5 +1,7 @@
 package com.projpolice.domain.user.controller;
 
+import static com.projpolice.domain.user.service.JwtService.*;
+
 import java.time.LocalDate;
 
 import org.springframework.http.HttpStatus;
@@ -14,13 +16,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.projpolice.domain.project.service.ProjectService;
 import com.projpolice.domain.task.response.UserTaskRangeResponse;
 import com.projpolice.domain.task.service.TaskService;
+import com.projpolice.domain.user.domain.rdb.User;
 import com.projpolice.domain.user.request.UserJoinRequest;
 import com.projpolice.domain.user.request.UserLoginRequest;
 import com.projpolice.domain.user.request.UserUpdateRequest;
 import com.projpolice.domain.user.response.UserInfoResponse;
 import com.projpolice.domain.user.response.UserLoginResponse;
+import com.projpolice.domain.user.response.UserProjectPagingResponse;
 import com.projpolice.domain.user.service.UserService;
 import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.base.BaseResponse;
@@ -41,6 +46,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
     private final UserService userService;
     private final TaskService taskService;
+    private final ProjectService projectService;
 
     /**
      * 회원가입 처리
@@ -136,5 +142,22 @@ public class UserController {
                     taskService.selectUserTaskRelatedDataWithRange(startDate, endDate)
                 )
             ));
+    }
+
+    @GetMapping("/projects")
+    @Operation(summary = "현재 나의 프로젝트 리스트 조회", security = @SecurityRequirement(name = "Authorization"), description = "Access Token에 해당하는 사용자의 현재 프로젝트를 조회 기간에 따라 반환합니다.")
+    public ResponseEntity<BaseResponse<UserProjectPagingResponse>> selectUserProjectRelatedDataWithRange(
+        @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+        @RequestParam(name = "num_of_pages", required = false, defaultValue = "10") int numOfPages) {
+        User user = getLoggedUser();
+
+        return ResponseEntity.ok()
+            .body(
+                BaseResponse.<UserProjectPagingResponse>builder()
+                    .code(200)
+                    .message("현재 나의 프로젝트 리스트 조회 성공")
+                    .data(projectService.selectProjectOfUser(user.getId(), page, numOfPages))
+                    .build()
+            );
     }
 }
