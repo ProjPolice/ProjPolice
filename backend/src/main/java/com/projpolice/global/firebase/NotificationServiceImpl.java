@@ -248,12 +248,12 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         final String body = bodyBuilder.toString();
-        final String link = "";
+        final String link = baseUrl;
 
         com.google.firebase.messaging.Notification notification
             = Notification.builder()
-            .setTitle("")
-            .setBody("")
+            .setTitle("작업이 변경되었습니다.")
+            .setBody(bodyBuilder.toString())
             .setImage(iconPath)
             .build();
 
@@ -271,7 +271,7 @@ public class NotificationServiceImpl implements NotificationService {
         // TODO: change it as projection instead of using List<User>
         List<User> otherUsersRelatedToTask = taskRepository.findOtherUsersInTasksById(taskId, invokedUserId);
         for (User user : otherUsersRelatedToTask) {
-            final String token = "";
+            final String token = user.getFcmToken();
             com.google.firebase.messaging.Message message = Message.builder()
                 .setToken(token)
                 .setNotification(notification)
