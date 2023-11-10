@@ -95,7 +95,7 @@ public class FileController {
      * @return FIleBaseItem
      */
     @DeleteMapping("/{file_id}")
-    @Operation(summary = "파일 삭제", description = "파일들을 삭제하는 메소드입니다.")
+    @Operation(summary = "파일 삭제", security = @SecurityRequirement(name = "Authorization"), description = "파일들을 삭제하는 메소드입니다.")
     public ResponseEntity<BaseResponse<BaseIdItem>> deleteFile(@RequestParam(name = "file_id") long fileId) {
 
         return ResponseEntity.ok()
