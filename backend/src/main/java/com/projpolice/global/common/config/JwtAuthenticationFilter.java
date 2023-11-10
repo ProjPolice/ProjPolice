@@ -49,7 +49,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userId;
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")){
+        if (authHeader == null || !authHeader.startsWith("Bearer ")
+            || (request.getServletPath().equals("/users") && request.getMethod().equals("POST"))) {
             filterChain.doFilter(request, response);
             return;
         }
