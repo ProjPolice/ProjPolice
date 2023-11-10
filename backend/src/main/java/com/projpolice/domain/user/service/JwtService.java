@@ -4,15 +4,19 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.projpolice.domain.user.domain.rdb.User;
+import com.projpolice.domain.user.domain.redis.RefreshTokenRedisData;
+import com.projpolice.domain.user.repository.rdb.RefreshTokenRepository;
 import com.projpolice.global.common.error.exception.UnAuthorizedException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 
@@ -22,16 +26,18 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-
+import lombok.RequiredArgsConstructor;
 
 /**
  * Spring Security의 Jwt 와 관련된 작업들에 대한 컴포넌트이다.
  */
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
     @Value("${JWT_SECRET_KEY}")
     private String SECRET_KEY;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     /**
      * Jwt 토큰으로부터 사용자 메일을 추출한다.
@@ -76,10 +82,32 @@ public class JwtService {
             .setClaims(extraClaims)
             .setSubject(userDetails.getUsername())
             .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24)) // 24분
             .signWith(getSignInKey(), SignatureAlgorithm.HS256)
             .compact();
     }
+
+    /**
+     * Refresh 토큰 생성
+     */
+    public String generateRefreshToken(UserDetails userDetails){
+        String refreshToken = Jwts
+            .builder()
+            .setSubject(userDetails.getUsername())
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)) // 7일
+            .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+            .compact();
+
+        // redis에 저장
+        refreshTokenRepository.save(RefreshTokenRedisData.builder()
+            .id(userDetails.getUsername())
+            .refreshToken(refreshToken)
+            .build());
+
+        return refreshToken;
+    }
+
 
     /**
      * Jwt 토큰의 유효성을 검토한다.

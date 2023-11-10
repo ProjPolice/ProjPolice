@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.projpolice.domain.user.domain.rdb.User;
+import com.projpolice.domain.user.domain.redis.RefreshTokenRedisData;
+import com.projpolice.domain.user.repository.rdb.RefreshTokenRepository;
 import com.projpolice.domain.user.repository.rdb.UserRepository;
 import com.projpolice.domain.user.request.UserJoinRequest;
 import com.projpolice.domain.user.request.UserLoginRequest;
@@ -35,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final StorageConnector storageConnector;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     private final String CONTENT_TYPE = "multipart/form-data";
 
@@ -118,8 +121,11 @@ public class UserServiceImpl implements UserService {
         user.setFcmToken(request.getToken());
         userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
         return UserLoginResponse.builder()
             .accessToken(jwtToken)
+            .refreshToken(refreshToken)
             .build();
     }
 
@@ -132,9 +138,33 @@ public class UserServiceImpl implements UserService {
         User loggedUser = getLoggedUser();
         loggedUser.setFcmToken(null);
         userRepository.save(loggedUser);
+
+        refreshTokenRepository.deleteById(String.valueOf(loggedUser.getId()));
         return UserLogoutResponse.builder()
             .id(loggedUser.getId())
             .build();
+    }
+
+    /**
+     * RefreshToken을 입력받아서 만약 Redis에 같은 RefreshToken이 있을경우 재발급 해준다.
+     *
+     * @return UserLogoutResponse
+     */
+    public String reissue(String refreshToken) {
+
+        String userId = jwtService.extractUsername(refreshToken);
+
+        RefreshTokenRedisData refreshTokenRedisData = refreshTokenRepository.findById(userId)
+            .orElseThrow(() -> new BaseException(ExceptionInfo.REFRESH_TOKEN_EXPIRED));
+
+        User user = userRepository.findById(Long.valueOf(userId))
+            .orElseThrow(() -> new BaseException(ExceptionInfo.LOGIN_FAIL));
+
+        if (refreshToken.equals(refreshTokenRedisData.getRefreshToken())) {
+            String jwtToken = jwtService.generateToken(user);
+            return jwtToken;
+        }
+        else throw new BaseException(ExceptionInfo.INVALID_REFRESH_TOKEN);
     }
 
 }

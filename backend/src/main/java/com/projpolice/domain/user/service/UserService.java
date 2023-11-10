@@ -20,5 +20,6 @@ public interface UserService {
     UserInfoResponse updateUserInfo(UserUpdateRequest request, MultipartFile image);
 
     UserLogoutResponse logout();
+    String reissue(String refreshToken);
 
 }

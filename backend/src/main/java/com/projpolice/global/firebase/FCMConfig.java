@@ -16,7 +16,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 @Configuration
 public class FCMConfig {
-    @Value("${projpolicce.fcm.keypath}")
+    @Value("${projpolice.fcm.keypath}")
     private String keyPath;
     @Bean
     FirebaseMessaging firebaseMessaging() throws IOException {
