@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.projpolice.domain.user.domain.User;
-import com.projpolice.domain.user.repository.UserRepository;
+import com.projpolice.domain.user.domain.rdb.User;
+import com.projpolice.domain.user.repository.rdb.UserRepository;
 import com.projpolice.domain.user.request.UserJoinRequest;
 import com.projpolice.domain.user.request.UserLoginRequest;
 import com.projpolice.domain.user.request.UserUpdateRequest;

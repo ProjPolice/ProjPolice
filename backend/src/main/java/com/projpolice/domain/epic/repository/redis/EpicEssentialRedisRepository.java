@@ -3,8 +3,8 @@ package com.projpolice.domain.epic.repository.redis;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.projpolice.domain.epic.domain.redis.ProjectEpicRedisItem;
+import com.projpolice.domain.epic.domain.redis.EpicEssentialRedisData;
 
 @Repository
-public interface ProjectEpicRedisRepository extends CrudRepository<ProjectEpicRedisItem, Long> {
+public interface EpicEssentialRedisRepository extends CrudRepository<EpicEssentialRedisData, Long> {
 }

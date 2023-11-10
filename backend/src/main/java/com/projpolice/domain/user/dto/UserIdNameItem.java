@@ -2,7 +2,7 @@ package com.projpolice.domain.user.dto;
 
 import java.util.Objects;
 
-import com.projpolice.domain.user.domain.User;
+import com.projpolice.domain.user.domain.rdb.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

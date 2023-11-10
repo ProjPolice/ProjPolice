@@ -15,4 +15,5 @@ public class TaskProjectedItem {
     LocalDate startDate;
     LocalDate endDate;
     TaskStatus status;
+    long userId;
 }

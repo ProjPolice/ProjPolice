@@ -12,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.projpolice.domain.user.domain.User;
+import com.projpolice.domain.user.domain.rdb.User;
 import com.projpolice.global.common.error.exception.UnAuthorizedException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 

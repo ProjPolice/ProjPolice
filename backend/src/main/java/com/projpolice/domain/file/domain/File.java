@@ -10,7 +10,7 @@ import org.hibernate.annotations.Where;
 import org.springframework.util.StringUtils;
 
 import com.projpolice.domain.file.request.FileUploadRequest;
-import com.projpolice.domain.task.domain.Task;
+import com.projpolice.domain.task.domain.rdb.Task;
 import com.projpolice.global.common.base.BaseEntity;
 
 import jakarta.persistence.Column;

@@ -3,7 +3,7 @@ package com.projpolice.domain.project.dto;
 import java.time.LocalDate;
 
 import com.projpolice.domain.project.domain.rdb.Project;
-import com.projpolice.domain.user.domain.User;
+import com.projpolice.domain.user.domain.rdb.User;
 import com.projpolice.domain.user.dto.UserIdNameItem;
 
 import lombok.AllArgsConstructor;

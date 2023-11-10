@@ -22,4 +22,6 @@ public interface EpicProjectionDataItem {
     LocalDate getTaskEndDate();
 
     TaskStatus getTaskStatus();
+
+    Long getUserId();
 }

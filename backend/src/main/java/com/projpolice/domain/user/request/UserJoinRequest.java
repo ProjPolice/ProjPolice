@@ -1,6 +1,6 @@
 package com.projpolice.domain.user.request;
 
-import com.projpolice.domain.user.domain.User;
+import com.projpolice.domain.user.domain.rdb.User;
 
 import lombok.Getter;
 import lombok.Setter;
