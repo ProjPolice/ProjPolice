@@ -9,7 +9,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.projpolice.domain.user.domain.rdb.User;
 import com.projpolice.domain.user.repository.rdb.UserRepository;
@@ -45,12 +44,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional
-    public BaseIdItem join(UserJoinRequest request, MultipartFile image) {
+    public BaseIdItem join(UserJoinRequest request) {
         String imageUuid = null;
 
-        if (image != null) {
-            imageUuid = String.format("%s_%s", UUID.randomUUID(), image.getOriginalFilename());
-            storageConnector.putObject(FileUtil.generateStreamFromFile(image), imageUuid, CONTENT_TYPE);
+        if (request.getImage() != null) {
+            imageUuid = String.format("%s_%s", UUID.randomUUID(), request.getImage().getOriginalFilename());
+            storageConnector.putObject(FileUtil.generateStreamFromFile(request.getImage()), imageUuid, CONTENT_TYPE);
         }
 
         User user = userRepository.save(
@@ -79,7 +78,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional
-    public UserInfoResponse updateUserInfo(UserUpdateRequest request, MultipartFile image) {
+    public UserInfoResponse updateUserInfo(UserUpdateRequest request) {
         User user = getLoggedUser();
 
         if (request.getName() != null) {
@@ -88,9 +87,9 @@ public class UserServiceImpl implements UserService {
         if (request.getEmail() != null) {
             user.setEmail(request.getEmail());
         }
-        if (image != null) {
-            String imageUuid = String.format("%s_%s", UUID.randomUUID(), image.getOriginalFilename());
-            storageConnector.putObject(FileUtil.generateStreamFromFile(image), imageUuid, CONTENT_TYPE);
+        if (request.getImage() != null) {
+            String imageUuid = String.format("%s_%s", UUID.randomUUID(), request.getImage().getOriginalFilename());
+            storageConnector.putObject(FileUtil.generateStreamFromFile(request.getImage()), imageUuid, CONTENT_TYPE);
             user.setImage(imageUuid);
         }
 

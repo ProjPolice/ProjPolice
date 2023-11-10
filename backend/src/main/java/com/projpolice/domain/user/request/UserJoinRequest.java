@@ -1,5 +1,7 @@
 package com.projpolice.domain.user.request;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.projpolice.domain.user.domain.rdb.User;
 
 import lombok.Getter;
@@ -14,6 +16,7 @@ public class UserJoinRequest {
     private String name;
     private String email;
     private String password;
+    private MultipartFile image = null;
 
     public static User to(UserJoinRequest request, String imageUuid, String password) {
         return User.builder()

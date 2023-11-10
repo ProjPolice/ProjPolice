@@ -1,5 +1,7 @@
 package com.projpolice.domain.user.request;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,4 +10,5 @@ import lombok.Setter;
 public class UserUpdateRequest {
     private String name;
     private String email;
+    private MultipartFile image;
 }
