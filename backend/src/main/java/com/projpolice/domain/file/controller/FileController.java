@@ -40,7 +40,8 @@ public class FileController {
     @GetMapping
     @Operation(summary = "세부작업의 파일들 조회", security = @SecurityRequirement(name = "Authroization"), description = "세부작업의 파일들을 조회하는 메소드입니다.")
     public ResponseEntity<BaseResponse<List<FileDetailItem>>> getTaskFile(
-        @RequestParam(name = "project_id") Long projectId, @RequestParam(name = "task_id") Long taskId) {
+        @RequestParam(name = "project_id", required = false) Long projectId,
+        @RequestParam(name = "task_id", required = false) Long taskId) {
         if ((projectId == null && taskId == null) || (projectId != null && taskId != null)) {
             throw new BadRequestException(ExceptionInfo.INVALID_METADATA);
         }
@@ -84,8 +85,8 @@ public class FileController {
      *
      * @return FIleBaseItem
      */
-    @DeleteMapping
-    @Operation(summary = "파일 삭제", security = @SecurityRequirement(name = "Authroization"), description = "파일들을 삭제하는 메소드입니다.")
+    @DeleteMapping("/{file_id}")
+    @Operation(summary = "파일 삭제", description = "파일들을 삭제하는 메소드입니다.")
     public ResponseEntity<BaseResponse<BaseIdItem>> deleteFile(@RequestParam(name = "file_id") long fileId) {
 
         return ResponseEntity.ok()

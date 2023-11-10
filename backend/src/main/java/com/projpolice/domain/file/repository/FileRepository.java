@@ -2,7 +2,6 @@ package com.projpolice.domain.file.repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalLong;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -23,7 +22,7 @@ public interface FileRepository extends JpaRepository<File, Long> {
         left join User user on task.user.id = user.id
         where file.id = :fileId and file.deleted = false
         """)
-    OptionalLong findUserIdById(Long fileId);
+    Optional<Long> findUserIdById(Long fileId);
 
     @Query("""
         select file, user.id as userId

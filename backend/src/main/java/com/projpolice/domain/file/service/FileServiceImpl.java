@@ -13,6 +13,7 @@ import com.projpolice.domain.file.request.FileUploadRequest;
 import com.projpolice.domain.task.domain.Task;
 import com.projpolice.domain.task.repository.TaskRepository;
 import com.projpolice.global.common.base.BaseIdItem;
+import com.projpolice.global.common.error.exception.FileException;
 import com.projpolice.global.common.error.exception.TaskException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.manager.ProjectAuthManager;
@@ -88,9 +89,15 @@ public class FileServiceImpl implements FileService {
     @Transactional
     public BaseIdItem deleteFile(long fileId) {
         long userId = fileRepository.findUserIdById(fileId)
-            .orElseThrow(() -> new TaskException(ExceptionInfo.INVALID_FILE));
+            .orElseThrow(() -> new FileException(ExceptionInfo.INVALID_FILE));
         projectAuthManager.checkUserIdMatchOrThrow(userId);
+
+        File file = fileRepository.findById(fileId)
+            .orElseThrow(() -> new FileException(ExceptionInfo.INVALID_FILE));
+
         fileRepository.deleteById(fileId);
+        storageConnector.deleteObject(file.getUuid());
+
         return new BaseIdItem(fileId);
     }
 }
