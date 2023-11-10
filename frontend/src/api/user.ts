@@ -4,7 +4,7 @@ export default {
   data: () => http.get<DataResponse>('users'),
   login: (data: LoginRequest) => http.post<LoginResponse>('users', data),
   modify: (data: ModifyRequest) => http.patch<ModifyResponse>('users', data),
-  signup: (data: SignupRequest) => http.post<SignupResponse>('users/join', data),
+  signup: (data: SignupRequest) => http.post<SignupResponse>('users/join', data, {'headers' : {'Content-Type':'multipart/form-data'}}),
 };
 
 interface SignupRequest {

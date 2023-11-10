@@ -9,8 +9,8 @@ export const instance = Axios.create({
 
 export const http = {
   get: <Response = unknown>(url: string) => instance.get<Response>(url).then((response) => response.data),
-  post: <Response = unknown, Request = unknown>(url: string, body?: Request) =>
-    instance.post<Response>(url, body).then((response) => response.data),
+  post: <Response = unknown, Request = unknown>(url: string, body?: Request, config?: any) =>
+    instance.post<Response>(url, body, config).then((response) => response.data),
   put: <Response = unknown, Request = unknown>(url: string, body?: Request) =>
     instance.put<Response>(url, body).then((response) => response.data),
   patch: <Response = unknown, Request = unknown>(url: string, body?: Request) =>
