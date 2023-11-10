@@ -36,10 +36,12 @@ public interface FileRepository extends JpaRepository<File, Long> {
     @Query("""
         select file
         from File file
-        left join Task task on file.task.id = task.id
-        left join Epic epic on task.epic.id = epic.id
-        left join Project project on epic.project.id = project.id
-        where project.id = :projectId and file.deleted = false 
+        where (file.task.id, file.createdAt) in (
+            select file.task.id as id, max(file.createdAt) as createdAt
+            from File file
+            where file.task.epic.project.id = :projectId and file.deleted = false 
+            group by file.task.id
+        )
         """)
     List<File> findByProjectId(@Param("projectId") Long projectId);
 

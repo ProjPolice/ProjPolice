@@ -39,12 +39,15 @@ public class FileController {
     private final FileService fileService;
 
     /**
-     * 세부작업의 파일들을 조회하는 메소드
+     * 1. 프로젝트의 세부 작업들의 최신 파일 리스트 조회
+     * 2. 세부작업의 파일들을 조회
+     * 하는 메소드
      *
      * @return List<FIleDetailItem>
      */
     @GetMapping
-    @Operation(summary = "세부작업의 파일들 조회", security = @SecurityRequirement(name = "Authorization"), description = "세부작업의 파일들을 조회하는 메소드입니다.")
+    @Operation(summary = "프로젝트의 세부 작업들의 최신 파일 리스트 조회/한 세부작업의 파일들 조회", security = @SecurityRequirement(name = "Authorization")
+        , description = "project_id를 넣으면 프로젝트의 세부 작업들의 최신 파일 리스트 조회 \n task_id를 넣으면 한 세부작업의 전체 파일들 조회 \n 하는 메소드입니다.")
     public ResponseEntity<BaseResponse<List<FileDetailItem>>> getTaskFile(
         @RequestParam(name = "project_id", required = false) Long projectId,
         @RequestParam(name = "task_id", required = false) Long taskId) {
@@ -62,7 +65,7 @@ public class FileController {
         return ResponseEntity.ok()
             .body(BaseResponse.<List<FileDetailItem>>builder()
                 .code(HttpStatus.OK.value())
-                .message("세부작업의 파일들 조회")
+                .message(projectId == null ? "세부작업의 파일들 조회 성공" : "프로젝트의 세부 작업들의 최신 파일 리스트 조회 성공")
                 .data(list)
                 .build());
     }
