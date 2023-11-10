@@ -44,7 +44,7 @@ public class FileController {
      * @return List<FIleDetailItem>
      */
     @GetMapping
-    @Operation(summary = "세부작업의 파일들 조회", security = @SecurityRequirement(name = "Authroization"), description = "세부작업의 파일들을 조회하는 메소드입니다.")
+    @Operation(summary = "세부작업의 파일들 조회", security = @SecurityRequirement(name = "Authorization"), description = "세부작업의 파일들을 조회하는 메소드입니다.")
     public ResponseEntity<BaseResponse<List<FileDetailItem>>> getTaskFile(
         @RequestParam(name = "project_id", required = false) Long projectId,
         @RequestParam(name = "task_id", required = false) Long taskId) {
@@ -74,7 +74,7 @@ public class FileController {
      * @return FIleDetailItem
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "파일 업로드", security = @SecurityRequirement(name = "Authroization"), description = "파일을 업로드 하는 메서드입니다.")
+    @Operation(summary = "파일 업로드", security = @SecurityRequirement(name = "Authorization"), description = "파일을 업로드 하는 메서드입니다.")
     public ResponseEntity<BaseResponse<FileDetailItem>> uploadFile(FileUploadRequest request,
         @RequestParam(name = "task_id") long taskId) {
 

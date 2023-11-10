@@ -56,55 +56,55 @@ public class EpicController {
     /**
      * 해당 할일 상세 조회 요청 처리
      *
-     * @param epiceId
+     * @param epicId
      * @return 조회한 할일의 상세 내용
      */
     @GetMapping("/{epicId}")
     @Operation(summary = "할일 조회", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 epic id를 받아 할일을 조회합니다.")
-    public ResponseEntity<BaseResponse<EpicDetailData>> getEpicDetail(@PathVariable("epiceId") long epiceId) {
+    public ResponseEntity<BaseResponse<EpicDetailData>> getEpicDetail(@PathVariable("epicId") long epicId) {
 
         return ResponseEntity.ok()
             .body(BaseResponse.<EpicDetailData>builder()
                 .code(HttpStatus.OK.value())
                 .message("할일 상세 조회 성공")
-                .data(epicService.getEpic(epiceId))
+                .data(epicService.getEpic(epicId))
                 .build());
     }
 
     /**
      * 해당 할일을 수정하는 요청 처리
      *
-     * @param epiceId
+     * @param epicId
      * @param epicUpdateRequest
      * @return 수정된 할일 상세 정보 조회
      */
     @PatchMapping("/{epicId}")
     @Operation(summary = "할일 수정", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 수정할 할일 정보를 받아 할일을 수정합니다.")
-    public ResponseEntity<BaseResponse<EpicDetailData>> updateEpic(@PathVariable("epiceId") long epiceId
+    public ResponseEntity<BaseResponse<EpicDetailData>> updateEpic(@PathVariable("epicId") long epicId
         , @RequestBody EpicUpdateRequest epicUpdateRequest) {
 
         return ResponseEntity.ok()
             .body(BaseResponse.<EpicDetailData>builder()
                 .code(HttpStatus.OK.value())
                 .message("할일 수정 성공")
-                .data(epicService.updateEpic(epiceId, epicUpdateRequest))
+                .data(epicService.updateEpic(epicId, epicUpdateRequest))
                 .build());
     }
 
     /**
      * 해당 할일을 삭제하는 요청 처리
-     * @param epiceId
+     * @param epicId
      * @return 삭제한 할일의 id
      */
     @DeleteMapping("/{epicId}")
     @Operation(summary = "할일 삭제", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 삭제할 epic id를 받아 할일을 삭제합니다.")
-    public ResponseEntity<BaseResponse<BaseIdItem>> deleteEpic(@PathVariable("epiceId") long epiceId) {
+    public ResponseEntity<BaseResponse<BaseIdItem>> deleteEpic(@PathVariable("epicId") long epicId) {
 
         return ResponseEntity.ok()
             .body(BaseResponse.<BaseIdItem>builder()
                 .code(HttpStatus.OK.value())
                 .message("할일 삭제 성공")
-                .data(epicService.deleteEpic(epiceId))
+                .data(epicService.deleteEpic(epicId))
                 .build());
     }
 
