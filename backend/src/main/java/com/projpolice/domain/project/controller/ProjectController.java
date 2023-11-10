@@ -104,7 +104,7 @@ public class ProjectController {
      * @return ResponseEntity<BaseResponse < ProjectDetailData>> The response entity containing the modified project details.
      */
     @PatchMapping("/{project_id}")
-    @Operation(summary = "프로젝트 수정", security = @SecurityRequirement(name = "Authroization"), description = "Access Token과 project Id, 그리고 수정할 데이터를 받아 해당 프로젝트를 수정합니다.")
+    @Operation(summary = "프로젝트 수정", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 project Id, 그리고 수정할 데이터를 받아 해당 프로젝트를 수정합니다.")
     public ResponseEntity<BaseResponse<ProjectDetailData>> modifyProject(@PathVariable("project_id") long id,
         @RequestBody
         ProjectModifyRequest request) {

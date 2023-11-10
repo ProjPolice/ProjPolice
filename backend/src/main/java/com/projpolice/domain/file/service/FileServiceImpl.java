@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.projpolice.domain.file.domain.File;
 import com.projpolice.domain.file.dto.FileDetailItem;
+import com.projpolice.domain.file.dto.FileResourceItem;
 import com.projpolice.domain.file.repository.FileRepository;
 import com.projpolice.domain.file.request.FileUploadRequest;
 import com.projpolice.domain.task.domain.rdb.Task;
 import com.projpolice.domain.task.repository.rdb.TaskRepository;
 import com.projpolice.global.common.base.BaseIdItem;
+import com.projpolice.global.common.error.exception.FileException;
 import com.projpolice.global.common.error.exception.TaskException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.manager.ProjectAuthManager;
@@ -56,6 +58,19 @@ public class FileServiceImpl implements FileService {
     }
 
     /**
+     * 파일 객체에서 실제 파일을 다운로드 할 수 있는 기능
+     * @param fileId
+     * @return
+     */
+    @Override
+    public FileResourceItem getFileOfFile(Long fileId) {
+        File file = fileRepository.findById(fileId)
+            .orElseThrow(() -> new FileException(ExceptionInfo.INVALID_FILE));
+
+        return FileResourceItem.of(file, storageConnector.getObject(file.getUuid()));
+    }
+
+    /**
      * 세부작업에 파일을 생성하는 메소드
      *
      * @param fileUploadRequest
@@ -88,9 +103,15 @@ public class FileServiceImpl implements FileService {
     @Transactional
     public BaseIdItem deleteFile(long fileId) {
         long userId = fileRepository.findUserIdById(fileId)
-            .orElseThrow(() -> new TaskException(ExceptionInfo.INVALID_FILE));
+            .orElseThrow(() -> new FileException(ExceptionInfo.INVALID_FILE));
         projectAuthManager.checkUserIdMatchOrThrow(userId);
+
+        File file = fileRepository.findById(fileId)
+            .orElseThrow(() -> new FileException(ExceptionInfo.INVALID_FILE));
+
         fileRepository.deleteById(fileId);
+        storageConnector.deleteObject(file.getUuid());
+
         return new BaseIdItem(fileId);
     }
 }
