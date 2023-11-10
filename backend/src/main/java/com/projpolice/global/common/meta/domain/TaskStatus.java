@@ -23,6 +23,10 @@ public enum TaskStatus {
 
     @JsonCreator()
     public static TaskStatus ofName(String name) {
+        if (name == null) {
+            return TODO;
+        }
+
         return Stream.of(TaskStatus.values())
             .filter(t -> t.name().equals(name.toUpperCase()))
             .findFirst()

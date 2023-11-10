@@ -13,6 +13,12 @@ import com.projpolice.domain.file.dto.FileWithUserIdProjectionData;
 
 public interface FileRepository extends JpaRepository<File, Long> {
 
+    @Query("""
+        select file
+        from File file
+        where file.deleted = false and file.task.id = :taskId
+        order by file.version desc
+        """)
     List<File> findByTaskId(Long taskId);
 
     @Query("""

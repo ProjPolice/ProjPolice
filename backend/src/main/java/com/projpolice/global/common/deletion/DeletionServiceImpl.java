@@ -43,7 +43,7 @@ public class DeletionServiceImpl implements DeletionService {
         fileRepository.deleteAllByEpicId(epicId);
         taskRepository.deleteAllByEpicId(epicId);
         epicRepository.deleteById(epicId);
-        long projectId = epicRepository.findProjectIdByEpicId(epicId).getAsLong();
+        long projectId = epicRepository.findProjectIdByEpicId(epicId).get();
         redisService.invalidateProject(projectId);
         storageConnector.deleteObjectByBatchAndIgnore(uuid); // why last?->if transaction fail, object should be kept
     }

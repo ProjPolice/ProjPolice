@@ -2,6 +2,7 @@ package com.projpolice.global.common.error;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -56,6 +57,18 @@ public class ControllerAdviceHandler {
                 BaseResponse.<Void>builder()
                     .code(exceptionInfo.getCode())
                     .message(exceptionInfo.getMessage())
+                    .build()
+            );
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<BaseResponse<Void>> handleValidation(MethodArgumentNotValidException exception) {
+        final ExceptionInfo info = ExceptionInfo.INVALID_METADATA;
+        return ResponseEntity.status(info.getStatus())
+            .body(
+                BaseResponse.<Void>builder()
+                    .code(info.getCode())
+                    .message(info.getMessage())
                     .build()
             );
     }

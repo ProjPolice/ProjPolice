@@ -71,7 +71,7 @@ public class TaskServiceImpl implements TaskService {
         if (taskCreateRequest.getUserId().equals(getLoggedUser().getId())) {
             notificationService.taskAssignedToUser(task.getId(), taskCreateRequest.getUserId());
         }
-        long projectId = epicRepository.findProjectIdByEpicId(taskCreateRequest.getEpicId()).getAsLong();
+        long projectId = epicRepository.findProjectIdByEpicId(taskCreateRequest.getEpicId()).get();
         redisService.invalidateProject(projectId);
         return TaskDetailItem.from(task);
     }

@@ -4,8 +4,10 @@ import com.projpolice.domain.epic.dto.EpicDetailData;
 import com.projpolice.domain.task.domain.rdb.Task;
 import com.projpolice.domain.user.dto.UserIdNameImgItem;
 
+import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
+@Getter
 @SuperBuilder
 public class TaskDetailItem extends TaskBaseItem {
     private UserIdNameImgItem user;

@@ -51,17 +51,17 @@ public class UserController {
      * @param request
      * @return 회원의 아이디
      */
-    @PostMapping(value = "/join", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/join" /*, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE */)
     @Operation(summary = "회원가입", description = "새로운 사용자 정보를 입력 받아 회원가입을 진행합니다.")
-    public ResponseEntity<? extends BaseResponse<BaseIdItem>> join(UserJoinRequest request,
-        @RequestPart(required = false) MultipartFile image) {
+    public ResponseEntity<? extends BaseResponse<BaseIdItem>> join(@RequestBody UserJoinRequest request//,
+        /*@RequestPart(required = false) MultipartFile image*/) {
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(
                 BaseResponse.<BaseIdItem>builder()
                     .code(HttpStatus.OK.value())
                     .message("회원가입 성공")
-                    .data(userService.join(request, image))
+                    .data(userService.join(request, null))
                     .build()
             );
     }
@@ -136,8 +136,6 @@ public class UserController {
             );
     }
 
-
-
     @GetMapping("/tasks")
     @Operation(summary = "현재 나의 세부 작업 리스트 조회", security = @SecurityRequirement(name = "Authorization"), description = "Access Token에 해당하는 사용자의 현재 세부 리스트를 조회 기간에 따라 반환합니다.")
     public ResponseEntity<BaseResponse<UserTaskRangeResponse>> selectUserTaskRelatedDataWithRange(
@@ -151,10 +149,10 @@ public class UserController {
             endDate = LocalDate.now().plusDays(3);
         }
         return ResponseEntity.ok()
-            .body(new BaseResponse<>(
-                new UserTaskRangeResponse(
-                    taskService.selectUserTaskRelatedDataWithRange(startDate, endDate)
-                )
-            ));
+            .body(BaseResponse.<UserTaskRangeResponse>builder()
+                .code(200)
+                .message("세부 작업 리스트 조회 완료")
+                .data(new UserTaskRangeResponse(taskService.selectUserTaskRelatedDataWithRange(startDate, endDate)))
+                .build());
     }
 }

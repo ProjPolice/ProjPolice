@@ -2,7 +2,7 @@ package com.projpolice.domain.epic.repository.rdb;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.OptionalLong;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -69,7 +69,7 @@ public interface EpicRepository extends JpaRepository<Epic, Long> {
         task.name as taskName,
         task.startDate as taskStartDate,
         task.endDate as taskEndDate,
-        task.status as taskStatus,
+        coalesce(task.status, 'TODO')  as taskStatus,  
         task.user.id as userId
         from Epic epic left outer join Task task on epic.id = task.epic.id
         where epic.project.id = :project_id and epic.deleted = false
@@ -89,5 +89,5 @@ public interface EpicRepository extends JpaRepository<Epic, Long> {
         from Epic epic
         where epic.deleted = false and epic.id = :epicId
         """)
-    OptionalLong findProjectIdByEpicId(@Param("epicId") long epicId);
+    Optional<Long> findProjectIdByEpicId(@Param("epicId") long epicId);
 }

@@ -23,6 +23,7 @@ import com.projpolice.global.common.base.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -39,7 +40,8 @@ public class TaskController {
      */
     @PostMapping
     @Operation(summary = "세부작업 생성", security = @SecurityRequirement(name = "Authorization"), description = "사용자의 Access Token과 생성할 세부 작업 데이터를 받아 생성합니다.")
-    public ResponseEntity<BaseResponse<TaskDetailItem>> createTask(@RequestBody TaskCreateRequest taskCreateRequest) {
+    public ResponseEntity<BaseResponse<TaskDetailItem>> createTask(
+        @Valid @RequestBody TaskCreateRequest taskCreateRequest) {
         return ResponseEntity.ok()
             .body(BaseResponse.<TaskDetailItem>builder()
                 .code(HttpStatus.OK.value())
