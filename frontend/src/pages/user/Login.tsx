@@ -2,10 +2,15 @@ import { Page, link } from '@assets/design/globalStyles';
 import { Container, Box, Header, HeaderText, InputBox, Column, Button, LoginFooter } from './UserStyle';
 import { colors } from '@assets/design/colors';
 import { Link } from 'react-router-dom';
+import { useTextInput } from 'common/hooks/useTextInput';
 
 function Login() {
   const findId = () => {};
   const findPassword = () => {};
+
+  const [id, handleId] = useTextInput();
+  const [password, handlePassword] = useTextInput();
+
   return (
     <Page>
       <Container>
@@ -24,6 +29,8 @@ function Login() {
                   border: 'none',
                   outline: 'none',
                 }}
+                value={id}
+                onChange={handleId}
               />
             </InputBox>
             <InputBox topLeftRadius="0px" topRightRadius="0px" bottomLeftRadius="8px" bottomRightRadius="8px">
@@ -36,6 +43,8 @@ function Login() {
                   border: 'none',
                   outline: 'none',
                 }}
+                value={password}
+                onChange={handlePassword}
               />
             </InputBox>
           </Column>
