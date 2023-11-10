@@ -31,6 +31,7 @@ import com.projpolice.global.common.error.exception.EpicException;
 import com.projpolice.global.common.error.exception.UserException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.manager.ProjectAuthManager;
+import com.projpolice.global.firebase.NotificationService;
 import com.projpolice.global.redis.RedisService;
 
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,7 @@ public class TaskServiceImpl implements TaskService {
     private final FileRepository fileRepository;
     private final DeletionService deletionService;
     private final RedisService redisService;
+    private final NotificationService notificationService;
 
     /**
      * 상세 작업 생성
@@ -65,6 +67,10 @@ public class TaskServiceImpl implements TaskService {
             .orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC));
 
         Task task = taskRepository.save(Task.of(taskCreateRequest, user, epic));
+
+        if (taskCreateRequest.getUserId() != getLoggedUser().getId()) {
+            notificationService.taskAssignedToUser(task.getId(), taskCreateRequest.getUserId());
+        }
         long projectId = epicRepository.findProjectIdByEpicId(taskCreateRequest.getEpicId()).getAsLong();
         redisService.invalidateProject(projectId);
         return TaskDetailItem.from(task);

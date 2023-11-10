@@ -65,10 +65,14 @@ public class User implements UserDetails {
     @Size(max = 25)
     private String name;
 
-    private String image;
-
     @NotNull
     private String password;
+
+    private String image;
+
+    private String fcmToken;
+
+    private String refreshToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
