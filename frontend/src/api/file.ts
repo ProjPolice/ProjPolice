@@ -2,7 +2,7 @@ import { CommonResponse, http } from './http';
 
 export default {
   file: () => http.get<FileResponse>('files'),
-  upload: (data: UploadRequest) => http.post<UploadResponse>('files', { data }),
+  upload: (data: UploadRequest) => http.post<UploadResponse>('files', data),
   delete: () => http.delete<DeleteResponse>('files'),
 };
 

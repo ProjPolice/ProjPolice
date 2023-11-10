@@ -84,12 +84,10 @@ function ProjectList() {
           <h4>프로젝트</h4>
           <button>프로젝트 생성</button>
         </div>
-        <p>
-          <div>
-            {currentPage > 0 && <button onClick={handlePrevPage}>이전</button>}
-            {endIndex < projectItems.length && <button onClick={handleNextPage}>다음</button>}
-          </div>
-        </p>
+        <div>
+          {currentPage > 0 && <button onClick={handlePrevPage}>이전</button>}
+          {endIndex < projectItems.length && <button onClick={handleNextPage}>다음</button>}
+        </div>
       </TextContainer>
       <ProjectBoxContainer>
         {visibleItems.map((project, index) => (

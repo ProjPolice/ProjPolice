@@ -1,46 +1,18 @@
-import { ChangeEvent, useState } from 'react';
 import { Page } from '@assets/design/globalStyles';
 import { Header, HeaderText, Container, Box, Column, InputBox, Button } from './UserStyle';
+import { useTextInput } from 'common/hooks/useTextInput';
+
 import user from '@api/user';
+import { useImageInput } from 'common/hooks/useFileInput';
+import { useNavigate } from 'react-router-dom';
 
 function SignUp() {
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  const [email, setEmail] = useState('');
-  const [image, setImage] = useState<FormData>();
-  const [imageSrc, setImageSrc] = useState<string>();
-
-  const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
-  };
-
-  const handleChangePassword = (event: ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
-
-  const handleChangePasswordConfirmation = (event: ChangeEvent<HTMLInputElement>) => {
-    setPasswordConfirmation(event.target.value);
-  };
-
-  const handleChangeEmail = (event: ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
-
-  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const formData = new FormData();
-      const reader = new FileReader();
-      reader.onload = () => {
-        const result = reader.result as string;
-        setImageSrc(result);
-      };
-      formData.append('file', files[0]);
-      reader.readAsDataURL(files[0]);
-      setImage(formData);
-    }
-  };
+  const navigate = useNavigate();
+  const [name, handleName] = useTextInput();
+  const [password, handlePassword] = useTextInput();
+  const [passwordConfirmation, handlePasswordConfirmation] = useTextInput();
+  const [email, handleEmail] = useTextInput();
+  const [image, handleImage, imageSrc] = useImageInput();
 
   const submitSignup = () => {
     if (password === passwordConfirmation) {
@@ -50,9 +22,15 @@ function SignUp() {
         image: image,
         password: password,
       };
-      user.signup(data).then((response) => {
-        console.log(response);
-      });
+      user
+        .signup(data)
+        .then((response) => {
+          console.log(response);
+          navigate('/');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
       alert('비밀번호와 비밀번호 확인이 서로 다릅니다.');
     }
@@ -86,7 +64,7 @@ function SignUp() {
                   id="imageInput"
                   accept="image/*"
                   style={{ display: 'none' }}
-                  onChange={handleImageUpload}
+                  onChange={handleImage}
                 />
               </div>
             )}
@@ -95,7 +73,7 @@ function SignUp() {
             <InputBox topLeftRadius="8px" topRightRadius="8px" bottomLeftRadius="0px" bottomRightRadius="0px">
               <input
                 type="text"
-                placeholder="아이디를 입력하세요"
+                placeholder="이름을 입력하세요"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -103,35 +81,7 @@ function SignUp() {
                   outline: 'none',
                 }}
                 value={name}
-                onChange={handleChangeName}
-              />
-            </InputBox>
-            <InputBox topLeftRadius="0px" topRightRadius="0px" bottomLeftRadius="0px" bottomRightRadius="0px">
-              <input
-                type="password"
-                placeholder="비밀번호를 입력하세요"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  border: 'none',
-                  outline: 'none',
-                }}
-                value={password}
-                onChange={handleChangePassword}
-              />
-            </InputBox>
-            <InputBox topLeftRadius="0px" topRightRadius="0px" bottomLeftRadius="0px" bottomRightRadius="0px">
-              <input
-                type="password"
-                placeholder="비밀번호를 한번 더 입력하세요"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  border: 'none',
-                  outline: 'none',
-                }}
-                value={passwordConfirmation}
-                onChange={handleChangePasswordConfirmation}
+                onChange={handleName}
               />
             </InputBox>
             <InputBox topLeftRadius="0px" topRightRadius="0px" bottomLeftRadius="8px" bottomRightRadius="8px">
@@ -145,7 +95,35 @@ function SignUp() {
                   outline: 'none',
                 }}
                 value={email}
-                onChange={handleChangeEmail}
+                onChange={handleEmail}
+              />
+            </InputBox>
+            <InputBox topLeftRadius="0px" topRightRadius="0px" bottomLeftRadius="0px" bottomRightRadius="0px">
+              <input
+                type="password"
+                placeholder="비밀번호를 입력하세요"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                  outline: 'none',
+                }}
+                value={password}
+                onChange={handlePassword}
+              />
+            </InputBox>
+            <InputBox topLeftRadius="0px" topRightRadius="0px" bottomLeftRadius="0px" bottomRightRadius="0px">
+              <input
+                type="password"
+                placeholder="비밀번호를 한번 더 입력하세요"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                  outline: 'none',
+                }}
+                value={passwordConfirmation}
+                onChange={handlePasswordConfirmation}
               />
             </InputBox>
           </Column>

@@ -1,8 +1,8 @@
 import { CommonResponse, http } from './http';
 
 export default {
-  create: (data: CreateRequest) => http.post<CreateResponse>('tasks', { data }),
-  modify: (taskId: number, data: ModifyRequest) => http.patch<ModifyResponse>(`tasks/${taskId}`, { data }),
+  create: (data: CreateRequest) => http.post<CreateResponse>('tasks', data),
+  modify: (taskId: number, data: ModifyRequest) => http.patch<ModifyResponse>(`tasks/${taskId}`, data),
 };
 
 interface CreateRequest {
