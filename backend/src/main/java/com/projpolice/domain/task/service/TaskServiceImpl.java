@@ -68,7 +68,7 @@ public class TaskServiceImpl implements TaskService {
 
         Task task = taskRepository.save(Task.of(taskCreateRequest, user, epic));
 
-        if (taskCreateRequest.getUserId() != getLoggedUser().getId()) {
+        if (taskCreateRequest.getUserId().equals(getLoggedUser().getId())) {
             notificationService.taskAssignedToUser(task.getId(), taskCreateRequest.getUserId());
         }
         long projectId = epicRepository.findProjectIdByEpicId(taskCreateRequest.getEpicId()).getAsLong();
