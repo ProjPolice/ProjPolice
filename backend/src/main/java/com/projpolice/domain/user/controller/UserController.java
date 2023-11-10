@@ -6,14 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.projpolice.domain.task.response.UserTaskRangeResponse;
 import com.projpolice.domain.task.service.TaskService;
@@ -50,16 +49,15 @@ public class UserController {
      * @return 회원의 아이디
      */
     @PostMapping(value = "/join", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "회원가입", description = "새로운 사용자 정보를 입력 받아 회원가입을 진행합니다.")
-    public ResponseEntity<? extends BaseResponse<BaseIdItem>> join(UserJoinRequest request,
-        @RequestPart(required = false) MultipartFile image) {
+    @Operation(summary = "회원가입", description = "새로운 사용자 정보를 입력 받아 회원가입을 진행합니다. \n 단, 스웨거에서는 이미지가 없으면 에러 발생")
+    public ResponseEntity<? extends BaseResponse<BaseIdItem>> join(@ModelAttribute UserJoinRequest request) {
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(
                 BaseResponse.<BaseIdItem>builder()
                     .code(HttpStatus.OK.value())
                     .message("회원가입 성공")
-                    .data(userService.join(request, image))
+                    .data(userService.join(request))
                     .build()
             );
     }
@@ -90,14 +88,14 @@ public class UserController {
      */
     @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "사용자 정보 수정", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 수정할 정보를 받아 사용자의 정보를 수정합니다.")
-    public ResponseEntity<? extends BaseResponse<UserInfoResponse>> updateUserInfo(UserUpdateRequest request,
-        @RequestPart(required = false) MultipartFile image) {
+    public ResponseEntity<? extends BaseResponse<UserInfoResponse>> updateUserInfo(
+        @ModelAttribute UserUpdateRequest request) {
 
         return ResponseEntity.ok()
             .body(BaseResponse.<UserInfoResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("사용자 정보 수정 성공")
-                .data(userService.updateUserInfo(request, image))
+                .data(userService.updateUserInfo(request))
                 .build()
             );
     }
