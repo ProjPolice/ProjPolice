@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 import ProjectItem from './ProjectList/ProjectItem';
 import { colors } from '@assets/design/colors';
@@ -85,16 +84,14 @@ function ProjectList() {
           <h4>프로젝트</h4>
           <button>프로젝트 생성</button>
         </div>
-        <p>
-          <div>
-            {currentPage > 0 && <button onClick={handlePrevPage}>이전</button>}
-            {endIndex < projectItems.length && <button onClick={handleNextPage}>다음</button>}
-          </div>
-        </p>
+        <div>
+          {currentPage > 0 && <button onClick={handlePrevPage}>이전</button>}
+          {endIndex < projectItems.length && <button onClick={handleNextPage}>다음</button>}
+        </div>
       </TextContainer>
       <ProjectBoxContainer>
         {visibleItems.map((project, index) => (
-          <ProjectItem {...project} projectId={index} />
+          <ProjectItem {...project} projectId={index} key={index} />
         ))}
       </ProjectBoxContainer>
     </ProjectContainer>

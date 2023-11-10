@@ -1,8 +1,8 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 
 export const useImageInput = (
   initialData?: FormData,
-): [FormData | undefined, (event: ChangeEvent<HTMLInputElement>) => void, string] => {
+): [FormData | undefined, (event: ChangeEvent<HTMLInputElement>) => void, string, Dispatch<SetStateAction<string>>] => {
   const [image, setImage] = useState(initialData);
   const [src, setSrc] = useState('');
 
@@ -21,5 +21,5 @@ export const useImageInput = (
     }
   };
 
-  return [image, handleImage, src];
+  return [image, handleImage, src, setSrc];
 };

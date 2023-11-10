@@ -2,11 +2,10 @@ import { CommonResponse, http } from './http';
 
 export default {
   data: () => http.get<DataResponse>('epics'),
-  create: (data: CreateRequest) => http.post<CreateResponse>('epics', { data }),
+  create: (data: CreateRequest) => http.post<CreateResponse>('epics', data),
   tododata: (epicsId: number) => http.get<TodoDataResponse>(`epics/${epicsId}`),
   tododelete: (epicsId: number) => http.delete<TodoDeleteResponse>(`epics/${epicsId}`),
-  todomodify: (epicsId: number, data: TodoModifyRequest) =>
-    http.patch<TodoModifyResponse>(`epics/${epicsId}`, { data }),
+  todomodify: (epicsId: number, data: TodoModifyRequest) => http.patch<TodoModifyResponse>(`epics/${epicsId}`, data),
 };
 
 interface DataResponse extends CommonResponse {

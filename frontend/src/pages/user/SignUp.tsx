@@ -4,8 +4,10 @@ import { useTextInput } from 'common/hooks/useTextInput';
 
 import user from '@api/user';
 import { useImageInput } from 'common/hooks/useFileInput';
+import { useNavigate } from 'react-router-dom';
 
 function SignUp() {
+  const navigate = useNavigate();
   const [name, handleName] = useTextInput();
   const [password, handlePassword] = useTextInput();
   const [passwordConfirmation, handlePasswordConfirmation] = useTextInput();
@@ -24,6 +26,7 @@ function SignUp() {
         .signup(data)
         .then((response) => {
           console.log(response);
+          navigate('/');
         })
         .catch((error) => {
           console.log(error);
@@ -70,7 +73,7 @@ function SignUp() {
             <InputBox topLeftRadius="8px" topRightRadius="8px" bottomLeftRadius="0px" bottomRightRadius="0px">
               <input
                 type="text"
-                placeholder="아이디를 입력하세요"
+                placeholder="이름을 입력하세요"
                 style={{
                   width: '100%',
                   height: '100%',

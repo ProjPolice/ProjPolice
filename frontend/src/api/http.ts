@@ -1,21 +1,11 @@
+// import { getToken } from '@utils/getToken';
 import Axios from 'axios';
 
 export const ROOT = 'https://api.projpolice.com/';
 
-const instance = Axios.create({
+export const instance = Axios.create({
   baseURL: ROOT,
 });
-
-// httpAxios.interceptors.request.use((config) => {
-//   // Request URL 보는법
-//   // console.log(config.url);
-//   const newConfig = { ...config };
-//   const token = store.getState().user.token;
-//   if (token) {
-//     newConfig.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return newConfig;
-// });
 
 export const http = {
   get: <Response = unknown>(url: string) => instance.get<Response>(url).then((response) => response.data),
