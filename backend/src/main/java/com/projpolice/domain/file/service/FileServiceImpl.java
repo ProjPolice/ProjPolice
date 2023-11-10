@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.projpolice.domain.file.domain.File;
 import com.projpolice.domain.file.dto.FileDetailItem;
+import com.projpolice.domain.file.dto.FileResourceItem;
 import com.projpolice.domain.file.repository.FileRepository;
 import com.projpolice.domain.file.request.FileUploadRequest;
 import com.projpolice.domain.task.domain.Task;
@@ -54,6 +55,19 @@ public class FileServiceImpl implements FileService {
         return fileRepository.findByProjectId(projectId).stream()
             .map(FileDetailItem::from)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * 파일 객체에서 실제 파일을 다운로드 할 수 있는 기능
+     * @param fileId
+     * @return
+     */
+    @Override
+    public FileResourceItem getFileOfFile(Long fileId) {
+        File file = fileRepository.findById(fileId)
+            .orElseThrow(() -> new FileException(ExceptionInfo.INVALID_FILE));
+
+        return FileResourceItem.of(file, storageConnector.getObject(file.getUuid()));
     }
 
     /**

@@ -1,18 +1,24 @@
 package com.projpolice.domain.file.controller;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projpolice.domain.file.dto.FileDetailItem;
+import com.projpolice.domain.file.dto.FileResourceItem;
 import com.projpolice.domain.file.request.FileUploadRequest;
 import com.projpolice.domain.file.service.FileService;
 import com.projpolice.global.common.base.BaseIdItem;
@@ -95,5 +101,24 @@ public class FileController {
                 .message("파일 삭제 성공")
                 .data(fileService.deleteFile(fileId))
                 .build());
+    }
+
+    /**
+     * 파일을 다운로드 할 수 있는 메소드
+     * @param fileId
+     * @return
+     */
+    @GetMapping("/{file_id}")
+    @Operation(summary = "파일 다운로드", description = "파일을 다운로드하는 메소드입니다.")
+    public ResponseEntity<Resource> downloadFileByFileId(@PathVariable(name = "file_id") Long fileId) {
+        FileResourceItem fileResourceItem = fileService.getFileOfFile(fileId);
+
+        return ResponseEntity.ok()
+            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+            .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment() // (6)
+                .filename(fileResourceItem.getName(), StandardCharsets.UTF_8)
+                .build()
+                .toString())
+            .body(fileResourceItem.getResource());
     }
 }
