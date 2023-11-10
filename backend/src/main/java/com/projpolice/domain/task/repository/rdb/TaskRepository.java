@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.projpolice.domain.task.domain.rdb.Task;
 import com.projpolice.domain.task.dto.ProjectIdEpicIdProjectionData;
+import com.projpolice.domain.task.dto.TaskNameProjectNameOwnerNameProjectionData;
 import com.projpolice.domain.task.dto.UserTaskProjectionData;
 
 import io.lettuce.core.dynamic.annotation.Param;
@@ -113,4 +114,14 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
         """)
     List<UserTaskProjectionData> findTasksByUserId(@Param("userId") long userId,
         @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+    @Query("""
+        select task.name as taskName, project.name as projectName, project.user.name as projectOwnerName
+        from Task task
+        left join Epic epic on task.epic.id = epic.id
+        left join Project project on epic.project.id = project.id
+        where task.deleted = false and task.id = :taskId
+        """)
+    Optional<TaskNameProjectNameOwnerNameProjectionData> findNameProjectNameProjectionById(
+        @Param("taskId") long taskId);
 }
