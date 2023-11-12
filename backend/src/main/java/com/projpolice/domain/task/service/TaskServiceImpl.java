@@ -15,6 +15,7 @@ import com.projpolice.domain.epic.repository.rdb.EpicRepository;
 import com.projpolice.domain.file.dto.FileDetailItem;
 import com.projpolice.domain.file.repository.FileRepository;
 import com.projpolice.domain.task.domain.rdb.Task;
+import com.projpolice.domain.task.dto.TaskChangePackagingDto;
 import com.projpolice.domain.task.dto.TaskDetailItem;
 import com.projpolice.domain.task.dto.TaskRelatedProjectionData;
 import com.projpolice.domain.task.dto.UserTaskProjectionData;
@@ -68,7 +69,7 @@ public class TaskServiceImpl implements TaskService {
 
         Task task = taskRepository.save(Task.of(taskCreateRequest, user, epic));
 
-        if (taskCreateRequest.getUserId().equals(getLoggedUser().getId())) {
+        if (!taskCreateRequest.getUserId().equals(getLoggedUser().getId())) {
             notificationService.taskAssignedToUser(task.getId(), taskCreateRequest.getUserId());
         }
         long projectId = epicRepository.findProjectIdByEpicId(taskCreateRequest.getEpicId()).getAsLong();
@@ -87,42 +88,51 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public TaskUpdateResponse updateTask(Long taskId, TaskUpdateRequest taskUpdateRequest) {
         projectAuthManager.checkTaskOwnershipOrThrow(taskId);
+        TaskChangePackagingDto.Builder changeBuilder = TaskChangePackagingDto.builder();
 
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_TASK));
         boolean updated = false;
 
         if (taskUpdateRequest.getName() != null) {
+            changeBuilder.name(task.getName(), taskUpdateRequest.getName());
             task.setName(taskUpdateRequest.getName());
             updated = true;
         }
         if (taskUpdateRequest.getDescription() != null) {
+            changeBuilder.description(task.getDescription(), taskUpdateRequest.getDescription());
             task.setDescription(taskUpdateRequest.getDescription());
             updated = true;
         }
         if (taskUpdateRequest.getStartDate() != null) {
+            changeBuilder.startDate(task.getStartDate(), taskUpdateRequest.getStartDate());
             task.setStartDate(taskUpdateRequest.getStartDate());
             updated = true;
         }
         if (taskUpdateRequest.getEndDate() != null) {
+            changeBuilder.endDate(task.getEndDate(), taskUpdateRequest.getEndDate());
             task.setEndDate(taskUpdateRequest.getEndDate());
             updated = true;
         }
         if (taskUpdateRequest.getStatus() != null) {
+            changeBuilder.status(task.getStatus(), taskUpdateRequest.getStatus());
             task.setStatus(taskUpdateRequest.getStatus());
             updated = true;
         }
         if (taskUpdateRequest.getUserId() != null) {
+            changeBuilder.userId(task.getUser().getId(), taskUpdateRequest.getUserId());
             task.setUser(userRepository.findById(taskUpdateRequest.getUserId())
                 .orElseThrow(() -> new UserException(ExceptionInfo.INVALID_USER)));
             updated = true;
         }
         if (taskUpdateRequest.getEpicId() != null) {
+            changeBuilder.epicId(task.getEpic().getId(), taskUpdateRequest.getEpicId());
             task.setEpic(epicRepository.findById(taskUpdateRequest.getEpicId())
                 .orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC)));
             updated = true;
         }
 
         if (updated) {
+            notificationService.taskChanged(taskId, task.getUser().getId(), changeBuilder.build());
             long projectId = taskRepository.findProjectIdById(taskId).getAsLong();
             redisService.invalidateProject(projectId);
         }
