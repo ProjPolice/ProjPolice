@@ -13,6 +13,7 @@ import com.projpolice.domain.task.domain.rdb.Task;
 import com.projpolice.domain.task.dto.ProjectIdEpicIdProjectionData;
 import com.projpolice.domain.task.dto.TaskNameProjectNameOwnerNameProjectionData;
 import com.projpolice.domain.task.dto.UserTaskProjectionData;
+import com.projpolice.domain.user.domain.rdb.User;
 
 import io.lettuce.core.dynamic.annotation.Param;
 
@@ -123,4 +124,14 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
         """)
     Optional<TaskNameProjectNameOwnerNameProjectionData> findNameProjectNameProjectionById(
         @Param("taskId") long taskId);
+
+    // TODO: make it as projection when User Entity have FCM token
+    @Query("""
+        select userProject.user
+        from Task task
+        left join Epic epic on task.epic.id = epic.id
+        left join UserProject userProject on epic.project.id = userProject.project.id
+        where task.deleted = false and task.id = :taskId and userProject.user.id != :userId
+        """)
+    List<User> findOtherUsersInTasksById(@Param("taskId") long taskId, @Param("userId") long userId);
 }
