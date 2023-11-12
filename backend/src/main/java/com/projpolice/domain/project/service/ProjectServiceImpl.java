@@ -274,7 +274,7 @@ public class ProjectServiceImpl implements ProjectService {
                     .build()
                 ).collect(Collectors.toList())
             )
-            .pages(projects.getTotalPages() + 1)
+            .pages(projects.getTotalPages())
             .numOfRows(numOfRows)
             .build();
     }
