@@ -2,7 +2,7 @@ package com.projpolice.domain.epic.repository.rdb;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.OptionalLong;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -81,13 +81,12 @@ public interface EpicRepository extends JpaRepository<Epic, Long> {
          )
         """)
     List<EpicProjectionDataItem> selectProjectEpicsWithDateRange(@Param("project_id") long project_id,
-        @Param("start_date")
-        LocalDate start_date, @Param("end_date") LocalDate end_date);
+        @Param("start_date") LocalDate start_date, @Param("end_date") LocalDate end_date);
 
     @Query("""
         select epic.project.id
         from Epic epic
         where epic.deleted = false and epic.id = :epicId
         """)
-    OptionalLong findProjectIdByEpicId(@Param("epicId") long epicId);
+    Optional<Long> findProjectIdByEpicId(@Param("epicId") long epicId);
 }

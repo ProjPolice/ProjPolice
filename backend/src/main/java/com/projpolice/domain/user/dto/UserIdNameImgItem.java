@@ -14,11 +14,11 @@ import lombok.experimental.SuperBuilder;
 public class UserIdNameImgItem extends UserIdNameItem {
     private String image;
 
-    public static UserIdNameImgItem from(User user) {
+    public static UserIdNameImgItem of(User user, String imageUrl) {
         return UserIdNameImgItem.builder()
             .id(user.getId())
             .name(user.getName())
-            .image(user.getImage())
+            .image(String.format("%s%s", imageUrl, user.getImage()))
             .build();
     }
 }

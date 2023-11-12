@@ -18,7 +18,7 @@ public class TaskGetResponse extends TaskBaseItem {
     private EpicDetailData epic;
     private List<FileDetailItem> files;
 
-    public static TaskGetResponse from(Task task, List<FileDetailItem> files) {
+    public static TaskGetResponse of(Task task, List<FileDetailItem> files, String imageUrl) {
         return TaskGetResponse.builder()
             .id(task.getId())
             .name(task.getName())
@@ -26,7 +26,7 @@ public class TaskGetResponse extends TaskBaseItem {
             .status(task.getStatus().name())
             .startDate(task.getStartDate())
             .endDate(task.getEndDate())
-            .user(UserIdNameImgItem.from(task.getUser()))
+            .user(UserIdNameImgItem.of(task.getUser(), imageUrl))
             .epic(EpicDetailData.from(task.getEpic()))
             .files(files)
             .build();

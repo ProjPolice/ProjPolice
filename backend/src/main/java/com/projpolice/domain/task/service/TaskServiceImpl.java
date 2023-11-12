@@ -29,11 +29,13 @@ import com.projpolice.domain.user.repository.rdb.UserRepository;
 import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.deletion.DeletionService;
 import com.projpolice.global.common.error.exception.EpicException;
+import com.projpolice.global.common.error.exception.TaskException;
 import com.projpolice.global.common.error.exception.UserException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.manager.ProjectAuthManager;
 import com.projpolice.global.firebase.NotificationService;
 import com.projpolice.global.redis.RedisService;
+import com.projpolice.global.storage.base.StorageConnector;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,6 +49,7 @@ public class TaskServiceImpl implements TaskService {
     private final FileRepository fileRepository;
     private final DeletionService deletionService;
     private final RedisService redisService;
+    private final StorageConnector storageConnector;
     private final NotificationService notificationService;
 
     /**
@@ -72,9 +75,11 @@ public class TaskServiceImpl implements TaskService {
         if (!taskCreateRequest.getUserId().equals(getLoggedUser().getId())) {
             notificationService.taskAssignedToUser(task.getId(), taskCreateRequest.getUserId());
         }
-        long projectId = epicRepository.findProjectIdByEpicId(taskCreateRequest.getEpicId()).getAsLong();
+        long projectId = epicRepository.findProjectIdByEpicId(taskCreateRequest.getEpicId())
+            .orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC));
+        
         redisService.invalidateProject(projectId);
-        return TaskDetailItem.from(task);
+        return TaskDetailItem.of(task, storageConnector.getPreAuthenticatedUrl());
     }
 
     /**
@@ -133,11 +138,12 @@ public class TaskServiceImpl implements TaskService {
 
         if (updated) {
             notificationService.taskChanged(taskId, task.getUser().getId(), changeBuilder.build());
-            long projectId = taskRepository.findProjectIdById(taskId).getAsLong();
+            long projectId = taskRepository.findProjectIdById(taskId)
+                .orElseThrow(() -> new TaskException(ExceptionInfo.INVALID_TASK));
             redisService.invalidateProject(projectId);
         }
 
-        return TaskUpdateResponse.from(task);
+        return TaskUpdateResponse.of(task, storageConnector.getPreAuthenticatedUrl());
     }
 
     /**
@@ -168,9 +174,9 @@ public class TaskServiceImpl implements TaskService {
     public TaskGetResponse getTask(Long taskId) {
         projectAuthManager.checkTaskMembershipOrThrow(taskId);
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_TASK));
-        return TaskGetResponse.from(task, fileRepository.findByTaskId(taskId).stream()
+        return TaskGetResponse.of(task, fileRepository.findByTaskId(taskId).stream()
             .map(FileDetailItem::from)
-            .collect(Collectors.toList()));
+            .collect(Collectors.toList()), storageConnector.getPreAuthenticatedUrl());
     }
 
     @Override

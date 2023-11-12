@@ -113,7 +113,8 @@ public class EpicServiceImpl implements EpicService {
         }
 
         if (updated) {
-            long projectId = epicRepository.findProjectIdByEpicId(id).getAsLong();
+            long projectId = epicRepository.findProjectIdByEpicId(id)
+                .orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC));
             redisService.invalidateProject(projectId);
         }
 
