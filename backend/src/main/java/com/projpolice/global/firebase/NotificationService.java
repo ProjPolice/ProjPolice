@@ -1,4 +1,6 @@
-package com.projpolice.global.notification.service;
+package com.projpolice.global.firebase;
+
+import com.projpolice.domain.task.dto.TaskChangePackagingDto;
 
 public interface NotificationService {
 
@@ -12,5 +14,5 @@ public interface NotificationService {
     void taskAssignedToUser(long taskId, long userId);
 
     // task가 변경 되었을 때
-    void taskChanged(long taskId);
+    void taskChanged(long taskId, long invokedUserId, TaskChangePackagingDto changes);
 }

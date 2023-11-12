@@ -17,6 +17,7 @@ import com.projpolice.domain.user.request.UserLoginRequest;
 import com.projpolice.domain.user.request.UserUpdateRequest;
 import com.projpolice.domain.user.response.UserInfoResponse;
 import com.projpolice.domain.user.response.UserLoginResponse;
+import com.projpolice.domain.user.response.UserLogoutResponse;
 import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.error.exception.BaseException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
@@ -113,9 +114,25 @@ public class UserServiceImpl implements UserService {
             )
         );
 
+        user.setFcmToken(request.getToken());
+        userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
         return UserLoginResponse.builder()
             .accessToken(jwtToken)
+            .build();
+    }
+
+    /**
+     * 사용자 로그아웃하고 Redis에 있는 토큰 또한 삭제한다.
+     *
+     * @return UserLogoutResponse
+     */
+    public UserLogoutResponse logout() {
+        User loggedUser = getLoggedUser();
+        loggedUser.setFcmToken(null);
+        userRepository.save(loggedUser);
+        return UserLogoutResponse.builder()
+            .id(loggedUser.getId())
             .build();
     }
 
