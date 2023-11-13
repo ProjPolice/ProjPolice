@@ -46,20 +46,18 @@ function ProjectList() {
           <h4>프로젝트</h4>
           <ProjPoliceButton width={55} height={30} context="+ 추가" onClick={handleModalVisible} />
         </div>
-        <p>
-          <div>
-            {currentPage > 0 && (
-              <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={handlePrevPage}>
-                <img src={LeftArrow} style={{ width: '70%', height: '100%' }}></img>
-              </button>
-            )}
-            {endIndex < items.length && (
-              <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={handleNextPage}>
-                <img src={RightArrow} style={{ width: '70%', height: '50%' }}></img>
-              </button>
-            )}
-          </div>
-        </p>
+        <div>
+          {currentPage > 0 && (
+            <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={handlePrevPage}>
+              <img src={LeftArrow} style={{ width: '70%', height: '100%' }}></img>
+            </button>
+          )}
+          {endIndex < projectItems.length && (
+            <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={handleNextPage}>
+              <img src={RightArrow} style={{ width: '70%', height: '50%' }}></img>
+            </button>
+          )}
+        </div>
       </TextContainer>
       <ProjectBoxContainer>
         {visibleItems.map((project, index) => (
