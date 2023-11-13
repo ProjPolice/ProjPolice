@@ -10,7 +10,7 @@ public enum ExceptionInfo {
     // Common
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 1000, "서버 에러입니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, 1001, "권한이 존재하지 않습니다."),
-    ACESSTOKEN_EXPIRED(HttpStatus.BAD_REQUEST, 1002, "엑세스 토큰이 만료되었습니다."),
+    ACCESS_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, 1002, "엑세스 토큰이 만료되었습니다."),
     REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, 1003, "리프레쉬 토큰이 만료되었습니다."),
     INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, 1004, "잘못된 리프레쉬 토큰입니다."),
 

@@ -8,9 +8,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-@RedisHash(value = "user-data", timeToLive = 30 * 24 * 60 * 60) // 30일
+@RedisHash(value = "user-data-refresh", timeToLive = 5 * 24 * 60 * 60) // 5일
 public class RefreshTokenRedisData {
     @Id
-    String id;
-    String refreshToken;
+    private String id;
+    private String refreshToken;
 }

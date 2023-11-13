@@ -4,11 +4,9 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.projpolice.domain.user.domain.rdb.User;
 import com.projpolice.domain.user.domain.redis.RefreshTokenRedisData;
-import com.projpolice.domain.user.repository.rdb.RefreshTokenRepository;
+import com.projpolice.domain.user.repository.redis.RefreshTokenRepository;
 import com.projpolice.global.common.error.exception.UnAuthorizedException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 
@@ -54,11 +52,11 @@ public class JwtService {
      * @return claim
      */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        try{
+        try {
             final Claims claims = extractAllClaims(token);
             return claimsResolver.apply(claims);
-        }catch (ExpiredJwtException e){
-            throw new UnAuthorizedException(ExceptionInfo.ACESSTOKEN_EXPIRED );
+        } catch (ExpiredJwtException e) {
+            throw new UnAuthorizedException(ExceptionInfo.ACCESS_TOKEN_EXPIRED);
         }
     }
 
@@ -71,43 +69,61 @@ public class JwtService {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    /**
-     * 추가할 extraClaims를 포함하여 UserDetails객체 정보를 Claim에 담아 Jwt를 생성한다.
-     *
-     * @return String token
-     */
-    public String generateToken (Map<String, Object> extraClaims, UserDetails userDetails) {
+    public String generateToken(Map<String, Object> extraClaims, String userId) {
         return Jwts
             .builder()
             .setClaims(extraClaims)
-            .setSubject(userDetails.getUsername())
+            .setSubject(String.valueOf(userId))
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24)) // 24분
             .signWith(getSignInKey(), SignatureAlgorithm.HS256)
             .compact();
     }
 
+    public String generateToken(Map<String, Object> extraClaims, long userId) {
+        return generateToken(extraClaims, String.valueOf(userId));
+    }
+
+    /**
+     * 추가할 extraClaims를 포함하여 UserDetails객체 정보를 Claim에 담아 Jwt를 생성한다.
+     *
+     * @return String token
+     */
+    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        return generateToken(extraClaims, userDetails.getUsername());
+    }
+
     /**
      * Refresh 토큰 생성
      */
-    public String generateRefreshToken(UserDetails userDetails){
+    public String generateRefreshToken(String userId) {
         String refreshToken = Jwts
             .builder()
-            .setSubject(userDetails.getUsername())
+            .setSubject(userId)
             .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)) // 7일
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 2)) // 2일
             .signWith(getSignInKey(), SignatureAlgorithm.HS256)
             .compact();
 
         // redis에 저장
         refreshTokenRepository.save(RefreshTokenRedisData.builder()
-            .id(userDetails.getUsername())
+            .id(userId)
             .refreshToken(refreshToken)
             .build());
 
         return refreshToken;
     }
 
+    public String generateRefreshToken(long userId) {
+        return generateRefreshToken(String.valueOf(userId));
+    }
+
+    /**
+     * Refresh 토큰 생성
+     */
+    public String generateRefreshToken(UserDetails userDetails) {
+        return generateRefreshToken(userDetails.getUsername());
+    }
 
     /**
      * Jwt 토큰의 유효성을 검토한다.

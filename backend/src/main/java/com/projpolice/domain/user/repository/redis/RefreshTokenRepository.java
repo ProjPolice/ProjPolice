@@ -1,9 +1,8 @@
-package com.projpolice.domain.user.repository.rdb;
+package com.projpolice.domain.user.repository.redis;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.projpolice.domain.user.domain.rdb.RefreshTokenEntity;
 import com.projpolice.domain.user.domain.redis.RefreshTokenRedisData;
 
 @Repository

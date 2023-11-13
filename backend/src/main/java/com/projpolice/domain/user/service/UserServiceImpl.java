@@ -13,8 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.projpolice.domain.user.domain.rdb.User;
 import com.projpolice.domain.user.domain.redis.RefreshTokenRedisData;
-import com.projpolice.domain.user.repository.rdb.RefreshTokenRepository;
 import com.projpolice.domain.user.repository.rdb.UserRepository;
+import com.projpolice.domain.user.repository.redis.RefreshTokenRepository;
 import com.projpolice.domain.user.request.UserJoinRequest;
 import com.projpolice.domain.user.request.UserLoginRequest;
 import com.projpolice.domain.user.request.UserUpdateRequest;
@@ -23,6 +23,7 @@ import com.projpolice.domain.user.response.UserLoginResponse;
 import com.projpolice.domain.user.response.UserLogoutResponse;
 import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.error.exception.BaseException;
+import com.projpolice.global.common.error.exception.UnAuthorizedException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.util.FileUtil;
 import com.projpolice.global.storage.base.StorageConnector;
@@ -107,6 +108,7 @@ public class UserServiceImpl implements UserService {
      *
      * @return UserLoginResponse
      */
+    @Transactional
     public UserLoginResponse login(UserLoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
             .orElseThrow(() -> new BaseException(ExceptionInfo.LOGIN_FAIL));
@@ -118,8 +120,7 @@ public class UserServiceImpl implements UserService {
             )
         );
 
-        user.setFcmToken(request.getToken());
-        userRepository.save(user);
+        user.setFcmToken(request.getFirebaseToken());
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
@@ -134,9 +135,12 @@ public class UserServiceImpl implements UserService {
      *
      * @return UserLogoutResponse
      */
+    @Transactional
     public UserLogoutResponse logout() {
+        // User Entity could be at different entity, because it's in different Transaction
         User loggedUser = getLoggedUser();
         loggedUser.setFcmToken(null);
+        // Check whether it works as 'dirty check update' or 'merge'
         userRepository.save(loggedUser);
 
         refreshTokenRepository.deleteById(String.valueOf(loggedUser.getId()));
@@ -151,20 +155,27 @@ public class UserServiceImpl implements UserService {
      * @return UserLogoutResponse
      */
     public String reissue(String refreshToken) {
-
-        String userId = jwtService.extractUsername(refreshToken);
+        String userId;
+        try {
+            userId = jwtService.extractUsername(refreshToken);
+        } catch (UnAuthorizedException exception) {
+            if (exception.getCode().equals(ExceptionInfo.ACCESS_TOKEN_EXPIRED.getCode())) {
+                throw new UnAuthorizedException(ExceptionInfo.REFRESH_TOKEN_EXPIRED);
+            }
+            throw exception;
+        }
 
         RefreshTokenRedisData refreshTokenRedisData = refreshTokenRepository.findById(userId)
-            .orElseThrow(() -> new BaseException(ExceptionInfo.REFRESH_TOKEN_EXPIRED));
+            .orElseThrow(() -> new BaseException(ExceptionInfo.INVALID_REFRESH_TOKEN));
 
         User user = userRepository.findById(Long.valueOf(userId))
-            .orElseThrow(() -> new BaseException(ExceptionInfo.LOGIN_FAIL));
+            .orElseThrow(() -> new BaseException(ExceptionInfo.INVALID_REFRESH_TOKEN));
 
         if (refreshToken.equals(refreshTokenRedisData.getRefreshToken())) {
-            String jwtToken = jwtService.generateToken(user);
-            return jwtToken;
+            return jwtService.generateToken(user);
+        } else {
+            throw new BaseException(ExceptionInfo.INVALID_REFRESH_TOKEN);
         }
-        else throw new BaseException(ExceptionInfo.INVALID_REFRESH_TOKEN);
     }
 
 }
