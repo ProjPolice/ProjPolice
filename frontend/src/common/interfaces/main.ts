@@ -11,14 +11,6 @@ export interface TaskItemProps {
   membercount: number;
 }
 
-export interface ProjectItemProps {
-  backgroundColor: string;
-  title: string;
-  members: string[];
-  tasks: string[];
-  projectId: number;
-}
-
 export interface BoardItemProps {
   name?: string;
   backgroundColor: string;

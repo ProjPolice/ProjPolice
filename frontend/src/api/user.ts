@@ -6,6 +6,8 @@ export default {
   modify: (data: ModifyRequest) => http.patch<ModifyResponse>('users', data),
   signup: (data: SignupRequest) =>
     http.post<SignupResponse>('users/join', data, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  tasks: () => http.get<TaskResponse>('users/tasks'),
+  projects: () => http.get<ProjectResponse>('users/projects'),
 };
 
 interface SignupRequest {
@@ -45,7 +47,7 @@ interface DataResponse extends CommonResponse {
 interface ModifyRequest {
   name: string;
   email: string;
-  image: string;
+  image?: File;
 }
 
 interface ModifyResponse extends CommonResponse {
@@ -55,4 +57,43 @@ interface ModifyResponse extends CommonResponse {
     email: string;
     image: string;
   };
+}
+
+interface TaskResponse extends CommonResponse {
+  data: {
+    task: {
+      id: number;
+      name: string;
+      startDate: string;
+      endDate: string;
+      status: string;
+      epic: {
+        id: number;
+        name: string;
+      };
+      project: {
+        id: number;
+        name: string;
+      };
+      file: {
+        id: number;
+        name: string;
+      };
+      userId: number;
+    }[];
+  };
+}
+
+export interface Projects {
+  id: number;
+  name: string;
+  description: string;
+}
+
+interface ProjectResponse extends CommonResponse {
+  data: {
+    projects: Projects[];
+  };
+  pages: number;
+  numOfRows: number;
 }

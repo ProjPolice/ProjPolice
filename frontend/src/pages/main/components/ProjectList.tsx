@@ -1,70 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import ProjectItem from './ProjectList/ProjectItem';
-import { colors } from '@assets/design/colors';
 import { ProjectBoxContainer, ProjectContainer, TextContainer } from '@main/MainStyle';
 
-import AddButton from '../../../common/assets/icons/AddButton.png';
-import LeftArrow from '../../../common/assets/icons/LeftArrow.png';
-import RightArrow from '../../../common/assets/icons/RightArrow.png';
+import LeftArrow from '@assets/icons/LeftArrow.png';
+import RightArrow from '@assets/icons/RightArrow.png';
+import user, { Projects } from '@api/user';
+import ProjPoliceButton from '@widgets/buttons/ProjPoliceButton';
+import CreateProjectkModal from '@widgets/modals/CreateProjectModal';
 
 function ProjectList() {
-  const projectItems = [
-    {
-      title: '프로젝트 1',
-      members: ['철수', '영희', '민지'],
-      tasks: ['할 일 1', '할 일 2', '할 일 3', '할 일 4'],
-      backgroundColor: colors.yellow,
-    },
-    {
-      title: '프로젝트 2',
-      members: ['철수', '영희', '민지'],
-      tasks: ['할 일 1', '할 일 2', '할 일 3', '할 일 4'],
-      backgroundColor: colors.blue,
-    },
-    {
-      title: '프로젝트 3',
-      members: ['철수', '영희', '민지'],
-      tasks: ['할 일 1', '할 일 2', '할 일 3', '할 일 4', '할 일 5', '할 일 6'],
-      backgroundColor: colors.black,
-    },
-    {
-      title: '프로젝트 4',
-      members: ['철수', '영희', '민지'],
-      tasks: ['할 일 1', '할 일 2', '할 일 3', '할 일 4'],
-      backgroundColor: colors.yellow,
-    },
-    {
-      title: '프로젝트 5',
-      members: ['철수', '영희', '민지'],
-      tasks: ['할 일 1', '할 일 2', '할 일 3', '할 일 4'],
-      backgroundColor: colors.blue,
-    },
-    {
-      title: '프로젝트 6',
-      members: ['철수', '영희', '민지'],
-      tasks: ['할 일 1', '할 일 2', '할 일 3', '할 일 4', '할 일 5', '할 일 6'],
-      backgroundColor: colors.black,
-    },
-    {
-      title: '프로젝트 7',
-      members: ['철수', '영희', '민지'],
-      tasks: ['할 일 1', '할 일 2', '할 일 3', '할 일 4'],
-      backgroundColor: colors.yellow,
-    },
-    {
-      title: '프로젝트 8',
-      members: ['철수', '영희', '민지'],
-      tasks: ['할 일 1', '할 일 2', '할 일 3', '할 일 4'],
-      backgroundColor: colors.blue,
-    },
-    {
-      title: '프로젝트 9',
-      members: ['철수', '영희', '민지'],
-      tasks: ['할 일 1', '할 일 2', '할 일 3', '할 일 4', '할 일 5', '할 일 6'],
-      backgroundColor: colors.black,
-    },
-  ];
+  const [items, setItems] = useState<Projects[]>([]);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    user.projects().then((response) => {
+      setItems(response.data.projects);
+    });
+  }, []);
 
   const itemsPerPage = 3; // 한 페이지에 보여질 아이템 수
   const [currentPage, setCurrentPage] = useState(0);
@@ -79,16 +32,19 @@ function ProjectList() {
 
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const visibleItems = projectItems.slice(startIndex, endIndex);
+  const visibleItems = items.slice(startIndex, endIndex);
+
+  const handleModalVisible = () => {
+    setVisible(!visible);
+  };
 
   return (
     <ProjectContainer>
+      <CreateProjectkModal visible={visible} handleVisible={handleModalVisible} />
       <TextContainer>
-        <div style={{ display: 'flex', alignItems: 'center', justifyItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyItems: 'center', width: '100%', gap: '1%' }}>
           <h4>프로젝트</h4>
-          <button style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
-            <img src={AddButton} style={{ width: '70%', height: '100%' }}></img>
-          </button>
+          <ProjPoliceButton width={55} height={30} context="+ 추가" onClick={handleModalVisible} />
         </div>
         <p>
           <div>
@@ -97,7 +53,7 @@ function ProjectList() {
                 <img src={LeftArrow} style={{ width: '70%', height: '100%' }}></img>
               </button>
             )}
-            {endIndex < projectItems.length && (
+            {endIndex < items.length && (
               <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={handleNextPage}>
                 <img src={RightArrow} style={{ width: '70%', height: '50%' }}></img>
               </button>
@@ -107,7 +63,7 @@ function ProjectList() {
       </TextContainer>
       <ProjectBoxContainer>
         {visibleItems.map((project, index) => (
-          <ProjectItem {...project} projectId={index} key={index} />
+          <ProjectItem {...project} key={index} />
         ))}
       </ProjectBoxContainer>
     </ProjectContainer>

@@ -40,7 +40,13 @@ export const Box = styled.div<BoxProps>`
   flex-direction: column;
   border-color: ${colors.default};
   border-width: ${(props) =>
-    props.position === 'left' ? '5px 2.5px 5px 5px' : props.position === 'right' ? '5px 5px 5px 2.5px' : '5px'};
+    props.type === 'name'
+      ? '5px 2.5px 5px 5px'
+      : props.type === 'image'
+      ? '5px 5px 5px 2.5px'
+      : props.type === 'email'
+      ? '0px 5px 0px 5px'
+      : '5px'};
   border-style: solid;
   padding-left: 5%;
   justify-content: space-evenly;

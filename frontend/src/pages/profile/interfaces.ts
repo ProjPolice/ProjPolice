@@ -1,3 +1,3 @@
 export interface BoxProps {
-  position?: 'left' | 'right';
+  type?: 'name' | 'image' | 'email';
 }
