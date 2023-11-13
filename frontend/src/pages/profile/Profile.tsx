@@ -30,15 +30,28 @@ function Profile() {
         <Header>
           <HeaderText>프로필 관리</HeaderText>
           {isEditing ? (
-            <button onClick={handleSaveProfile}>저장</button>
+            <p onClick={handleSaveProfile} style={{ cursor: 'pointer', marginRight: '5%' }}>
+              저장
+            </p>
           ) : (
-            <button onClick={() => setIsEditing(true)}>프로필 수정</button>
+            <p onClick={() => setIsEditing(true)} style={{ cursor: 'pointer', marginRight: '5%' }}>
+              프로필수정
+            </p>
           )}
         </Header>
         <Row>
           <Box position="left">
             <h4>회원명</h4>
-            {isEditing ? <input type="text" value={name} onChange={handleName} /> : <h6>{name}</h6>}
+            {isEditing ? (
+              <input
+                type="text"
+                style={{ width: '50%', height: '20%' }}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            ) : (
+              <h6>{name}</h6>
+            )}
           </Box>
           <Box position="right">
             <h4>프로필 사진</h4>
@@ -55,13 +68,31 @@ function Profile() {
         <Row>
           <Box>
             <h4>이메일</h4>
-            {isEditing ? <input type="text" value={email} onChange={handleEmail} /> : <h6>{email}</h6>}
+            {isEditing ? (
+              <input
+                type="text"
+                style={{ width: '50%', height: '20%' }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            ) : (
+              <h6>{email}</h6>
+            )}
           </Box>
         </Row>
         <Row>
           <Box>
             <h4>비밀번호</h4>
-            {isEditing ? <input type="text" value={password} onChange={handlePassword} /> : <h6>{password}</h6>}
+            {isEditing ? (
+              <input
+                type="text"
+                style={{ width: '50%', height: '20%' }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            ) : (
+              <h6>{password}</h6>
+            )}
           </Box>
         </Row>
       </Container>

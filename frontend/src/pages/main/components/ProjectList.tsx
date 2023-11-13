@@ -4,6 +4,10 @@ import ProjectItem from './ProjectList/ProjectItem';
 import { colors } from '@assets/design/colors';
 import { ProjectBoxContainer, ProjectContainer, TextContainer } from '@main/MainStyle';
 
+import AddButton from '../../../common/assets/icons/AddButton.png';
+import LeftArrow from '../../../common/assets/icons/LeftArrow.png';
+import RightArrow from '../../../common/assets/icons/RightArrow.png';
+
 function ProjectList() {
   const projectItems = [
     {
@@ -80,14 +84,26 @@ function ProjectList() {
   return (
     <ProjectContainer>
       <TextContainer>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyItems: 'center' }}>
           <h4>프로젝트</h4>
-          <button>프로젝트 생성</button>
+          <button style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
+            <img src={AddButton} style={{ width: '70%', height: '100%' }}></img>
+          </button>
         </div>
-        <div>
-          {currentPage > 0 && <button onClick={handlePrevPage}>이전</button>}
-          {endIndex < projectItems.length && <button onClick={handleNextPage}>다음</button>}
-        </div>
+        <p>
+          <div>
+            {currentPage > 0 && (
+              <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={handlePrevPage}>
+                <img src={LeftArrow} style={{ width: '70%', height: '100%' }}></img>
+              </button>
+            )}
+            {endIndex < projectItems.length && (
+              <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={handleNextPage}>
+                <img src={RightArrow} style={{ width: '70%', height: '50%' }}></img>
+              </button>
+            )}
+          </div>
+        </p>
       </TextContainer>
       <ProjectBoxContainer>
         {visibleItems.map((project, index) => (

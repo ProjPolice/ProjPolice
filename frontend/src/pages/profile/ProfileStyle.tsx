@@ -18,6 +18,7 @@ export const Header = styled.div`
   border-radius: 10px 10px 0px 0px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 `;
 
 export const HeaderText = styled.h1`
