@@ -9,14 +9,16 @@ import { selectedIndexState } from 'state/project';
 
 const projectDetails = [
   {
-    projectName: 'Project 1',
-    leader: 'Project Leader 1',
+    projectName: '할 일 A',
+    leader: '담당자 1',
     members: ['Member 1', 'Member 2', 'Member 3'],
+    file: 'file1.pdf',
   },
   {
-    projectName: 'Project 2',
-    leader: 'Project Leader 2',
+    projectName: '할 일 B',
+    leader: '담당자 2',
     members: ['Member 4', 'Member 5', 'Member 6'],
+    file: 'file2.pdf',
   },
 ];
 
@@ -27,30 +29,30 @@ function TaskDetail() {
     console.log(selectedIndex);
   }, [selectedIndex]);
 
-  // Conditional rendering based on the selectedIndex
   const selectedProject = projectDetails[selectedIndex];
 
   return (
     <Container width={'30%'} height={'90%'}>
       <ContainerNav height={'14.5%'} background="">
-        <p>프로젝트 정보</p>
+        <p>할 일 정보</p>
       </ContainerNav>
       <ContainerNav height={'1.5px'} background="#d8d8d8" />
       <DetailContainer width={'100%'} height={'85%'} background="" flexdirection="column">
         <DetailContainer width={'100%'} height={'30%'} background="" flexdirection="row">
           <DetailBox width={'50%'} height={'100%'} background="">
-            <h6>프로젝트명</h6>
-            <p>{selectedProject?.projectName}</p>
+            <h6>{selectedProject?.projectName}</h6>
           </DetailBox>
           <DetailBox width={'50%'} height={'100%'} background="">
-            <h6>담당자</h6>
-            <p>{selectedProject?.leader}</p>
+            <h6>{selectedProject?.leader}</h6>
           </DetailBox>
         </DetailContainer>
         <DetailBox width={'100%'} height={'40%'} background="">
           <h6>구성원</h6>
-          {/* Pass members to MemberList component */}
           <MemberList members={selectedProject?.members || []} />
+        </DetailBox>
+        <DetailBox width={'100%'} height={'40%'} background="">
+          <h6>최신파일</h6>
+          <h6>{selectedProject?.file}</h6>
         </DetailBox>
       </DetailContainer>
     </Container>
