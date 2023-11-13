@@ -14,6 +14,7 @@ import com.projpolice.domain.task.dto.TaskChangePackagingDto;
 import com.projpolice.domain.task.dto.TaskNameProjectNameOwnerNameProjectionData;
 import com.projpolice.domain.task.repository.rdb.TaskRepository;
 import com.projpolice.domain.user.domain.rdb.User;
+import com.projpolice.domain.user.dto.UserEmailFcmTokenProjection;
 import com.projpolice.domain.user.repository.rdb.UserRepository;
 import com.projpolice.global.common.error.exception.BaseException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
@@ -180,11 +181,10 @@ public class NotificationServiceImpl implements NotificationService {
 
         final String body = bodyBuilder.toString();
 
-        // TODO: change it as projection instead of using List<User>
-        List<User> otherUsersRelatedToTask = taskRepository.findOtherUsersInTasksById(taskId, invokedUserId);
+        List<UserEmailFcmTokenProjection> otherUsersRelatedToTask = taskRepository.findOtherUsersInTasksById(taskId, invokedUserId);
         List<String> emails = new ArrayList<>();
         List<String> fcmTokens = new ArrayList<>();
-        for (User user : otherUsersRelatedToTask) {
+        for (UserEmailFcmTokenProjection user : otherUsersRelatedToTask) {
             if (user.getFcmToken() != null) {
                 fcmTokens.add(user.getFcmToken());
             }

@@ -15,6 +15,7 @@ import com.projpolice.domain.task.dto.ProjectIdEpicIdProjectionData;
 import com.projpolice.domain.task.dto.TaskNameProjectNameOwnerNameProjectionData;
 import com.projpolice.domain.task.dto.UserTaskProjectionData;
 import com.projpolice.domain.user.domain.rdb.User;
+import com.projpolice.domain.user.dto.UserEmailFcmTokenProjection;
 
 import io.lettuce.core.dynamic.annotation.Param;
 
@@ -126,15 +127,16 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     Optional<TaskNameProjectNameOwnerNameProjectionData> findNameProjectNameProjectionById(
         @Param("taskId") long taskId);
 
-    // TODO: make it as projection when User Entity have FCM token
     @Query("""
-        select userProject.user
+        select 
+         userProject.user.email as email,
+         userProject.user.fcmToken as fcmToken
         from Task task
         left join Epic epic on task.epic.id = epic.id
         left join UserProject userProject on epic.project.id = userProject.project.id
         where task.deleted = false and task.id = :taskId and userProject.user.id != :userId
         """)
-    List<User> findOtherUsersInTasksById(@Param("taskId") long taskId, @Param("userId") long userId);
+    List<UserEmailFcmTokenProjection> findOtherUsersInTasksById(@Param("taskId") long taskId, @Param("userId") long userId);
 
     @Query("""
         select
@@ -157,4 +159,23 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
         where task.deleted = false and project.id = :projectId
         """)
     List<ProjectDetailProjection> findProjectTaskDetailsByProjectId(@Param("projectId") long projectId);
+
+    @Query("""
+        select
+         task.id as taskId,
+         task.name as taskName,
+         task.startDate as startDate,
+         task.endDate as endDate,
+         task.status as taskStatus,
+         task.user.id as userId,
+         task.user.name as userName,
+         task.user.image as userImage,
+         file.name as fileName,
+         file.uuid as fileUuid
+        from Task task
+        left join Epic epic on task.epic.id = epic.id
+        left outer join File file on file.task.id = task.id
+        where task.deleted = false and epic.id = :epicId
+        """)
+    List<ProjectDetailProjection> findEpicTaskDetailsByEpicId(@Param("epicId") long epicId);
 }

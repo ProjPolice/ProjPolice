@@ -25,4 +25,6 @@ public interface TaskService {
         LocalDate endDate);
 
     List<ProjectTaskDetails> selectProjectTaskDetailByProjectId(long projectId);
+
+    List<ProjectTaskDetails> selectEpicTaskDetailByEpicId(long epicId);
 }
