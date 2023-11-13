@@ -134,4 +134,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
         where task.deleted = false and task.id = :taskId and userProject.user.id != :userId
         """)
     List<User> findOtherUsersInTasksById(@Param("taskId") long taskId, @Param("userId") long userId);
+
 }
