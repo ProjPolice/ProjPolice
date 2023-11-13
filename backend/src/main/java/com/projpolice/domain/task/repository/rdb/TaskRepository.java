@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.projpolice.domain.task.domain.rdb.Task;
+import com.projpolice.domain.task.dto.ProjectDetailProjection;
 import com.projpolice.domain.task.dto.ProjectIdEpicIdProjectionData;
 import com.projpolice.domain.task.dto.TaskNameProjectNameOwnerNameProjectionData;
 import com.projpolice.domain.task.dto.UserTaskProjectionData;
@@ -135,4 +136,25 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
         """)
     List<User> findOtherUsersInTasksById(@Param("taskId") long taskId, @Param("userId") long userId);
 
+    @Query("""
+        select
+         task.id as taskId,
+         task.name as taskName,
+         task.startDate as startDate,
+         task.endDate as endDate,
+         task.status as taskStatus,
+         task.user.id as userId,
+         task.user.name as userName,
+         task.user.image as userImage,
+         epic.id as epicId,
+         epic.name as epicName,
+         file.name as fileName,
+         file.uuid as fileUuid
+        from Task task
+        left join Epic epic on task.epic.id = epic.id
+        left join Project project on project.id = epic.project.id
+        left outer join File file on file.task.id = task.id
+        where task.deleted = false and project.id = :projectId
+        """)
+    List<ProjectDetailProjection> findProjectTaskDetailsByProjectId(@Param("projectId") long projectId);
 }

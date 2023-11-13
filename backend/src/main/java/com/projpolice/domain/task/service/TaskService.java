@@ -3,6 +3,7 @@ package com.projpolice.domain.task.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.projpolice.domain.task.dto.ProjectTaskDetails;
 import com.projpolice.domain.task.dto.TaskDetailItem;
 import com.projpolice.domain.task.dto.TaskRelatedProjectionData;
 import com.projpolice.domain.task.request.TaskCreateRequest;
@@ -22,4 +23,6 @@ public interface TaskService {
 
     List<TaskRelatedProjectionData> selectUserTaskRelatedDataWithRange(LocalDate startDate,
         LocalDate endDate);
+
+    List<ProjectTaskDetails> selectProjectTaskDetailByProjectId(long projectId);
 }
