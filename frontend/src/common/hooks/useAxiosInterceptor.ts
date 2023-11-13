@@ -4,6 +4,7 @@ import { tokenState } from 'state/user';
 
 export const useAxiosInterceptor = () => {
   const token = useRecoilValue(tokenState);
+  console.log('인터셉터 호출');
   instance.interceptors.request.use((config) => {
     const newConfig = { ...config };
     if (token.accessToken.length !== 0) {

@@ -11,9 +11,7 @@ import { tokenState } from 'state/user';
 const NavigationBar = () => {
   const token = useRecoilValue(tokenState);
 
-  const logout = () => {
-    useResetRecoilState(tokenState);
-  };
+  const logout = useResetRecoilState(tokenState);
 
   return (
     <NavBar>
