@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.api.Http;
 import com.projpolice.domain.task.dto.ProjectTaskDetails;
 import com.projpolice.domain.task.dto.TaskDetailItem;
 import com.projpolice.domain.task.request.TaskCreateRequest;
@@ -118,15 +119,23 @@ public class TaskController {
             throw new BaseException(ExceptionInfo.INVALID_METADATA);
         }
 
+        List<ProjectTaskDetails> list;
+        String message;
+
         if (epicId == null) {
-            return ResponseEntity.ok()
-                .body(BaseResponse.<List<ProjectTaskDetails>>builder()
-                    .code(200)
-                    .message("프로젝트의 세부 작업 리스트 조회 성공")
-                    .data(taskService.selectProjectTaskDetailByProjectId(projectId))
-                    .build()
-                );
+            list = taskService.selectProjectTaskDetailByProjectId(projectId);
+            message = "프로젝트의 세부 작업 리스트 조회 성공";
+        } else {
+            list = taskService.selectEpicTaskDetailByEpicId(epicId);
+            message = "할일의 세부 작업 리스트 조회 성공";
         }
-        return null;
+
+        return ResponseEntity.ok()
+            .body(BaseResponse.<List<ProjectTaskDetails>>builder()
+                .code(HttpStatus.OK.value())
+                .message(message)
+                .data(list)
+                .build()
+            );
     }
 }

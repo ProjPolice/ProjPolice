@@ -201,10 +201,19 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<ProjectTaskDetails> selectProjectTaskDetailByProjectId(long projectId) {
-        // add check
-
+        projectAuthManager.checkProjectMembershipOrThrow(projectId);
         List<ProjectDetailProjection> projectTaskDetailsByProjectId = taskRepository.findProjectTaskDetailsByProjectId(
             projectId);
+        return projectTaskDetailsByProjectId.stream()
+            .map(ProjectTaskDetails::new)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProjectTaskDetails> selectEpicTaskDetailByEpicId(long epicId) {
+        projectAuthManager.checkEpicMembershipOrThrow(epicId);
+        List<ProjectDetailProjection> projectTaskDetailsByProjectId = taskRepository.findEpicTaskDetailsByEpicId(
+            epicId);
         return projectTaskDetailsByProjectId.stream()
             .map(ProjectTaskDetails::new)
             .collect(Collectors.toList());

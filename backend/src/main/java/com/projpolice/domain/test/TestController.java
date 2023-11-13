@@ -20,7 +20,7 @@ public class TestController {
 
     @PostMapping("/mail")
     public String emailTest(@RequestBody MailDto mail) {
-
+        mailService.sendMail(mail);
         return "Send";
     }
 }
