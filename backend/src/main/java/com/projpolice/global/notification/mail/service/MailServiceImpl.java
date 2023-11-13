@@ -3,6 +3,7 @@ package com.projpolice.global.notification.mail.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 import com.projpolice.global.notification.mail.dto.MailDto;
@@ -13,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MailServiceImpl implements MailService {
 
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender = new JavaMailSenderImpl();
 
     @Value("${projpolice.mail.sender}")
     private String sender;
