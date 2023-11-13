@@ -1,4 +1,4 @@
-package com.projpolice.global.firebase;
+package com.projpolice.global.notification;
 
 import com.projpolice.domain.task.dto.TaskChangePackagingDto;
 

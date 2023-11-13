@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.management.Notification;
-
 import org.jboss.resteasy.spi.UnauthorizedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,7 +34,7 @@ import com.projpolice.global.common.error.exception.BadRequestException;
 import com.projpolice.global.common.error.exception.UnAuthorizedException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.manager.ProjectAuthManager;
-import com.projpolice.global.firebase.NotificationService;
+import com.projpolice.global.notification.NotificationService;
 import com.projpolice.global.redis.RedisService;
 import com.projpolice.global.storage.base.StorageConnector;
 
