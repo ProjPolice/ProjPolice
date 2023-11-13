@@ -1,14 +1,14 @@
 import { CommonResponse, http } from './http';
 
 export default {
-  create: (data: CreateRequest) => http.post<CreateResponse>('projects', { data }),
+  create: (data: CreateRequest) => http.post<CreateResponse>('projects', data),
   memberdata: (projectId: number) => http.get<MemberDataResponse>(`projects/${projectId}/users`),
   memberCreate: (projectId: number, data: MemberCreateRequest) =>
-    http.post<MemberCreateResponse>(`projects/${projectId}/users`, { data }),
+    http.post<MemberCreateResponse>(`projects/${projectId}/users`, data),
   memberDelete: (projectId: number, userId: number) =>
     http.post<MemberDeleteResponse>(`projects/${projectId}/users/${userId}`),
   delete: (projectId: number) => http.delete<DeleteResponse>(`/projects/${projectId}`),
-  modify: (projectId: number, data: ModifyRequest) => http.patch<ModifyResponse>(`projects/${projectId}`, { data }),
+  modify: (projectId: number, data: ModifyRequest) => http.patch<ModifyResponse>(`projects/${projectId}`, data),
   data: (projectId: number) => http.get<DataResponse>(`projects/${projectId}`),
 };
 

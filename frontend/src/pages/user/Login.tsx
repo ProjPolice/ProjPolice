@@ -1,11 +1,43 @@
 import { Page, link } from '@assets/design/globalStyles';
 import { Container, Box, Header, HeaderText, InputBox, Column, Button, LoginFooter } from './UserStyle';
 import { colors } from '@assets/design/colors';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useTextInput } from 'common/hooks/useTextInput';
+import user from '@api/user';
+import { useSetRecoilState } from 'recoil';
+import { tokenState } from 'state/user';
 
 function Login() {
+  const navigate = useNavigate();
   const findId = () => {};
   const findPassword = () => {};
+
+  const [email, handleEmail] = useTextInput();
+  const [password, handlePassword] = useTextInput();
+
+  const setToken = useSetRecoilState(tokenState);
+
+  const submitLogin = () => {
+    const data = {
+      email: email,
+      password: password,
+    };
+    user
+      .login(data)
+      .then((response) => {
+        console.log(response);
+        if (response.code === 200) {
+          setToken(response.data);
+          navigate('/');
+        } else if (response.code === 1002) {
+          alert('로그인에 실패하였습니다.');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <Page>
       <Container>
@@ -24,6 +56,8 @@ function Login() {
                   border: 'none',
                   outline: 'none',
                 }}
+                value={email}
+                onChange={handleEmail}
               />
             </InputBox>
             <InputBox topLeftRadius="0px" topRightRadius="0px" bottomLeftRadius="8px" bottomRightRadius="8px">
@@ -36,11 +70,13 @@ function Login() {
                   border: 'none',
                   outline: 'none',
                 }}
+                value={password}
+                onChange={handlePassword}
               />
             </InputBox>
           </Column>
           <Column height="10%">
-            <Button>로그인</Button>
+            <Button onClick={submitLogin}>로그인</Button>
           </Column>
         </Box>
         <LoginFooter>

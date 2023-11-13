@@ -2,7 +2,9 @@ import { colors } from '@assets/design/colors';
 import { DetailContainer } from '@project/ProjectStyle';
 import { ProfileBox } from '@project/ProjectStyle';
 import { Photo } from '@project/ProjectStyle';
-import DefaultProfilePhoto from '../../../../src/common/assets/icons/Logo.png';
+
+import DefaultProfilePhoto from '@assets/images/ProjPoliceIcon.png';
+
 function MemberList() {
   return (
     <DetailContainer width={'100%'} height={'35%'} background="" flexdirection="row">

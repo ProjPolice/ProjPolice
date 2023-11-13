@@ -2,8 +2,9 @@ import { TimeLineContainer, TimeLineBar } from '@project/ProjectStyle';
 import { colors } from '@assets/design/colors';
 import { Photo } from '@project/ProjectStyle';
 import { TimelineInfoLeft } from '@project/ProjectStyle';
-import DefaultProfilePhoto from '../../../../src/common/assets/icons/Logo.png';
-import DefaultFileIcon from '../../../../src/common/assets/icons/Stick.png';
+
+import DefaultProfilePhoto from '@assets/images/ProjPoliceIcon.png';
+import DefaultFileIcon from '@assets/icons/Stick.png';
 
 function TimelineList() {
   const items = [

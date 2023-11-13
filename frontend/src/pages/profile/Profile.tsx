@@ -1,17 +1,28 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Page } from '@assets/design/globalStyles';
 import { Box, Container, Header, HeaderText, Row } from './ProfileStyle';
+import user from '@api/user';
+import { useTextInput } from 'common/hooks/useTextInput';
+import { useImageInput } from 'common/hooks/useFileInput';
 
 function Profile() {
-  const [name, setName] = useState('회원명');
-  const [photo, setPhoto] = useState('사진');
-  const [email, setEmail] = useState('이메일');
-  const [password, setPassword] = useState('비밀번호');
+  const [name, handleName, setName] = useTextInput();
+  const [, handleImage, imageSrc, setImageSrc] = useImageInput();
+  const [email, handleEmail, setEmail] = useTextInput();
+  const [password, handlePassword] = useTextInput();
   const [isEditing, setIsEditing] = useState(false);
 
   const handleSaveProfile = () => {
     setIsEditing(false);
   };
+
+  useEffect(() => {
+    user.data().then((response) => {
+      setName(response.data.name);
+      setImageSrc(response.data.image);
+      setEmail(response.data.email);
+    });
+  }, []);
 
   return (
     <Page>
@@ -45,9 +56,12 @@ function Profile() {
           <Box position="right">
             <h4>프로필 사진</h4>
             {isEditing ? (
-              <input type="text" value={photo} onChange={(e) => setPhoto(e.target.value)} />
+              <div>
+                <input type="file" onChange={handleImage} />
+                <></>
+              </div>
             ) : (
-              <h6>{photo}</h6>
+              <img src={imageSrc} />
             )}
           </Box>
         </Row>

@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 import ProjectItem from './ProjectList/ProjectItem';
 import { colors } from '@assets/design/colors';
@@ -108,7 +107,7 @@ function ProjectList() {
       </TextContainer>
       <ProjectBoxContainer>
         {visibleItems.map((project, index) => (
-          <ProjectItem {...project} projectId={index} />
+          <ProjectItem {...project} projectId={index} key={index} />
         ))}
       </ProjectBoxContainer>
     </ProjectContainer>

@@ -1,24 +1,25 @@
 import { colors } from '@assets/design/colors';
 import { link } from '@assets/design/globalStyles';
 import styled from '@emotion/styled';
-import { userState } from 'State';
+
 import { Link } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
+
+import Logo from '@assets/images/ProjPoliceIcon.png';
+import { tokenState } from 'state/user';
 
 const NavigationBar = () => {
-  const [user, setUser] = useRecoilState(userState);
+  const token = useRecoilValue(tokenState);
 
   const logout = () => {
-    setUser({
-      token: '',
-    });
+    useResetRecoilState(tokenState);
   };
 
   return (
     <NavBar>
       <LogoContainer>
         <Link to={'/'}>
-          <img src="../../../src/common/assets/icons/Logo.png" />
+          <img src={Logo} height={'55px'} />
         </Link>
       </LogoContainer>
       <ToolBox>
@@ -33,11 +34,9 @@ const NavigationBar = () => {
           </Link>
         </Segment>
         <Segment>
-          <a href={''} css={link}>
-            <p>알림</p>
-          </a>
+          <p>알림</p>
         </Segment>
-        {user.token === '' ? (
+        {token.accessToken === '' ? (
           <Segment>
             <Link to={'/login'} css={link}>
               <p>로그인</p>
