@@ -5,8 +5,12 @@ import { TimelineInfoLeft } from '@project/ProjectStyle';
 
 import DefaultProfilePhoto from '@assets/images/ProjPoliceIcon.png';
 import DefaultFileIcon from '@assets/icons/Stick.png';
+import { useSetRecoilState } from 'recoil';
+import { selectedIndexState } from 'state/project';
 
 function TimelineList() {
+  const setSelectedIndex = useSetRecoilState(selectedIndexState);
+
   const items = [
     {
       id: 1,
@@ -29,7 +33,13 @@ function TimelineList() {
   return (
     <TimeLineContainer width={'100%'} height={'85%'} background="">
       {items.map((item, index) => (
-        <TimeLineBar key={index} width={item.width} height={'33px'} background={item.background}>
+        <TimeLineBar
+          key={index}
+          width={item.width}
+          height={'33px'}
+          background={item.background}
+          onClick={() => setSelectedIndex(index)}
+        >
           <TimelineInfoLeft>
             <p style={{ fontSize: '15px' }}>{item.title}</p>
             <Photo

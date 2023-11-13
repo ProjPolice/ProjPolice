@@ -5,8 +5,18 @@ import { SectionHeader } from './ProjectStyle';
 import ProjectCalendarTimeline from './components/ProjectCalendarTimeline';
 import ProjectDetail from './components/ProjectDetail';
 import ProjectTaskList from './components/ProjectEpicList';
+import { selectedIndexState } from 'state/project';
+import { useRecoilValue } from 'recoil';
+import { useEffect } from 'react';
+import TaskDetail from './components/TaskDetail';
 
 function Project() {
+  const selectedIndex = useRecoilValue(selectedIndexState);
+
+  useEffect(() => {
+    console.log(selectedIndex);
+  }, [selectedIndex]);
+
   return (
     <Page>
       <CenterContainer background="">
@@ -16,7 +26,7 @@ function Project() {
 
         <ProjectSection height={'50%'} background="">
           <ProjectCalendarTimeline />
-          <ProjectDetail />
+          {selectedIndex === -1 ? <ProjectDetail /> : <TaskDetail />}
         </ProjectSection>
 
         <SectionHeader height={'8%'} background="" alignitems="end">
