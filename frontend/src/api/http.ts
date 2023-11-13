@@ -1,5 +1,5 @@
 // import { getToken } from '@utils/getToken';
-import Axios from 'axios';
+import Axios, { AxiosRequestConfig } from 'axios';
 
 export const ROOT = 'https://api.projpolice.com/';
 
@@ -9,7 +9,7 @@ export const instance = Axios.create({
 
 export const http = {
   get: <Response = unknown>(url: string) => instance.get<Response>(url).then((response) => response.data),
-  post: <Response = unknown, Request = unknown>(url: string, body?: Request, config?: any) =>
+  post: <Response = unknown, Request = unknown>(url: string, body?: Request, config?: AxiosRequestConfig) =>
     instance.post<Response>(url, body, config).then((response) => response.data),
   put: <Response = unknown, Request = unknown>(url: string, body?: Request) =>
     instance.put<Response>(url, body).then((response) => response.data),
