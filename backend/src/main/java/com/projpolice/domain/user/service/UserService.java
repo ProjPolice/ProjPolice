@@ -18,5 +18,6 @@ public interface UserService {
     UserInfoResponse updateUserInfo(UserUpdateRequest request);
 
     UserLogoutResponse logout();
+    String reissue(String refreshToken);
 
 }

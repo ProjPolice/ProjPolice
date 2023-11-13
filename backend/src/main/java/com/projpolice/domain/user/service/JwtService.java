@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.projpolice.domain.user.domain.rdb.User;
+import com.projpolice.domain.user.domain.redis.RefreshTokenRedisData;
+import com.projpolice.domain.user.repository.redis.RefreshTokenRepository;
 import com.projpolice.global.common.error.exception.UnAuthorizedException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 
@@ -22,16 +24,18 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-
+import lombok.RequiredArgsConstructor;
 
 /**
  * Spring Security의 Jwt 와 관련된 작업들에 대한 컴포넌트이다.
  */
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
     @Value("${JWT_SECRET_KEY}")
     private String SECRET_KEY;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     /**
      * Jwt 토큰으로부터 사용자 메일을 추출한다.
@@ -48,11 +52,11 @@ public class JwtService {
      * @return claim
      */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        try{
+        try {
             final Claims claims = extractAllClaims(token);
             return claimsResolver.apply(claims);
-        }catch (ExpiredJwtException e){
-            throw new UnAuthorizedException(ExceptionInfo.ACESSTOKEN_EXPIRED );
+        } catch (ExpiredJwtException e) {
+            throw new UnAuthorizedException(ExceptionInfo.ACCESS_TOKEN_EXPIRED);
         }
     }
 
@@ -65,20 +69,60 @@ public class JwtService {
         return generateToken(new HashMap<>(), userDetails);
     }
 
+    public String generateToken(Map<String, Object> extraClaims, String userId) {
+        return Jwts
+            .builder()
+            .setClaims(extraClaims)
+            .setSubject(String.valueOf(userId))
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24)) // 24분
+            .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+            .compact();
+    }
+
+    public String generateToken(Map<String, Object> extraClaims, long userId) {
+        return generateToken(extraClaims, String.valueOf(userId));
+    }
+
     /**
      * 추가할 extraClaims를 포함하여 UserDetails객체 정보를 Claim에 담아 Jwt를 생성한다.
      *
      * @return String token
      */
-    public String generateToken (Map<String, Object> extraClaims, UserDetails userDetails) {
-        return Jwts
+    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        return generateToken(extraClaims, userDetails.getUsername());
+    }
+
+    /**
+     * Refresh 토큰 생성
+     */
+    public String generateRefreshToken(String userId) {
+        String refreshToken = Jwts
             .builder()
-            .setClaims(extraClaims)
-            .setSubject(userDetails.getUsername())
+            .setSubject(userId)
             .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 2)) // 2일
             .signWith(getSignInKey(), SignatureAlgorithm.HS256)
             .compact();
+
+        // redis에 저장
+        refreshTokenRepository.save(RefreshTokenRedisData.builder()
+            .id(userId)
+            .refreshToken(refreshToken)
+            .build());
+
+        return refreshToken;
+    }
+
+    public String generateRefreshToken(long userId) {
+        return generateRefreshToken(String.valueOf(userId));
+    }
+
+    /**
+     * Refresh 토큰 생성
+     */
+    public String generateRefreshToken(UserDetails userDetails) {
+        return generateRefreshToken(userDetails.getUsername());
     }
 
     /**

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +34,7 @@ import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.base.BaseResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -115,7 +117,7 @@ public class UserController {
      * @return 인증에 필요한 Jwt Token 발급
      */
     @PostMapping
-    @Operation(summary = "사용자 로그인", security = @SecurityRequirement(name = "Authorization"), description = "이메일과 패스워드를 받아 Access Token을 반환합니다. 추가적으로 FCM을 위해 토큰 입력을 해야합니다.")
+    @Operation(summary = "사용자 로그인",  description = "이메일과 패스워드를 받아 Access Token을 반환합니다. 추가적으로 FCM을 위해 토큰 입력을 해야합니다.")
     public ResponseEntity<BaseResponse<UserLoginResponse>> login(@RequestBody UserLoginRequest request) {
 
         return ResponseEntity.ok()
@@ -136,6 +138,19 @@ public class UserController {
                 .code(200)
                 .message("로그아웃 성공")
                 .data(userService.logout())
+                .build()
+            );
+    }
+
+    @GetMapping("/reissue")
+    @Operation(summary = "사용자 리프레쉬 토큰 점검 후 재발금", description = "리프레쉬 토큰을 점검하여 유효할 경우 accessToken을 재발급합니다.")
+    public ResponseEntity<BaseResponse<String>> reissue(@RequestHeader("Authorization") String refreshToken) {
+
+        return ResponseEntity.ok()
+            .body(BaseResponse.<String>builder()
+                .code(200)
+                .message("재발급 성공")
+                .data(userService.reissue(refreshToken.substring(7)))
                 .build()
             );
     }
