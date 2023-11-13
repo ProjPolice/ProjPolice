@@ -15,6 +15,8 @@ import com.projpolice.domain.epic.repository.rdb.EpicRepository;
 import com.projpolice.domain.file.dto.FileDetailItem;
 import com.projpolice.domain.file.repository.FileRepository;
 import com.projpolice.domain.task.domain.rdb.Task;
+import com.projpolice.domain.task.dto.ProjectDetailProjection;
+import com.projpolice.domain.task.dto.ProjectTaskDetails;
 import com.projpolice.domain.task.dto.TaskChangePackagingDto;
 import com.projpolice.domain.task.dto.TaskDetailItem;
 import com.projpolice.domain.task.dto.TaskRelatedProjectionData;
@@ -77,7 +79,7 @@ public class TaskServiceImpl implements TaskService {
         }
         long projectId = epicRepository.findProjectIdByEpicId(taskCreateRequest.getEpicId())
             .orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC));
-        
+
         redisService.invalidateProject(projectId);
         return TaskDetailItem.of(task, storageConnector.getPreAuthenticatedUrl());
     }
@@ -195,5 +197,16 @@ public class TaskServiceImpl implements TaskService {
             .toList();
         redisService.saveUserProjectsWithDateRange(userId, startDate, endDate, result);
         return result;
+    }
+
+    @Override
+    public List<ProjectTaskDetails> selectProjectTaskDetailByProjectId(long projectId) {
+        // add check
+
+        List<ProjectDetailProjection> projectTaskDetailsByProjectId = taskRepository.findProjectTaskDetailsByProjectId(
+            projectId);
+        return projectTaskDetailsByProjectId.stream()
+            .map(ProjectTaskDetails::new)
+            .collect(Collectors.toList());
     }
 }
