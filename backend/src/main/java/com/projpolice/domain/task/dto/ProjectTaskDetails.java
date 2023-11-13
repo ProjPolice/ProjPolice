@@ -7,11 +7,13 @@ import com.projpolice.domain.user.dto.UserIdNameImgItem;
 import com.projpolice.global.common.base.BaseIdName;
 import com.projpolice.global.common.meta.domain.TaskStatus;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class ProjectTaskDetails {
     private long id;
     private String name;
