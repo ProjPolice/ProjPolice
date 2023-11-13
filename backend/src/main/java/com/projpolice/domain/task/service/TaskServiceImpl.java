@@ -33,7 +33,7 @@ import com.projpolice.global.common.error.exception.TaskException;
 import com.projpolice.global.common.error.exception.UserException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.manager.ProjectAuthManager;
-import com.projpolice.global.firebase.NotificationService;
+import com.projpolice.global.notification.NotificationService;
 import com.projpolice.global.redis.RedisService;
 import com.projpolice.global.storage.base.StorageConnector;
 
