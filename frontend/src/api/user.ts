@@ -59,29 +59,34 @@ interface ModifyResponse extends CommonResponse {
   };
 }
 
-interface TaskResponse extends CommonResponse {
-  data: {
-    task: {
-      id: number;
-      name: string;
-      startDate: string;
-      endDate: string;
-      status: string;
-      epic: {
-        id: number;
-        name: string;
-      };
-      project: {
-        id: number;
-        name: string;
-      };
-      file: {
-        id: number;
-        name: string;
-      };
-      userId: number;
-    }[];
+export interface TaskItem {
+  id: number;
+  name: string;
+  startDate: string;
+  endDate: string;
+  epic: {
+    id: number;
+    name: string;
   };
+  project: {
+    id: number;
+    name: string;
+  };
+  file: {
+    id: number;
+    name: string;
+  };
+  userId: number;
+}
+
+export interface TaskData {
+  todo: TaskItem[];
+  inProgress: TaskItem[];
+  done: TaskItem[];
+}
+
+interface TaskResponse extends CommonResponse {
+  data: TaskData;
 }
 
 export interface Projects {

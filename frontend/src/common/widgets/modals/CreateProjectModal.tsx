@@ -10,12 +10,15 @@ import ProjPoliceButton from '@widgets/buttons/ProjPoliceButton';
 import { ModalProps } from '@interfaces/widgets';
 import { useTextInput } from 'common/hooks/useTextInput';
 import project from '@api/project';
+import { useNavigate } from 'react-router-dom';
 
 function CreateProjectkModal({ visible, handleVisible }: ModalProps) {
   const [name, handleName] = useTextInput();
   const [description, handleDescription] = useTextInput();
   const [startDate, handleStartDate] = useTextInput();
   const [endDate, handleEndDate] = useTextInput();
+
+  const navigate = useNavigate();
 
   const createProject = () => {
     const data = {
@@ -24,7 +27,10 @@ function CreateProjectkModal({ visible, handleVisible }: ModalProps) {
       startDate: startDate,
       endDate: endDate,
     };
-    project.create(data).then((response) => console.log(response.data));
+    project.create(data).then((response) => {
+      const id = response.data.id;
+      navigate(`/project/${id}`);
+    });
   };
 
   return (

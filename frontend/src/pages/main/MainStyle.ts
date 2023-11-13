@@ -43,9 +43,10 @@ export const ProjectContainer = styled.div`
 
 export const ProjectBoxContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   width: 100%;
   height: 70%;
+  padding: 1%;
+  gap: 4%;
 `;
 
 export const ProjectBox = styled.div<{ backgroundColor: string }>`

@@ -3,15 +3,15 @@ import { link } from '@assets/design/globalStyles';
 import styled from '@emotion/styled';
 
 import { Link } from 'react-router-dom';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
 
 import Logo from '@assets/images/ProjPoliceIcon.png';
-import { tokenState } from 'state/user';
 
 const NavigationBar = () => {
-  const token = useRecoilValue(tokenState);
+  const token = sessionStorage.getItem('accessToken');
 
-  const logout = useResetRecoilState(tokenState);
+  const logout = () => {
+    sessionStorage.removeItem('token');
+  };
 
   return (
     <NavBar>
@@ -34,7 +34,7 @@ const NavigationBar = () => {
         <Segment>
           <p>알림</p>
         </Segment>
-        {token.accessToken === '' ? (
+        {token === null ? (
           <Segment>
             <Link to={'/login'} css={link}>
               <p>로그인</p>

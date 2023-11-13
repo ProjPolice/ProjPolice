@@ -4,8 +4,6 @@ import { colors } from '@assets/design/colors';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTextInput } from 'common/hooks/useTextInput';
 import user from '@api/user';
-import { useSetRecoilState } from 'recoil';
-import { tokenState } from 'state/user';
 
 function Login() {
   const navigate = useNavigate();
@@ -14,8 +12,6 @@ function Login() {
 
   const [email, handleEmail] = useTextInput();
   const [password, handlePassword] = useTextInput();
-
-  const setToken = useSetRecoilState(tokenState);
 
   const submitLogin = () => {
     const data = {
@@ -27,7 +23,8 @@ function Login() {
       .then((response) => {
         console.log(response);
         if (response.code === 200) {
-          setToken(response.data);
+          sessionStorage.setItem('accessToken', response.data.accessToken);
+          sessionStorage.setItem('refreshToken', response.data.refreshToken);
           navigate('/');
         } else if (response.code === 1002) {
           alert('로그인에 실패하였습니다.');

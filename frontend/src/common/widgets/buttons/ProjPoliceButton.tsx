@@ -2,7 +2,7 @@ import { colors } from '@assets/design/colors';
 import { css } from '@emotion/react';
 import { ProjPoliceButtonProps } from '@interfaces/widgets';
 
-function ProjPoliceButton({ width, height, color = colors.primary, context, onClick }: ProjPoliceButtonProps) {
+function ProjPoliceButton({ width, height, color = colors.primary, context, onClick, type }: ProjPoliceButtonProps) {
   return (
     <div
       onClick={onClick}
@@ -24,7 +24,7 @@ function ProjPoliceButton({ width, height, color = colors.primary, context, onCl
         }
       `}
     >
-      <p>{context}</p>
+      {type === 'bold' ? <h4>{context}</h4> : <p>{context}</p>}
     </div>
   );
 }

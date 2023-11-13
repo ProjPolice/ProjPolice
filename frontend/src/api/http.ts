@@ -7,6 +7,15 @@ export const instance = Axios.create({
   baseURL: ROOT,
 });
 
+instance.interceptors.request.use((config) => {
+  const token = sessionStorage.getItem('accessToken');
+  const newConfig = { ...config };
+  if (token) {
+    newConfig.headers.Authorization = `Bearer ${token}`;
+  }
+  return newConfig;
+});
+
 export const http = {
   get: <Response = unknown>(url: string) => instance.get<Response>(url).then((response) => response.data),
   post: <Response = unknown, Request = unknown>(url: string, body?: Request, config?: AxiosRequestConfig) =>

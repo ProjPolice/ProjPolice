@@ -10,16 +10,43 @@ export const BoardContainer = styled.div<{ height: string; background: string }>
   height: ${(props) => props.height};
 `;
 
-export const Task = styled.div<{ backgroundColor: string }>`
+export const Task = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to bottom, ${(props) => props.backgroundColor} 10%, ${colors.light} 0%);
+  background: ${colors.light};
   border-radius: 10px;
   box-sizing: border-box;
   width: 100%;
   height: 100%;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+`;
+
+export const TaskHeader = styled.div`
+  width: 100%;
+  height: 10%;
+  background-color: ${colors.primary};
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+`;
+
+export const TaskBody = styled.div`
+  width: 98%;
+  height: 90%;
+  display: flex;
+  gap: 1%;
+`;
+
+export const SectionTitle = styled.h4`
+  font-weight: 100;
+  margin-top: 5%;
+`;
+
+export const SectionContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  align-items: center;
 `;
 
 export const BoardSection = styled.div<{ backgroundColor: string }>`
@@ -31,23 +58,23 @@ export const BoardSection = styled.div<{ backgroundColor: string }>`
   border-radius: 10px;
   box-sizing: border-box;
   width: 100%;
-  height: 85%;
+  height: 92%;
   margin-left: 0.5%;
   margin-right: 0.5%;
-  margin-top: 5%;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
-export const BoardBox = styled.div<{ backgroundColor: string }>`
+export const BoardBox = styled.div<{ backgroundColor: string; isDragging: boolean }>`
   display: flex;
-  flex-direction: row;
-  background: linear-gradient(to right, ${(props) => props.backgroundColor} 10%, ${colors.light} 0%);
+  flex-direction: column;
+  background: linear-gradient(to right, ${(props) => props.backgroundColor} 5%, ${colors.light} 0%);
   border-radius: 10px;
-  box-sizing: border-box;
-  width: 95%;
-  height: 20%;
+  width: 100%;
   margin-top: 3%;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+  padding-left: 6%;
+  padding-top: 3%;
+  opacity: ${(props) => (props.isDragging ? 0.5 : 1)};
 `;
 
 export const TextContainer = styled.div`

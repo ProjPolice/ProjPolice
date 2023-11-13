@@ -4,6 +4,7 @@ export interface ProjPoliceButtonProps {
   color?: string;
   context: string;
   onClick: () => void;
+  type?: string;
 }
 
 export interface ModalProps {

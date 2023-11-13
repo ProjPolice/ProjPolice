@@ -2,9 +2,6 @@ import { useEffect, useState } from 'react';
 
 import ProjectItem from './ProjectList/ProjectItem';
 import { ProjectBoxContainer, ProjectContainer, TextContainer } from '@main/MainStyle';
-
-import LeftArrow from '@assets/icons/LeftArrow.png';
-import RightArrow from '@assets/icons/RightArrow.png';
 import user, { Projects } from '@api/user';
 import ProjPoliceButton from '@widgets/buttons/ProjPoliceButton';
 import CreateProjectkModal from '@widgets/modals/CreateProjectModal';
@@ -44,18 +41,14 @@ function ProjectList() {
       <TextContainer>
         <div style={{ display: 'flex', alignItems: 'center', justifyItems: 'center', width: '100%', gap: '1%' }}>
           <h4>프로젝트</h4>
-          <ProjPoliceButton width={55} height={30} context="+ 추가" onClick={handleModalVisible} />
+          <ProjPoliceButton width={55} height={25} context="+ 추가" onClick={handleModalVisible} />
         </div>
-        <div>
+        <div style={{ display: 'flex', gap: '3%' }}>
           {currentPage > 0 && (
-            <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={handlePrevPage}>
-              <img src={LeftArrow} style={{ width: '70%', height: '100%' }}></img>
-            </button>
+            <ProjPoliceButton width={30} height={30} context="←" onClick={handlePrevPage} type="bold" />
           )}
-          {endIndex < projectItems.length && (
-            <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={handleNextPage}>
-              <img src={RightArrow} style={{ width: '70%', height: '50%' }}></img>
-            </button>
+          {endIndex < items.length && (
+            <ProjPoliceButton width={30} height={30} context="→" onClick={handleNextPage} type="bold" />
           )}
         </div>
       </TextContainer>
