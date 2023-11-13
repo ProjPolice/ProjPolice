@@ -1,4 +1,4 @@
-package com.projpolice.global.firebase;
+package com.projpolice.global.notification.firebase;
 
 import java.util.Collection;
 

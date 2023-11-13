@@ -18,7 +18,7 @@ import com.projpolice.domain.user.repository.rdb.UserRepository;
 import com.projpolice.global.common.error.exception.BaseException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.meta.domain.TaskStatus;
-import com.projpolice.global.firebase.FirebaseNotificationService;
+import com.projpolice.global.notification.firebase.FirebaseNotificationService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

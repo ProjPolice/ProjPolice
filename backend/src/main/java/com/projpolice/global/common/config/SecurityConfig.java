@@ -58,6 +58,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users/join").permitAll()
                 .requestMatchers(HttpMethod.GET, "/users/reissue").permitAll()
+                .requestMatchers("/test/**").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
