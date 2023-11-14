@@ -1,5 +1,6 @@
 package com.projpolice.global.notification.mail.service;
 
+import java.security.SecureRandom;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,8 @@ public class MailServiceImpl implements MailService {
 
     private final String nickname;
 
+    private final SecureRandom random = new SecureRandom();
+
     @Autowired
     MailServiceImpl(Environment env) {
         senderEmail = env.getProperty("projpolice.mail.sender");
@@ -90,7 +93,7 @@ public class MailServiceImpl implements MailService {
         MimeMessage message = new MimeMessage(session);
         try {
             message.setFrom(String.format("%s <%s>", nickname, senderEmail));
-
+            message.setHeader("Message-ID", String.format("%d@%s", random.nextLong(), domain));
             Address[] recipientAddress = InternetAddress.parse(mail.getEmailAddress());
 
             for (Address address : recipientAddress) {
