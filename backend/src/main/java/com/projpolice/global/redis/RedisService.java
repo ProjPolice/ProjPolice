@@ -155,11 +155,18 @@ public class RedisService implements ProjectRedisInterface, EpicRedisInterface, 
         List<TaskRelatedProjectionData> tasks) {
         UserTaskRedisData task = new UserTaskRedisData(userId, startDate, endDate, tasks);
         userTaskRedisRepository.save(task);
+        Map<Long, Long> epicToProject = new HashMap<>();
         Map<Long, List<Long>> projectTasks = new HashMap<>();
+        Map<Long, List<Long>> epicTasks = new HashMap<>();
         for (TaskRelatedProjectionData taskProjection : tasks) {
+            long taskId = taskProjection.getId();
             long projectId = taskProjection.getProject().getId();
             projectTasks.putIfAbsent(projectId, new ArrayList<>());
-            projectTasks.get(projectId).add(taskProjection.getId());
+            projectTasks.get(projectId).add(taskId);
+            long epicId = taskProjection.getEpic().getId();
+            epicTasks.putIfAbsent(epicId, new ArrayList<>());
+            epicTasks.get(epicId).add(taskId);
+            epicToProject.put(epicId, projectId);
         }
 
         for (Map.Entry<Long, List<Long>> projectTask : projectTasks.entrySet()) {
@@ -170,6 +177,18 @@ public class RedisService implements ProjectRedisInterface, EpicRedisInterface, 
             taskIdSet.addAll(projectTask.getValue());
             projectEssential.getTaskIds().clear();
             projectEssential.getTaskIds().addAll(taskIdSet);
+            projectEssentialRedisRepository.save(projectEssential);
+        }
+
+        for (Map.Entry<Long, List<Long>> epicTask : epicTasks.entrySet()) {
+            long epicId = epicTask.getKey();
+            long projectId = epicToProject.get(epicId);
+            ProjectEssentialRedisItem projectEssential = projectEssentialRedisRepository
+                .findById(projectId).orElse(new ProjectEssentialRedisItem(projectId));
+            Set<Long> epicIdSet = new HashSet<>(projectEssential.getEpicIds());
+            epicIdSet.addAll(epicTask.getValue());
+            projectEssential.getEpicIds().clear();
+            projectEssential.getTaskIds().addAll(epicIdSet);
             projectEssentialRedisRepository.save(projectEssential);
         }
 
