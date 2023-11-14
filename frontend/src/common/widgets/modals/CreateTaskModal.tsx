@@ -6,7 +6,7 @@ import { ContentItem } from './ModalStyle';
 import { Segment } from './ModalStyle';
 import { InputBox } from './ModalStyle';
 import { ContentName } from './ModalStyle';
-import { Button } from '@widgets/buttons/ButtonStyle';
+import ProjPoliceButton from '@widgets/buttons/ProjPoliceButton';
 
 function CreateTaskModal() {
   return (
@@ -113,12 +113,8 @@ function CreateTaskModal() {
       </ContainerContent>
       {/* item 5: 버튼 */}
       <Segment width={'70%'} height={'20%'}>
-        <Button width={'40%'} height={'45px'} fontsize={'16px'}>
-          생성
-        </Button>
-        <Button width={'40%'} height={'45px'} fontsize={'16px'}>
-          취소
-        </Button>
+        <ProjPoliceButton width={50} height={30} context="생성" onClick={() => console.log('생성')} />
+        <ProjPoliceButton width={50} height={30} context="생성" onClick={() => console.log('생성')} />
       </Segment>
       <Segment width={'100%'} height={'5%'} />
     </Container>
