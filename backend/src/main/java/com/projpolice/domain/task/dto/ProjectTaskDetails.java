@@ -2,6 +2,7 @@ package com.projpolice.domain.task.dto;
 
 import java.time.LocalDate;
 
+import com.projpolice.domain.file.dto.FileDetailItem;
 import com.projpolice.domain.file.dto.FileNameUUID;
 import com.projpolice.domain.user.dto.UserIdNameImgItem;
 import com.projpolice.global.common.base.BaseIdName;
@@ -22,7 +23,7 @@ public class ProjectTaskDetails {
     private TaskStatus status;
     private UserIdNameImgItem member;
     private BaseIdName epic;
-    private FileNameUUID file;
+    private FileDetailItem file;
 
     public ProjectTaskDetails(ProjectDetailProjection data) {
         id = data.getTaskId();
@@ -36,9 +37,13 @@ public class ProjectTaskDetails {
             .image(data.getUserImage())
             .build();
         epic = new BaseIdName(data.getEpicId(), data.getEpicName());
-        file = FileNameUUID.builder()
+        file = FileDetailItem.builder()
+            .id(data.getFileId())
             .name(data.getFileName())
-            .uuid(data.getFileUuid())
+            .comment(data.getFileComment())
+            .version(data.getFileVersion())
+            .extension(data.getFileExtension())
+            .taskId(data.getTaskId())
             .build();
     }
 }
