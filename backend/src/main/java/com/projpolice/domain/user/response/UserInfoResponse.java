@@ -18,7 +18,7 @@ public class UserInfoResponse {
             .id(user.getId())
             .name(user.getName())
             .email(user.getEmail())
-            .image(String.format("%s%s", preAuthenticatedUrl, user.getImage()))
+            .image(user.getImage() == null ? null : String.format("%s%s", preAuthenticatedUrl, user.getImage()))
             .build();
     }
 }
