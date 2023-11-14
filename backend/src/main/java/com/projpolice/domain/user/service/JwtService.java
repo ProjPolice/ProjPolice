@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,18 +25,29 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Spring Security의 Jwt 와 관련된 작업들에 대한 컴포넌트이다.
  */
 @Service
-@RequiredArgsConstructor
 public class JwtService {
 
-    @Value("${JWT_SECRET_KEY}")
-    private String SECRET_KEY;
+    private final String SECRET_KEY;
     private final RefreshTokenRepository refreshTokenRepository;
+
+    private final int accessTokenExpireMinutes;
+
+    private final int refreshTokenExpireMinutes;
+
+    @Autowired
+    public JwtService(Environment env, RefreshTokenRepository refreshTokenRepository) {
+        this.refreshTokenRepository = refreshTokenRepository;
+        SECRET_KEY = env.getProperty("JWT_SECRET_KEY");
+        accessTokenExpireMinutes =
+            Integer.parseInt(env.getProperty("projpolice.jwt.access.minutes", "24")) * 6000; // 24분
+        refreshTokenExpireMinutes =
+            Integer.parseInt(env.getProperty("projpolice.jwt.refresh.minutes", "2880")) * 6000; // 2일
+    }
 
     /**
      * Jwt 토큰으로부터 사용자 메일을 추출한다.
@@ -75,7 +87,7 @@ public class JwtService {
             .setClaims(extraClaims)
             .setSubject(String.valueOf(userId))
             .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24)) // 24분
+            .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpireMinutes))
             .signWith(getSignInKey(), SignatureAlgorithm.HS256)
             .compact();
     }
@@ -101,7 +113,7 @@ public class JwtService {
             .builder()
             .setSubject(userId)
             .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 2)) // 2일
+            .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpireMinutes))
             .signWith(getSignInKey(), SignatureAlgorithm.HS256)
             .compact();
 
