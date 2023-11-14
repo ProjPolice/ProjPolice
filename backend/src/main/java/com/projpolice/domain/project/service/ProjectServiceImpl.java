@@ -37,7 +37,6 @@ import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.manager.ProjectAuthManager;
 import com.projpolice.global.notification.NotificationService;
 import com.projpolice.global.redis.RedisService;
-import com.projpolice.global.storage.base.StorageConnector;
 
 import lombok.RequiredArgsConstructor;
 
@@ -57,7 +56,6 @@ public class ProjectServiceImpl implements ProjectService {
     @Qualifier("redisDummyService")
     private final RedisService redisService;
     private final DeletionService deletionService;
-    private final StorageConnector storageConnector;
     private final NotificationService notificationService;
 
     /**
@@ -191,7 +189,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         List<UserIdNameImgItem> list = userProjectRepository.findUserByProjectId(id)
             .stream()
-            .map(user -> UserIdNameImgItem.of(user, storageConnector.getPreAuthenticatedUrl()))
+            .map(user -> UserIdNameImgItem.from(user))
             .collect(Collectors.toList());
 
         redisService.saveProjectUserIdNameImgList(id, list);
@@ -223,7 +221,7 @@ public class ProjectServiceImpl implements ProjectService {
         redisService.invalidateProjectUser(projectId);
         notificationService.userInvitedToProject(projectId, newUser.getId());
 
-        return UserIdNameImgItem.of(newUser, storageConnector.getPreAuthenticatedUrl());
+        return UserIdNameImgItem.from(newUser);
     }
 
     /**

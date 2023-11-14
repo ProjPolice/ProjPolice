@@ -14,7 +14,7 @@ public class TaskUpdateResponse extends TaskBaseItem {
     private UserIdNameImgItem user;
     private EpicBaseItem epic;
 
-    public static TaskUpdateResponse of(Task task, String imageUrl) {
+    public static TaskUpdateResponse from(Task task) {
         return TaskUpdateResponse.builder()
             .id(task.getId())
             .name(task.getName())
@@ -22,7 +22,7 @@ public class TaskUpdateResponse extends TaskBaseItem {
             .status(task.getStatus().name())
             .startDate(task.getStartDate())
             .endDate(task.getEndDate())
-            .user(UserIdNameImgItem.of(task.getUser(), imageUrl))
+            .user(UserIdNameImgItem.from(task.getUser()))
             .epic(EpicBaseItem.from(task.getEpic()))
             .build();
     }

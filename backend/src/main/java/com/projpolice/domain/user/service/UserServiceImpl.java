@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
     public UserInfoResponse getUserInfo() {
         User user = getLoggedUser();
 
-        return UserInfoResponse.of(user, storageConnector.getPreAuthenticatedUrl());
+        return UserInfoResponse.from(user);
     }
 
     /**
@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        return UserInfoResponse.of(user, storageConnector.getPreAuthenticatedUrl());
+        return UserInfoResponse.from(user);
     }
 
     /**
