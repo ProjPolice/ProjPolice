@@ -111,7 +111,7 @@ public class EpicController {
     @GetMapping
     @Operation(summary = "프로젝트의 할일 리스트 조회", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 Project Id, 조회 기간을 받아 프로젝트의 할일 리스트를 반환합니다.")
     public ResponseEntity<BaseResponse<List<EpicProjectedItem>>> selectProjectEpicsWithDateRange(
-        @RequestParam("project_id") long projectId, @RequestParam(value = "start", required = false)
+        @RequestParam("project_id") long projectId, @RequestParam(value = "start_date", required = false)
     LocalDate start_date, @RequestParam(value = "end_date", required = false) LocalDate end_date) {
         return ResponseEntity.ok()
             .body(BaseResponse.<List<EpicProjectedItem>>builder()
