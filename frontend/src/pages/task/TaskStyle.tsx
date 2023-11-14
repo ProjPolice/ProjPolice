@@ -62,6 +62,10 @@ export const BoardSection = styled.div<{ backgroundColor: string }>`
   margin-left: 0.5%;
   margin-right: 0.5%;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    display: hidden;
+  }
 `;
 
 export const BoardBox = styled.div<{ backgroundColor: string; isDragging: boolean }>`
