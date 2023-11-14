@@ -48,7 +48,7 @@ function TaskDetail() {
         </DetailContainer>
         <DetailBox width={'100%'} height={'40%'} background="">
           <h6>구성원</h6>
-          <MemberList members={selectedProject?.members || []} />
+          <MemberList />
         </DetailBox>
         <DetailBox width={'100%'} height={'40%'} background="">
           <h6>최신파일</h6>
