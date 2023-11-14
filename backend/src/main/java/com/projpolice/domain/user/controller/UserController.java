@@ -3,6 +3,8 @@ package com.projpolice.domain.user.controller;
 import static com.projpolice.domain.user.service.JwtService.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projpolice.domain.project.service.ProjectService;
+import com.projpolice.domain.task.dto.TaskRelatedProjectionData;
 import com.projpolice.domain.task.response.UserTaskRangeResponse;
 import com.projpolice.domain.task.service.TaskService;
 import com.projpolice.domain.user.domain.rdb.User;
@@ -27,14 +30,13 @@ import com.projpolice.domain.user.request.UserLoginRequest;
 import com.projpolice.domain.user.request.UserUpdateRequest;
 import com.projpolice.domain.user.response.UserInfoResponse;
 import com.projpolice.domain.user.response.UserLoginResponse;
-import com.projpolice.domain.user.response.UserProjectPagingResponse;
 import com.projpolice.domain.user.response.UserLogoutResponse;
+import com.projpolice.domain.user.response.UserProjectPagingResponse;
 import com.projpolice.domain.user.service.UserService;
 import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.base.BaseResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -117,7 +119,7 @@ public class UserController {
      * @return 인증에 필요한 Jwt Token 발급
      */
     @PostMapping
-    @Operation(summary = "사용자 로그인",  description = "이메일과 패스워드를 받아 Access Token을 반환합니다. 추가적으로 FCM을 위해 토큰 입력을 해야합니다.")
+    @Operation(summary = "사용자 로그인", description = "이메일과 패스워드를 받아 Access Token을 반환합니다. 추가적으로 FCM을 위해 토큰 입력을 해야합니다.")
     public ResponseEntity<BaseResponse<UserLoginResponse>> login(@RequestBody UserLoginRequest request) {
 
         return ResponseEntity.ok()
@@ -155,8 +157,6 @@ public class UserController {
             );
     }
 
-
-
     @GetMapping("/tasks")
     @Operation(summary = "현재 나의 세부 작업 리스트 조회", security = @SecurityRequirement(name = "Authorization"), description = "Access Token에 해당하는 사용자의 현재 세부 리스트를 조회 기간에 따라 반환합니다.")
     public ResponseEntity<BaseResponse<UserTaskRangeResponse>> selectUserTaskRelatedDataWithRange(
@@ -169,11 +169,27 @@ public class UserController {
         if (endDate == null) {
             endDate = LocalDate.now().plusDays(3);
         }
+        List<TaskRelatedProjectionData> TODO = new ArrayList<>();
+        List<TaskRelatedProjectionData> PROCEEDING = new ArrayList<>();
+        List<TaskRelatedProjectionData> DONE = new ArrayList<>();
+
+        List<TaskRelatedProjectionData> taskRelatedProjectionData = taskService.selectUserTaskRelatedDataWithRange(
+            startDate, endDate);
+        for (TaskRelatedProjectionData taskRelatedProjectionDatum : taskRelatedProjectionData) {
+            switch (taskRelatedProjectionDatum.getStatus()) {
+                case TODO -> TODO.add(taskRelatedProjectionDatum);
+                case PROCEEDING -> PROCEEDING.add(taskRelatedProjectionDatum);
+                case DONE -> DONE.add(taskRelatedProjectionDatum);
+            }
+        }
+
         return ResponseEntity.ok()
             .body(new BaseResponse<>(
-                new UserTaskRangeResponse(
-                    taskService.selectUserTaskRelatedDataWithRange(startDate, endDate)
-                )
+                UserTaskRangeResponse.builder()
+                    .TODO(TODO)
+                    .PROCEEDING(PROCEEDING)
+                    .DONE(DONE)
+                    .build()
             ));
     }
 
