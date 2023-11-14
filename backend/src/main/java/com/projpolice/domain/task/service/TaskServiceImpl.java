@@ -37,7 +37,6 @@ import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.manager.ProjectAuthManager;
 import com.projpolice.global.notification.NotificationService;
 import com.projpolice.global.redis.RedisService;
-import com.projpolice.global.storage.base.StorageConnector;
 
 import lombok.RequiredArgsConstructor;
 
@@ -51,7 +50,6 @@ public class TaskServiceImpl implements TaskService {
     private final FileRepository fileRepository;
     private final DeletionService deletionService;
     private final RedisService redisService;
-    private final StorageConnector storageConnector;
     private final NotificationService notificationService;
 
     /**
@@ -81,7 +79,7 @@ public class TaskServiceImpl implements TaskService {
             .orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC));
 
         redisService.invalidateProject(projectId);
-        return TaskDetailItem.of(task, storageConnector.getPreAuthenticatedUrl());
+        return TaskDetailItem.from(task);
     }
 
     /**
@@ -145,7 +143,7 @@ public class TaskServiceImpl implements TaskService {
             redisService.invalidateProject(projectId);
         }
 
-        return TaskUpdateResponse.of(task, storageConnector.getPreAuthenticatedUrl());
+        return TaskUpdateResponse.from(task);
     }
 
     /**
@@ -178,7 +176,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_TASK));
         return TaskGetResponse.of(task, fileRepository.findByTaskId(taskId).stream()
             .map(FileDetailItem::from)
-            .collect(Collectors.toList()), storageConnector.getPreAuthenticatedUrl());
+            .collect(Collectors.toList()));
     }
 
     @Override
