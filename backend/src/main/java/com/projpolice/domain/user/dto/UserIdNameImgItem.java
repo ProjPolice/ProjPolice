@@ -18,7 +18,7 @@ public class UserIdNameImgItem extends UserIdNameItem {
         return UserIdNameImgItem.builder()
             .id(user.getId())
             .name(user.getName())
-            .image(String.format("%s%s", imageUrl, user.getImage()))
+            .image(user.getImage() == null ? null : String.format("%s%s", imageUrl, user.getImage()))
             .build();
     }
 }
