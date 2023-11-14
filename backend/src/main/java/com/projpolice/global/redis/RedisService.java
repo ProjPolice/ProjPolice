@@ -127,11 +127,13 @@ public class RedisService implements ProjectRedisInterface, EpicRedisInterface, 
         );
         for (EpicProjectedItem epicProjection : list) {
             long epicId = epicProjection.getId();
-
+            project.getEpicIds().add(epicId);
             epicEssentialList.add(new EpicEssentialRedisData(epicId, projectId));
             for (TaskProjectedItem taskProjection : epicProjection.getTasks()) {
+                long taskId = taskProjection.getId();
                 taskEssentialList.add(
-                    new TaskEssentialRedisData(taskProjection.getId(), epicId, projectId, taskProjection.getUserId()));
+                    new TaskEssentialRedisData(taskId, epicId, projectId, taskProjection.getUserId()));
+                project.getTaskIds().add(taskId);
             }
         }
         taskEssentialRepository.saveAll(taskEssentialList);
