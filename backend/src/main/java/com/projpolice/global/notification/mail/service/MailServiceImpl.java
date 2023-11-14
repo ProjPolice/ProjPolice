@@ -1,6 +1,7 @@
 package com.projpolice.global.notification.mail.service;
 
 import java.security.SecureRandom;
+import java.util.Collection;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,6 +105,38 @@ public class MailServiceImpl implements MailService {
             Transport.send(message);
         } catch (Exception e) {
             log.error("email error : {}", e.getMessage());
+        }
+    }
+
+    @Async
+    @Override
+    public void sendMail(Collection<MailDto> mails) {
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", smtpHost);
+        prop.put("mail.smtp.port", Integer.parseInt(smtpPort));
+        prop.put("mail.smtp.starttls.enable", startTLSEnable);
+        prop.put("mail.smtp.EnableSSL.enable", enableSSL);
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.quitwait", "false");
+        prop.put("mail.mime.allowutf8", true);
+        Session session = Session.getDefaultInstance(prop, auth);
+
+        for (MailDto mail : mails) {
+            MimeMessage message = new MimeMessage(session);
+            try {
+                message.setFrom(String.format("%s <%s>", nickname, senderEmail));
+                message.setHeader("Message-ID", String.format("%d@%s", random.nextLong(), domain));
+                Address[] recipientAddress = InternetAddress.parse(mail.getEmailAddress());
+
+                for (Address address : recipientAddress) {
+                    message.addRecipient(Message.RecipientType.TO, address);
+                }
+                message.setSubject(mail.getTitle(), encoding);
+                message.setText(mail.getBody(), encoding);
+                Transport.send(message);
+            } catch (Exception e) {
+                log.error("email error : {}", e.getMessage());
+            }
         }
     }
 }

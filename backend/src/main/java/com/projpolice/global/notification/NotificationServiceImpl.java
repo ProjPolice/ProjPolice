@@ -20,6 +20,8 @@ import com.projpolice.global.common.error.exception.BaseException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.meta.domain.TaskStatus;
 import com.projpolice.global.notification.firebase.FirebaseNotificationService;
+import com.projpolice.global.notification.mail.dto.MailDto;
+import com.projpolice.global.notification.mail.service.MailService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final TaskRepository taskRepository;
     private final EpicRepository epicRepository;
     private final FirebaseNotificationService firebaseNotificationService;
+    private final MailService mailService;
 
     @Override
     public void userInvitedToProject(long projectId, long userId) {
@@ -181,7 +184,8 @@ public class NotificationServiceImpl implements NotificationService {
 
         final String body = bodyBuilder.toString();
 
-        List<UserEmailFcmTokenProjection> otherUsersRelatedToTask = taskRepository.findOtherUsersInTasksById(taskId, invokedUserId);
+        List<UserEmailFcmTokenProjection> otherUsersRelatedToTask = taskRepository.findOtherUsersInTasksById(taskId,
+            invokedUserId);
         List<String> emails = new ArrayList<>();
         List<String> fcmTokens = new ArrayList<>();
         for (UserEmailFcmTokenProjection user : otherUsersRelatedToTask) {
@@ -193,6 +197,19 @@ public class NotificationServiceImpl implements NotificationService {
 
         if (!fcmTokens.isEmpty()) {
             firebaseNotificationService.taskChanged(taskId, title, body, fcmTokens);
+        }
+        if (!emails.isEmpty()) {
+            List<MailDto> mails = new ArrayList<>();
+            for (String email : emails) {
+                mails.add(
+                    MailDto.builder()
+                        .title(title)
+                        .body(body)
+                        .emailAddress(email)
+                        .build()
+                );
+                mailService.sendMail(mails);
+            }
         }
     }
 }
