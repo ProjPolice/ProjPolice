@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,8 @@ public class EpicServiceImpl implements EpicService {
     private final EpicRepository epicRepository;
     private final ProjectRepository projectRepository;
     private final ProjectAuthManager projectAuthManager;
+
+    @Qualifier("redisDummyService")
     private final RedisService redisService;
     private final DeletionService deletionService;
 

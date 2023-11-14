@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.jboss.resteasy.spi.UnauthorizedException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -53,6 +54,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final UserProjectRepository userProjectRepository;
     private final UserRepository userRepository;
     private final ProjectAuthManager projectAuthManager;
+    @Qualifier("redisDummyService")
     private final RedisService redisService;
     private final DeletionService deletionService;
     private final StorageConnector storageConnector;

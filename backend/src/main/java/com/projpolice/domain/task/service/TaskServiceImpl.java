@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +51,7 @@ public class TaskServiceImpl implements TaskService {
     private final ProjectAuthManager projectAuthManager;
     private final FileRepository fileRepository;
     private final DeletionService deletionService;
+    @Qualifier("redisDummyService")
     private final RedisService redisService;
     private final StorageConnector storageConnector;
     private final NotificationService notificationService;

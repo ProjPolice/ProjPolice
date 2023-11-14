@@ -2,6 +2,7 @@ package com.projpolice.global.common.deletion;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.projpolice.domain.epic.repository.rdb.EpicRepository;
@@ -25,6 +26,7 @@ public class DeletionServiceImpl implements DeletionService {
     private final TaskRepository taskRepository;
     private final FileRepository fileRepository;
     private final StorageConnector storageConnector;
+    @Qualifier("redisDummyService")
     private final RedisService redisService;
 
     @Override
