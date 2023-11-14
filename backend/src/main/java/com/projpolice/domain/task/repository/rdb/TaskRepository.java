@@ -91,7 +91,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             project.name as projectName,
             file.id as fileId,
             file.name as fileName,
-            coalesce(task.status, "TODO") as taskStatus,
+            coalesce(task.status, 'TODO') as taskStatus,
             userProject.id as userId
         from Task task
         left join Epic epic on task.epic.id = epic.id
@@ -143,7 +143,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
          task.name as taskName,
          task.startDate as startDate,
          task.endDate as endDate,
-         coalesce(task.status, "TODO") as taskStatus,
+         coalesce(task.status, 'TODO') as taskStatus,
          task.user.id as userId,
          task.user.name as userName,
          task.user.image as userImage,
@@ -165,7 +165,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
          task.name as taskName,
          task.startDate as startDate,
          task.endDate as endDate,
-         coalesce(task.status, "TODO") as taskStatus,
+         coalesce(task.status, 'TODO') as taskStatus,
          task.user.id as userId,
          task.user.name as userName,
          task.user.image as userImage,
