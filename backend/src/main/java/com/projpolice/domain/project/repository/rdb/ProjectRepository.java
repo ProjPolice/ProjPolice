@@ -35,4 +35,13 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
         and p.deleted = false
         """)
     boolean checkOwnership(@Param("projectId") long projectId, @Param("userId") long userId);
+
+    // 해당 유저가 속해있는 프로젝트
+    @Query("""
+            select userProject.project
+            from UserProject userProject
+            where userProject.user.id = :userId
+            and userProject.deleted = false and userProject.project.deleted = false
+        """)
+    Page<Project> findByProjectUserId(long userId, Pageable pageable);
 }
