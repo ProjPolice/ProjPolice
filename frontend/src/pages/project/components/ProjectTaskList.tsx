@@ -5,41 +5,26 @@ import { EpicContainer } from '@project/ProjectStyle';
 import { EpicItem } from '@project/ProjectStyle';
 import { TaskInfoStyle } from '@project/ProjectStyle';
 
-function ProjectEpicList() {
-  const tasks = [
-    {
-      id: 1,
-      name: '자료조사하기',
-      startDate: 'SYYY.SM.SD',
-      endDate: 'YYYY.MM.DD',
-      status: 'TODO', // 'PROCEEDING', 'DONE'
-      member: {
-        id: 1,
-        name: '김싸피',
-        image: 'imageurl',
-      },
-      file: {
-        name: '파일이름.format',
-        uuid: 'UUID',
-      },
-    },
-    {
-      id: 2,
-      name: '작업하기',
-      startDate: 'SYYY.SM.SD',
-      endDate: 'YYYY.MM.DD',
-      status: 'PROCEEDING',
-      member: {
-        id: 2,
-        name: '이싸피',
-        image: 'imageurl',
-      },
-      file: {
-        name: '파일이름.format',
-        uuid: 'UUID',
-      },
-    },
-  ];
+import task, { TasksData } from '@api/task';
+import { useEffect, useState } from 'react';
+import { EpicDetailProps } from '@interfaces/project';
+
+function ProjectTaskList({ projectId, epicId }: EpicDetailProps) {
+  const [tasks, setTasks] = useState<TasksData[]>([]);
+
+  console.log(epicId, '여기');
+
+  useEffect(() => {
+    task
+      .data(projectId, epicId)
+      .then((response) => {
+        setTasks(response.data);
+        console.log(response.data, '여기');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [projectId, epicId]);
 
   return (
     <Container width={'93%'} height={'90%'}>
@@ -49,9 +34,9 @@ function ProjectEpicList() {
           <EpicItem key={index} width={'100%'} height={'20%'} background={colors.light}>
             <TaskInfoStyle>{task.name}</TaskInfoStyle>
             <TaskInfoStyle>할 일 (소속) </TaskInfoStyle>
-            <TaskInfoStyle>{task.member.name}</TaskInfoStyle>
+            <TaskInfoStyle>{task.name}</TaskInfoStyle>
             <TaskInfoStyle>{task.endDate}</TaskInfoStyle>
-            <TaskInfoStyle>{task.file.name}</TaskInfoStyle>
+            <TaskInfoStyle>{}</TaskInfoStyle>
           </EpicItem>
         ))}
       </EpicContainer>
@@ -59,4 +44,4 @@ function ProjectEpicList() {
   );
 }
 
-export default ProjectEpicList;
+export default ProjectTaskList;
