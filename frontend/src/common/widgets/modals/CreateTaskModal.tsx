@@ -125,7 +125,7 @@ function CreateTaskModal({ visible, handleVisible, projectId, epicId }: TaskModa
               <InputBox width={'25%'} flexgrow="">
                 <input
                   type="text"
-                  placeholder="YYYY.MM.DD"
+                  placeholder="YYYY-MM-DD"
                   style={{
                     width: '100%',
                     height: '90%',
@@ -140,7 +140,7 @@ function CreateTaskModal({ visible, handleVisible, projectId, epicId }: TaskModa
               <InputBox width={'25%'} flexgrow="">
                 <input
                   type="text"
-                  placeholder="YYYY.MM.DD"
+                  placeholder="YYYY-MM-DD"
                   style={{
                     width: '100%',
                     height: '90%',
