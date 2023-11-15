@@ -41,6 +41,7 @@ function ProjectList() {
       <TextContainer>
         <div style={{ display: 'flex', alignItems: 'center', justifyItems: 'center', width: '100%', gap: '1%' }}>
           <h4>프로젝트</h4>
+          <h6>총 {items.length}건</h6>
           <ProjPoliceButton width={55} height={25} context="+ 추가" onClick={handleModalVisible} />
         </div>
         <div style={{ display: 'flex', gap: '3%' }}>

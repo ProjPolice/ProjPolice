@@ -36,7 +36,7 @@ export const ProjectContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 70%;
-  height: 40%;
+  height: 50%;
   background-color: ${colors.white};
   justify-content: space-evenly;
 `;
@@ -93,7 +93,7 @@ export const TaskContainer = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   width: 70%;
-  height: 40%;
+  height: 50%;
   padding-bottom: 1%;
 `;
 
@@ -102,17 +102,17 @@ export const TaskBoxContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   height: 60%;
+  gap: 2%;
 `;
 
 export const TaskBox = styled.div<{ backgroundColor: string }>`
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background: linear-gradient(to bottom, ${(props) => props.backgroundColor} 10%, ${colors.light} 0%);
+  flex-direction: column;
+  background: linear-gradient(to bottom, ${(props) => props.backgroundColor} 15%, ${colors.light} 0%);
   border-radius: 10px;
   box-sizing: border-box;
   width: 100%;
-  height: 30%;
+  height: 100%;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
@@ -120,5 +120,24 @@ export const TextContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: end;
-  // height: 10%;
+`;
+
+export const TaskListHeader = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 15%;
+`;
+
+export const TaskListBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 85%;
+  overflow-y: auto;
+`;
+
+export const TaskListItem = styled.div`
+  display: flex;
+  justify-content: space-around;
 `;

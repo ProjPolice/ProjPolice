@@ -59,11 +59,12 @@ interface ModifyResponse extends CommonResponse {
   };
 }
 
-export interface TaskItem {
+export interface TaskData {
   id: number;
   name: string;
   startDate: string;
   endDate: string;
+  status: string;
   epic: {
     id: number;
     name: string;
@@ -79,14 +80,10 @@ export interface TaskItem {
   userId: number;
 }
 
-export interface TaskData {
-  todo: TaskItem[];
-  inProgress: TaskItem[];
-  done: TaskItem[];
-}
-
 interface TaskResponse extends CommonResponse {
-  data: TaskData;
+  data: {
+    tasks: TaskData[];
+  };
 }
 
 export interface Projects {

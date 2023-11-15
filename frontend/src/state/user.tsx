@@ -12,3 +12,12 @@ export const refreshToken = atom({
   default: '',
   effects_UNSTABLE: [persistAtom],
 });
+
+export const countState = atom({
+  key: 'countState',
+  default: {
+    project: 0,
+    epic: 0,
+    task: 0,
+  },
+});

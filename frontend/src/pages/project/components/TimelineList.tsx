@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { TimelineListProps } from '@interfaces/project';
 import epic from '@api/epic';
 import { getTimelineProgress } from '@utils/getTimelineProgress';
-import TaskTimelineList from './TaskTimelineList';
+// import TaskTimelineList from './TaskTimelineList';
 
 function TimelineList({ startDate, endDate, projectId }: TimelineListProps) {
   const setSelectedIndex = useSetRecoilState(selectedIndexState);
@@ -41,7 +41,7 @@ function TimelineList({ startDate, endDate, projectId }: TimelineListProps) {
           <TimelineInfoLeft>
             <p style={{ fontSize: '15px' }}>{item.name}</p>
           </TimelineInfoLeft>
-          {item.tasks?.map((task, index) => (
+          {/* {item.tasks?.map((task, index) => (
             <TaskTimelineList
               key={index}
               id={task.id}
@@ -51,7 +51,7 @@ function TimelineList({ startDate, endDate, projectId }: TimelineListProps) {
               epicStart={item.startDate}
               index={index}
             />
-          ))}
+          ))} */}
         </TimeLineBar>
       ))}
     </TimeLineContainer>
