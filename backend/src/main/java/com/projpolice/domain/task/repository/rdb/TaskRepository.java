@@ -177,7 +177,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
          file.comment as fileComment,
          file.version as fileVersion,
          file.extension as fileExtension,
-         epic.id as epicId
+         epic.id as epicId,
+         epic.name as epicName
         from Task task
         left join Epic epic on task.epic.id = epic.id
         left outer join File file on file.task.id = task.id
