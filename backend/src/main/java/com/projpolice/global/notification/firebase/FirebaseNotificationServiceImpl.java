@@ -90,7 +90,7 @@ public class FirebaseNotificationServiceImpl implements FirebaseNotificationServ
 
     @Override
     public void userInvitedToProject(long projectId, String title, String body, String fcmToken) {
-        final String url = String.format("%s/", baseUrl);
+        final String url = String.format("%s/", baseUrl + "project/" + projectId);
         send(title, body, fcmToken, url);
     }
 

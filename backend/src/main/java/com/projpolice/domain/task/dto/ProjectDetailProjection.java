@@ -25,7 +25,6 @@ public interface ProjectDetailProjection {
 
     String getEpicName();
 
-
     Long getFileId();
     String getFileName();
 
