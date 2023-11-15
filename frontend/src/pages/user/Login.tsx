@@ -4,8 +4,12 @@ import { colors } from '@assets/design/colors';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTextInput } from 'common/hooks/useTextInput';
 import user from '@api/user';
+import { useSetRecoilState } from 'recoil';
+import { accessToken, refreshToken } from 'state/user';
 
 function Login() {
+  const setAccess = useSetRecoilState(accessToken);
+  const setRefresh = useSetRecoilState(refreshToken);
   const navigate = useNavigate();
   const findId = () => {};
   const findPassword = () => {};
@@ -17,14 +21,14 @@ function Login() {
     const data = {
       email: email,
       password: password,
+      token: localStorage.getItem('FirebaseToken'),
     };
     user
       .login(data)
       .then((response) => {
-        console.log(response);
         if (response.code === 200) {
-          sessionStorage.setItem('accessToken', response.data.accessToken);
-          sessionStorage.setItem('refreshToken', response.data.refreshToken);
+          setAccess(response.data.accessToken);
+          setRefresh(response.data.refreshToken);
           navigate('/');
         } else if (response.code === 1002) {
           alert('로그인에 실패하였습니다.');

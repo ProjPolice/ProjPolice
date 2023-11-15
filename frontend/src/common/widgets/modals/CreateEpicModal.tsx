@@ -7,29 +7,19 @@ import { Segment } from './ModalStyle';
 import { InputBox } from './ModalStyle';
 import { ContentName } from './ModalStyle';
 import ProjPoliceButton from '@widgets/buttons/ProjPoliceButton';
-import { TaskModalProps } from '@interfaces/widgets';
+import { EpicModalProps } from '@interfaces/widgets';
 import { useTextInput } from 'common/hooks/useTextInput';
-import task from '@api/task';
-import { epicDataState } from 'state/project';
+import epic from '@api/epic';
 import { useRecoilState } from 'recoil';
-import { useEffect, useState } from 'react';
-import project, { MemberData } from '@api/project';
+import { epicDataState } from 'state/project';
 
-function CreateTaskModal({ visible, handleVisible, projectId, epicId }: TaskModalProps) {
+function CreateEpicModal({ visible, handleVisible, projectId }: EpicModalProps) {
   const [name, handleName, setName] = useTextInput();
   const [description, handleDescription, setDescription] = useTextInput();
   const [startDate, handleStartDate, setStartDate] = useTextInput();
   const [endDate, handleEndDate, setEndDate] = useTextInput();
 
-  const [epicData, setEpicData] = useRecoilState(epicDataState);
-  const [members, setMembers] = useState<MemberData[]>([]);
-  const [selectedMember, setSelectedMember] = useState(0);
-
-  useEffect(() => {
-    project.memberdata(projectId).then((response) => {
-      setMembers(response.data.members);
-    });
-  });
+  const [epicItems, setEpicItems] = useRecoilState(epicDataState);
 
   const resetData = () => {
     setName('');
@@ -38,33 +28,30 @@ function CreateTaskModal({ visible, handleVisible, projectId, epicId }: TaskModa
     setEndDate('');
   };
 
-  const createTask = () => {
+  const createEpic = () => {
     const data = {
       name: name,
       description: description,
       startDate: startDate,
       endDate: endDate,
-      epicId: epicId,
-      userId: selectedMember,
+      projectId: projectId,
     };
-    task
+    epic
       .create(data)
       .then((response) => {
         handleVisible();
         resetData();
-        const createdTask = {
+        const createdEpic = {
           id: response.data.id,
           name: response.data.name,
           startDate: response.data.startDate,
           endDate: response.data.endDate,
+          tasks: [],
         };
-        const epicItems = epicData.map((item) => ({ ...item }));
-        const updatedEpicIndex = epicItems.findIndex((updatedEpicItem) => updatedEpicItem.id === epicId);
-        epicItems[updatedEpicIndex].tasks = [...epicItems[updatedEpicIndex].tasks, createdTask];
-        setEpicData(epicItems);
+        const updatedEpicItems = [...epicItems, createdEpic];
+        setEpicItems(updatedEpicItems);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
         alert('할 일 생성에 실패하였습니다');
       });
   };
@@ -72,21 +59,21 @@ function CreateTaskModal({ visible, handleVisible, projectId, epicId }: TaskModa
   return (
     <>
       {visible && (
-        <Container width={'30%'} height={'55%'}>
+        <Container width={'30%'} height={'30%'}>
           <ContainerNav height={'15px'} background={colors.primary} />
           <ContentItem width={'75%'} height={'30%'} justifycontent="">
-            <h3 style={{ fontWeight: '100', fontSize: '30px' }}>작업 생성</h3>
+            <h3 style={{ fontWeight: '100', fontSize: '30px' }}>할 일 생성</h3>
           </ContentItem>
           <ContainerContent width={'75%'} height={'65%'} background="">
             {/* item 2: 할 일 */}
             <ContentItem width={'100%'} height={'50px'} justifycontent="">
               <ContentName width={'90px'}>
-                <p style={{ fontSize: '14px' }}>작업명</p>
+                <p style={{ fontSize: '14px' }}>이름</p>
               </ContentName>
               <InputBox width={'50%'} flexgrow="">
                 <input
                   type="text"
-                  placeholder="작업 이름을 입력해주세요"
+                  placeholder="할 일 이름을 입력해주세요"
                   style={{
                     width: '100%',
                     height: '90%',
@@ -100,12 +87,12 @@ function CreateTaskModal({ visible, handleVisible, projectId, epicId }: TaskModa
             </ContentItem>
             <ContentItem width={'100%'} height={'50px'} justifycontent="">
               <ContentName width={'90px'}>
-                <p style={{ fontSize: '14px' }}>작업 설명</p>
+                <p style={{ fontSize: '14px' }}>설명</p>
               </ContentName>
               <InputBox width={'50%'} flexgrow="">
                 <input
                   type="text"
-                  placeholder="작업 설명을 입력해주세요"
+                  placeholder="할 일 설명을 입력해주세요"
                   style={{
                     width: '100%',
                     height: '90%',
@@ -152,29 +139,10 @@ function CreateTaskModal({ visible, handleVisible, projectId, epicId }: TaskModa
                 />
               </InputBox>
             </ContentItem>
-
-            <ContentItem width={'100%'} height={'50px'} justifycontent="">
-              <ContentName width={'90px'}>
-                <p style={{ fontSize: '14px' }}>작업할 사람</p>
-              </ContentName>
-              {/* member를 다 띄워서 선택하게 */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                {members.map((member, index) => (
-                  <img
-                    key={index}
-                    src={member.image}
-                    width={50}
-                    height={50}
-                    onClick={() => setSelectedMember(member.id)}
-                    style={selectedMember === member.id ? { border: '3px solid red', boxSizing: 'border-box' } : {}}
-                  />
-                ))}
-              </div>
-            </ContentItem>
           </ContainerContent>
           {/* item 5: 버튼 */}
           <Segment width={'70%'} height={'20%'}>
-            <ProjPoliceButton width={50} height={30} context="생성" onClick={createTask} />
+            <ProjPoliceButton width={50} height={30} context="생성" onClick={createEpic} />
             <ProjPoliceButton width={50} height={30} context="취소" onClick={handleVisible} />
           </Segment>
           <Segment width={'100%'} height={'5%'} />
@@ -184,4 +152,4 @@ function CreateTaskModal({ visible, handleVisible, projectId, epicId }: TaskModa
   );
 }
 
-export default CreateTaskModal;
+export default CreateEpicModal;

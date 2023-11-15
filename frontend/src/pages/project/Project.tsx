@@ -7,15 +7,15 @@ import ProjectDetail from './components/ProjectDetail';
 import ProjectTaskList from './components/ProjectEpicList';
 import { selectedIndexState } from 'state/project';
 import { useRecoilValue } from 'recoil';
-import { useEffect } from 'react';
-import TaskDetail from './components/TaskDetail';
+import { useParams } from 'react-router-dom';
+import EpicDetail from './components/EpicDetail';
 
 function Project() {
   const selectedIndex = useRecoilValue(selectedIndexState);
 
-  useEffect(() => {
-    console.log(selectedIndex);
-  }, [selectedIndex]);
+  const params = useParams();
+
+  const id = Number(params.project_id);
 
   return (
     <Page>
@@ -25,8 +25,8 @@ function Project() {
         </SectionHeader>
 
         <ProjectSection height={'50%'} background="">
-          <ProjectCalendarTimeline />
-          {selectedIndex === -1 ? <ProjectDetail /> : <TaskDetail />}
+          <ProjectCalendarTimeline id={id} />
+          {selectedIndex === -1 ? <ProjectDetail /> : <EpicDetail projectId={id} epicId={selectedIndex} />}
         </ProjectSection>
 
         <SectionHeader height={'8%'} background="" alignitems="end">

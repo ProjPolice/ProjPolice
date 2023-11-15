@@ -54,7 +54,7 @@ function ProjectList() {
       </TextContainer>
       <ProjectBoxContainer>
         {visibleItems.map((project, index) => (
-          <ProjectItem {...project} key={index} />
+          <ProjectItem {...project} key={index} index={index} />
         ))}
       </ProjectBoxContainer>
     </ProjectContainer>
