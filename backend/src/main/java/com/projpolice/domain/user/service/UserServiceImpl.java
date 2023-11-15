@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.projpolice.domain.user.domain.rdb.User;
 import com.projpolice.domain.user.domain.redis.RefreshTokenRedisData;
+import com.projpolice.domain.user.dto.UserIdNameImgItem;
 import com.projpolice.domain.user.repository.rdb.UserRepository;
 import com.projpolice.domain.user.repository.redis.RefreshTokenRepository;
 import com.projpolice.domain.user.request.UserJoinRequest;
@@ -126,6 +127,7 @@ public class UserServiceImpl implements UserService {
         return UserLoginResponse.builder()
             .accessToken(jwtToken)
             .refreshToken(refreshToken)
+            .user(UserIdNameImgItem.from(user))
             .build();
     }
 
