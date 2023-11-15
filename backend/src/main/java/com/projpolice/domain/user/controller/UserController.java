@@ -197,7 +197,7 @@ public class UserController {
     @Operation(summary = "현재 나의 프로젝트 리스트 조회", security = @SecurityRequirement(name = "Authorization"), description = "Access Token에 해당하는 사용자의 현재 프로젝트를 조회 기간에 따라 반환합니다.")
     public ResponseEntity<BaseResponse<UserProjectPagingResponse>> selectUserProjectRelatedDataWithRange(
         @RequestParam(name = "page", required = false, defaultValue = "1") int page,
-        @RequestParam(name = "num_of_pages", required = false, defaultValue = "10") int numOfPages) {
+        @RequestParam(name = "num_of_pages", required = false, defaultValue = "100000") int numOfPages) {
         User user = getLoggedUser();
 
         return ResponseEntity.ok()
