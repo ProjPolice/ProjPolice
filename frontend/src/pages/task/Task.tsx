@@ -3,7 +3,7 @@ import Board from './components/Board';
 import { TextContainer } from './TaskStyle';
 function Task() {
   return (
-    <Page>
+    <Page style={{ overflow: 'hidden' }}>
       <TextContainer>
         <h3>내 작업 관리</h3>
       </TextContainer>

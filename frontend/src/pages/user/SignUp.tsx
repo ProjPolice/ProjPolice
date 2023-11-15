@@ -43,7 +43,7 @@ function SignUp() {
           <Header>
             <HeaderText>회원가입</HeaderText>
           </Header>
-          <Column height="40%">
+          <Column height="200px">
             {image ? (
               <img
                 src={imageSrc}
