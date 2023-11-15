@@ -34,7 +34,13 @@ function TimelineList({ startDate, endDate, projectId }: TimelineListProps) {
           height="%"
           background={backgroundColorList[index % 3]}
           onClick={() => {
-            setSelectedIndex(item.id);
+            setSelectedIndex((prev) => {
+              if (prev === -1 || prev !== item.id) {
+                return item.id;
+              } else {
+                return -1;
+              }
+            });
           }}
           empty={getTimelineProgress(item.startDate, item.endDate, startDate).empty}
         >

@@ -3,144 +3,52 @@ import { BoardContainer, Task, BoardSection, SectionContainer, TaskHeader, TaskB
 import BoardItem from './BoardItem';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { moveItem } from '@utils/moveItem';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import user, { TaskData } from '@api/user';
 
 function Board() {
-  const dummyitems = {
-    todo: [
-      {
-        id: 0,
-        name: 'PPT1',
-        startDate: '2023-11-13',
-        endDate: '2023-11-20',
-        epic: {
-          id: 0,
-          name: '발표',
-        },
-        project: {
-          id: 0,
-          name: '프로폴리스',
-        },
-        file: {
-          id: 0,
-          name: '발표자료',
-        },
-        userId: 0,
-      },
-      {
-        id: 1,
-        name: 'PPT2',
-        startDate: '2023-11-13',
-        endDate: '2023-11-20',
-        epic: {
-          id: 0,
-          name: '발표',
-        },
-        project: {
-          id: 0,
-          name: '프로폴리스',
-        },
-        file: {
-          id: 0,
-          name: '발표자료',
-        },
-        userId: 0,
-      },
-    ],
-    inProgress: [
-      {
-        id: 2,
-        name: 'PPT3',
-        startDate: '2023-11-13',
-        endDate: '2023-11-20',
-        epic: {
-          id: 0,
-          name: '발표',
-        },
-        project: {
-          id: 0,
-          name: '프로폴리스',
-        },
-        file: {
-          id: 0,
-          name: '발표자료',
-        },
-        userId: 0,
-      },
-      {
-        id: 3,
-        name: 'PPT4',
-        startDate: '2023-11-13',
-        endDate: '2023-11-20',
-        epic: {
-          id: 0,
-          name: '발표',
-        },
-        project: {
-          id: 0,
-          name: '프로폴리스',
-        },
-        file: {
-          id: 0,
-          name: '발표자료',
-        },
-        userId: 0,
-      },
-    ],
-    done: [
-      {
-        id: 4,
-        name: 'PPT5',
-        startDate: '2023-11-13',
-        endDate: '2023-11-20',
-        epic: {
-          id: 0,
-          name: '발표',
-        },
-        project: {
-          id: 0,
-          name: '프로폴리스',
-        },
-        file: {
-          id: 0,
-          name: '발표자료',
-        },
-        userId: 0,
-      },
-      {
-        id: 5,
-        name: 'PPT6',
-        startDate: '2023-11-13',
-        endDate: '2023-11-20',
-        epic: {
-          id: 0,
-          name: '발표',
-        },
-        project: {
-          id: 0,
-          name: '프로폴리스',
-        },
-        file: {
-          id: 0,
-          name: '발표자료',
-        },
-        userId: 0,
-      },
-    ],
-  };
-  const [items, setItems] = useState(dummyitems);
+  const [todoItems, setTodoItems] = useState<TaskData[]>([]);
+  const [proceedingItems, setProceedingItems] = useState<TaskData[]>([]);
+  const [doneItems, setDoneItems] = useState<TaskData[]>([]);
+
+  useEffect(() => {
+    user.tasks().then((response) => {
+      const todo = response.data.tasks.filter((t) => t.status === 'TODO');
+      const proceeding = response.data.tasks.filter((p) => p.status === 'PROCEEDING');
+      const done = response.data.tasks.filter((d) => d.status === 'DONE');
+      setTodoItems(todo);
+      setProceedingItems(proceeding);
+      setDoneItems(done);
+      console.log(todo);
+      console.log(proceeding);
+      console.log(done);
+    });
+  }, []);
+
   return (
     <BoardContainer height={'90%'} background={colors.white}>
       <Task>
         <TaskHeader />
         <TaskBody>
-          <DragDropContext onDragEnd={(result) => moveItem({ result, items, setItems })}>
+          <DragDropContext
+            onDragEnd={(result) =>
+              moveItem({
+                result,
+                todoItems,
+                proceedingItems,
+                doneItems,
+                setTodoItems,
+                setProceedingItems,
+                setDoneItems,
+              })
+            }
+          >
             <SectionContainer>
               <SectionTitle>해야할 일</SectionTitle>
               <Droppable droppableId="todo">
                 {(provided) => (
                   <BoardSection backgroundColor={colors.board1} {...provided.droppableProps} ref={provided.innerRef}>
-                    {items.todo.map((todoItem, index) => (
+                    {todoItems.map((todoItem, index) => (
                       <BoardItem {...todoItem} backgroundColor={colors.red} key={index} index={index} />
                     ))}
                     {provided.placeholder}
@@ -150,11 +58,11 @@ function Board() {
             </SectionContainer>
             <SectionContainer>
               <SectionTitle>진행 중인 일</SectionTitle>
-              <Droppable droppableId="inProgress">
+              <Droppable droppableId="proceeding">
                 {(provided) => (
                   <BoardSection backgroundColor={colors.board2} {...provided.droppableProps} ref={provided.innerRef}>
-                    {items.inProgress.map((inProgressItem, index) => (
-                      <BoardItem {...inProgressItem} backgroundColor={colors.yellow} key={index} index={index} />
+                    {proceedingItems.map((proceedingItem, index) => (
+                      <BoardItem {...proceedingItem} backgroundColor={colors.yellow} key={index} index={index} />
                     ))}
                     {provided.placeholder}
                   </BoardSection>
@@ -166,7 +74,7 @@ function Board() {
               <Droppable droppableId="done">
                 {(provided) => (
                   <BoardSection backgroundColor={colors.board3} {...provided.droppableProps} ref={provided.innerRef}>
-                    {items.done.map((doneItem, index) => (
+                    {doneItems.map((doneItem, index) => (
                       <BoardItem {...doneItem} backgroundColor={colors.green} key={index} index={index} />
                     ))}
                     {provided.placeholder}

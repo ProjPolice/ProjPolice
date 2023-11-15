@@ -22,7 +22,7 @@ function Login() {
     const data = {
       email: email,
       password: password,
-      token: localStorage.getItem('FirebaseToken'),
+      firebaseToken: localStorage.getItem('FirebaseToken'),
     };
     user
       .login(data)

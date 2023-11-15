@@ -1,6 +1,6 @@
-import { TaskItem } from '@api/user';
+import { TaskData } from '@api/user';
 
-export interface BoardItemProps extends TaskItem {
+export interface BoardItemProps extends TaskData {
   index: number;
   backgroundColor: string;
 }

@@ -74,9 +74,11 @@ export const BoardBox = styled.div<{ backgroundColor: string; isDragging: boolea
   background: linear-gradient(to right, ${(props) => props.backgroundColor} 5%, ${colors.light} 0%);
   border-radius: 10px;
   width: 100%;
+  height: 200px;
+  justify-content: space-around;
   margin-top: 3%;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
-  padding-left: 6%;
+  padding-left: 10%;
   padding-top: 3%;
   opacity: ${(props) => (props.isDragging ? 0.5 : 1)};
 `;

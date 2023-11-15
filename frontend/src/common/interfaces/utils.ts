@@ -4,6 +4,14 @@ import { DropResult } from 'react-beautiful-dnd';
 
 export interface MoveItemProps {
   result: DropResult;
-  items: TaskData;
-  setItems: Dispatch<SetStateAction<TaskData>>;
+  todoItems: TaskData[];
+  setTodoItems: Dispatch<SetStateAction<TaskData[]>>;
+  proceedingItems: TaskData[];
+  setProceedingItems: Dispatch<SetStateAction<TaskData[]>>;
+  doneItems: TaskData[];
+  setDoneItems: Dispatch<SetStateAction<TaskData[]>>;
+}
+
+export interface AddItemProps extends MoveItemProps {
+  moved: TaskData;
 }

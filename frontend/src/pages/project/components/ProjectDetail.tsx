@@ -17,7 +17,6 @@ function ProjectDetail({ projectId }: ProjectIdProps) {
     project
       .memberdata(projectId)
       .then((response) => {
-        console.log(response.data.members);
         setMembers(response.data.members);
       })
       .catch((error) => {

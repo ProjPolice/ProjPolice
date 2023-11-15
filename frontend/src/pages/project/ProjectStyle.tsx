@@ -107,6 +107,7 @@ export const TimeLineBar = styled.div<{ width: number; height: string; backgroun
   min-height: 25%;
   z-index: 1;
   border-radius: 0px 5px 5px 0px;
+  cursor: pointer;
 `;
 
 export const TimelineInfoLeft = styled.div`
@@ -203,23 +204,20 @@ export const TaskInfoStyle = styled.p`
   font-size: 15px;
 `;
 
-export const Photo = styled.div<{
+export const Photo = styled.img<{
   width: string;
   height: string;
   background: string;
-  imgurl: string;
   borderradius: string;
 }>`
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background-color: ${(props) => props.background} !important;
   height: ${(props) => props.height};
   width: ${(props) => props.width};
   margin: 0% 3% 0% 0%;
   border-radius: ${(props) => props.borderradius};
-  background: url(${(props) => props.imgurl}) no-repeat center center;
   background-size: cover;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 `;
