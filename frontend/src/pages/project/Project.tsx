@@ -4,7 +4,7 @@ import { ProjectSection } from './ProjectStyle';
 import { SectionHeader } from './ProjectStyle';
 import ProjectCalendarTimeline from './components/ProjectCalendarTimeline';
 import ProjectDetail from './components/ProjectDetail';
-import ProjectTaskList from './components/ProjectEpicList';
+import ProjectTaskList from './components/ProjectTaskList';
 import { currentProjectOwner, selectedIndexState } from 'state/project';
 import { useRecoilValue } from 'recoil';
 import { useParams } from 'react-router-dom';
@@ -49,7 +49,7 @@ function Project() {
           <h3 style={{ marginBottom: '1%' }}>작업 목록</h3>
         </SectionHeader>
         <ProjectSection height={'31%'} background="">
-          <ProjectTaskList />
+          <ProjectTaskList projectId={projectId} epicId={selectedIndex} />
         </ProjectSection>
       </CenterContainer>
     </Page>
