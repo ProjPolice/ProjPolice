@@ -3,8 +3,6 @@ package com.projpolice.domain.user.controller;
 import static com.projpolice.domain.user.service.JwtService.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projpolice.domain.project.service.ProjectService;
-import com.projpolice.domain.task.dto.TaskRelatedProjectionData;
 import com.projpolice.domain.task.response.UserTaskRangeResponse;
 import com.projpolice.domain.task.service.TaskService;
 import com.projpolice.domain.user.domain.rdb.User;
@@ -169,28 +166,17 @@ public class UserController {
         if (endDate == null) {
             endDate = LocalDate.now().plusDays(3);
         }
-        List<TaskRelatedProjectionData> TODO = new ArrayList<>();
-        List<TaskRelatedProjectionData> PROCEEDING = new ArrayList<>();
-        List<TaskRelatedProjectionData> DONE = new ArrayList<>();
-
-        List<TaskRelatedProjectionData> taskRelatedProjectionData = taskService.selectUserTaskRelatedDataWithRange(
-            startDate, endDate);
-        for (TaskRelatedProjectionData taskRelatedProjectionDatum : taskRelatedProjectionData) {
-            switch (taskRelatedProjectionDatum.getStatus()) {
-                case TODO -> TODO.add(taskRelatedProjectionDatum);
-                case PROCEEDING -> PROCEEDING.add(taskRelatedProjectionDatum);
-                case DONE -> DONE.add(taskRelatedProjectionDatum);
-            }
-        }
 
         return ResponseEntity.ok()
-            .body(new BaseResponse<>(
-                UserTaskRangeResponse.builder()
-                    .TODO(TODO)
-                    .PROCEEDING(PROCEEDING)
-                    .DONE(DONE)
+            .body(
+                BaseResponse.<UserTaskRangeResponse>builder()
+                    .code(200)
+                    .message("현재 나의 세부 작업 리스트 조회 성공")
+                    .data(UserTaskRangeResponse.builder()
+                        .tasks(taskService.selectUserTaskRelatedDataWithRange(startDate, endDate))
+                        .build())
                     .build()
-            ));
+            );
     }
 
     @GetMapping("/projects")
