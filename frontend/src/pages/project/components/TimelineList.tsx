@@ -36,7 +36,7 @@ function TimelineList() {
         <TimeLineBar
           key={index}
           width={item.width}
-          height={'33px'}
+          height={'50%'}
           background={item.background}
           onClick={() => setSelectedIndex(index)}
         >
