@@ -14,7 +14,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserTaskRangeResponse {
-    List<TaskRelatedProjectionData> TODO;
-    List<TaskRelatedProjectionData> PROCEEDING;
-    List<TaskRelatedProjectionData> DONE;
+    List<TaskRelatedProjectionData> tasks;
 }
