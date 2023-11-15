@@ -5,11 +5,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTextInput } from 'common/hooks/useTextInput';
 import user from '@api/user';
 import { useSetRecoilState } from 'recoil';
-import { accessToken, refreshToken } from 'state/user';
+import { accessToken, refreshToken, userIdState } from 'state/user';
 
 function Login() {
   const setAccess = useSetRecoilState(accessToken);
   const setRefresh = useSetRecoilState(refreshToken);
+  const setUserId = useSetRecoilState(userIdState);
   const navigate = useNavigate();
   const findId = () => {};
   const findPassword = () => {};
@@ -29,6 +30,7 @@ function Login() {
         if (response.code === 200) {
           setAccess(response.data.accessToken);
           setRefresh(response.data.refreshToken);
+          setUserId(response.data.user.id);
           navigate('/');
         } else if (response.code === 1002) {
           alert('로그인에 실패하였습니다.');

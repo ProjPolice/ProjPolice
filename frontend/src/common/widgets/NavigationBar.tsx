@@ -6,15 +6,17 @@ import { Link } from 'react-router-dom';
 
 import Logo from '@assets/images/ProjPoliceIcon.png';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { accessToken, refreshToken } from 'state/user';
+import { accessToken, refreshToken, userIdState } from 'state/user';
 
 const NavigationBar = () => {
   const [access, setAccess] = useRecoilState(accessToken);
   const setRefresh = useSetRecoilState(refreshToken);
+  const setUserId = useSetRecoilState(userIdState);
 
   const logout = () => {
     setAccess('');
     setRefresh('');
+    setUserId(-1);
   };
 
   const test = () => {

@@ -13,7 +13,7 @@ import { getWeekdays } from '@utils/getWeekdays';
 import TimelineList from './TimelineList';
 import { ProjectIdProps } from '@interfaces/project';
 
-function ProjectCalendar({ id }: ProjectIdProps) {
+function ProjectCalendar({ projectId }: ProjectIdProps) {
   const [year] = useState(dayjs().year());
   const [month] = useState(dayjs().month());
   const [week] = useState(getWeek());
@@ -31,7 +31,7 @@ function ProjectCalendar({ id }: ProjectIdProps) {
         <TimelineList
           startDate={`${year}-${month + 1}-${weekdays[0].date}`}
           endDate={`${year}-${month + 1}-${weekdays[5].date}`}
-          projectId={id}
+          projectId={projectId}
         />
         <DayContainer width={'100%'} height={'100%'} background={colors.light}>
           {weekdays.map((day, index) => (

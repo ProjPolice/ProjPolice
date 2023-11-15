@@ -29,7 +29,7 @@ function CreateTaskModal({ visible, handleVisible, projectId, epicId }: TaskModa
     project.memberdata(projectId).then((response) => {
       setMembers(response.data.members);
     });
-  });
+  }, []);
 
   const resetData = () => {
     setName('');

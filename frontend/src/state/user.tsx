@@ -13,6 +13,12 @@ export const refreshToken = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
+export const userIdState = atom({
+  key: 'userIdState',
+  default: -1,
+  effects_UNSTABLE: [persistAtom],
+});
+
 export const countState = atom({
   key: 'countState',
   default: {

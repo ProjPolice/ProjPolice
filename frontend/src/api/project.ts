@@ -3,8 +3,8 @@ import { CommonResponse, http } from './http';
 export default {
   create: (data: CreateRequest) => http.post<CreateResponse>('projects', data),
   memberdata: (projectId: number) => http.get<MemberDataResponse>(`projects/${projectId}/users`),
-  memberCreate: (projectId: number, data: MemberCreateRequest) =>
-    http.post<MemberCreateResponse>(`projects/${projectId}/users`, data),
+  memberCreate: (projectId: number, email: { memberEmail: string }) =>
+    http.post<MemberCreateResponse>(`projects/${projectId}/users`, email),
   memberDelete: (projectId: number, userId: number) =>
     http.post<MemberDeleteResponse>(`projects/${projectId}/users/${userId}`),
   delete: (projectId: number) => http.delete<DeleteResponse>(`/projects/${projectId}`),
@@ -35,18 +35,12 @@ interface CreateResponse extends CommonResponse {
 
 interface MemberDataResponse extends CommonResponse {
   data: {
-    members: [
-      {
-        id: number;
-        name: string;
-        image: string;
-      },
-    ];
+    members: {
+      id: number;
+      name: string;
+      image: string;
+    }[];
   };
-}
-
-interface MemberCreateRequest {
-  memberEmail: string;
 }
 
 export interface MemberData {
@@ -56,7 +50,7 @@ export interface MemberData {
 }
 
 interface MemberCreateResponse extends CommonResponse {
-  data: MemberData[];
+  data: MemberData;
 }
 
 interface MemberDeleteResponse extends CommonResponse {

@@ -32,6 +32,11 @@ interface LoginResponse extends CommonResponse {
   data: {
     accessToken: string;
     refreshToken: string;
+    user: {
+      id: number;
+      name: string;
+      image: string;
+    };
   };
 }
 

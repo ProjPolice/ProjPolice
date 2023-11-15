@@ -1,5 +1,7 @@
+import { MemberData } from '@api/project';
+
 export interface ProjectIdProps {
-  id: number;
+  projectId: number;
 }
 
 export interface TimelineListProps {
@@ -20,4 +22,8 @@ export interface TaskTimelineListProps {
 export interface EpicDetailProps {
   projectId: number;
   epicId: number;
+}
+
+export interface MemberListProps {
+  members: MemberData[];
 }

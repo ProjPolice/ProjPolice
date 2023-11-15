@@ -34,12 +34,12 @@ export const Container = styled.div<{ width: string; height: string }>`
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
-export const SectionHeader = styled.div<{ height: string; background: string; alignitems: string }>`
+export const SectionHeader = styled.div<{ height: string; background: string; alignItems: string }>`
   display: flex;
   background-color: ${(props) => props.background};
   width: 92%;
   height: ${(props) => props.height};
-  align-items: ${(props) => props.alignitems};
+  align-items: ${(props) => props.alignItems};
 `;
 
 export const ContainerNav = styled.div<{ height: string; background: string }>`
