@@ -1,6 +1,6 @@
 # ProjPolice
 
-<img src="./readme/ProjPoliceIcon.png" width="80%" height="400px"/>
+<img src="./readme/ProjPoliceIcon.png" width="30%" height="300px"/>
 
 ## 📖목차
 
@@ -115,8 +115,9 @@
 ---
 
 ## 🏗️ 아키텍쳐
-
-<img alt="Group 8" src="./readme/system.png" />
+<div align=center>
+<img alt="Group 8" src="./readme/system.png" width="80%" height="80%" />
+</div>
 
 ---
 
@@ -434,7 +435,7 @@
 <details>
 <summary>ERD</summary>
 <div markdown="1">
-    <img src="./readme/erd.png" alt="ERD 페이지"/>
+    <img src="./readme/erd.png" alt="ERD 페이지" width="50%" height="50%"/>
 </div>
 </details>
 
