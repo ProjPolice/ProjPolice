@@ -5,12 +5,20 @@ import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
 import Logo from '@assets/images/ProjPoliceIcon.png';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { accessToken, refreshToken } from 'state/user';
 
 const NavigationBar = () => {
-  const token = sessionStorage.getItem('accessToken');
+  const [access, setAccess] = useRecoilState(accessToken);
+  const setRefresh = useSetRecoilState(refreshToken);
 
   const logout = () => {
-    sessionStorage.removeItem('token');
+    setAccess('');
+    setRefresh('');
+  };
+
+  const test = () => {
+    console.log(sessionStorage.getItem('sessionStorage'));
   };
 
   return (
@@ -31,10 +39,10 @@ const NavigationBar = () => {
             <p>마이페이지</p>
           </Link>
         </Segment>
-        <Segment>
+        <Segment onClick={test}>
           <p>알림</p>
         </Segment>
-        {token === null ? (
+        {access.length === 0 ? (
           <Segment>
             <Link to={'/login'} css={link}>
               <p>로그인</p>

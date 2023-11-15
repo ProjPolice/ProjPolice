@@ -1,56 +1,57 @@
 import { TimeLineContainer, TimeLineBar } from '@project/ProjectStyle';
-import { colors } from '@assets/design/colors';
-import { Photo } from '@project/ProjectStyle';
+import { backgroundColorList } from '@assets/design/colors';
 import { TimelineInfoLeft } from '@project/ProjectStyle';
 
-import DefaultProfilePhoto from '@assets/images/ProjPoliceIcon.png';
-import DefaultFileIcon from '@assets/icons/Stick.png';
-import { useSetRecoilState } from 'recoil';
-import { selectedIndexState } from 'state/project';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { epicDataState, selectedIndexState } from 'state/project';
+import { useEffect } from 'react';
+import { TimelineListProps } from '@interfaces/project';
+import epic from '@api/epic';
+import { getTimelineProgress } from '@utils/getTimelineProgress';
+import TaskTimelineList from './TaskTimelineList';
 
-function TimelineList() {
+function TimelineList({ startDate, endDate, projectId }: TimelineListProps) {
   const setSelectedIndex = useSetRecoilState(selectedIndexState);
+  const [items, setItems] = useRecoilState(epicDataState);
 
-  const items = [
-    {
-      id: 1,
-      title: '할 일 A',
-      width: '16.6%',
-      background: colors.red,
-      profilePhoto: DefaultProfilePhoto,
-      fileIcon: DefaultFileIcon,
-    },
-    {
-      id: 2,
-      title: '할 일 B',
-      width: '60%',
-      background: colors.violet,
-      profilePhoto: DefaultProfilePhoto,
-      fileIcon: DefaultFileIcon,
-    },
-  ];
+  useEffect(() => {
+    epic
+      .data({ start: startDate, end_date: endDate, projectId: projectId })
+      .then((response) => {
+        setItems(response.data);
+      })
+      .catch(() => {
+        console.log('에러다');
+      });
+  }, []);
 
   return (
     <TimeLineContainer width={'100%'} height={'85%'} background="">
       {items.map((item, index) => (
         <TimeLineBar
           key={index}
-          width={item.width}
-          height={'33px'}
-          background={item.background}
-          onClick={() => setSelectedIndex(index)}
+          width={getTimelineProgress(item.startDate, item.endDate, startDate).width}
+          height="%"
+          background={backgroundColorList[index % 3]}
+          onClick={() => {
+            setSelectedIndex(item.id);
+          }}
+          empty={getTimelineProgress(item.startDate, item.endDate, startDate).empty}
         >
           <TimelineInfoLeft>
-            <p style={{ fontSize: '15px' }}>{item.title}</p>
-            <Photo
-              width={'25px'}
-              height={'25px'}
-              background={colors.default}
-              imgurl={item.profilePhoto}
-              borderradius={'50%'}
-            />
+            <p style={{ fontSize: '15px' }}>{item.name}</p>
           </TimelineInfoLeft>
-          <Photo width={'25px'} height={'25px'} background={colors.default} imgurl={item.fileIcon} borderradius="" />
+          {item.tasks?.map((task, index) => (
+            <TaskTimelineList
+              key={index}
+              id={task.id}
+              name={task.name}
+              startDate={task.startDate}
+              endDate={task.endDate}
+              epicStart={item.startDate}
+              index={index}
+            />
+          ))}
         </TimeLineBar>
       ))}
     </TimeLineContainer>

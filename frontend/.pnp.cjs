@@ -39,6 +39,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@vitejs/plugin-react", "virtual:7475bde5fbc61ee3186d3aea66c8179ab1e106ce0d8e51c60095ac0ff4e681bdc8e868a607e45bb830d179e1d57e8f0d5add293955d2324e82637bcd9eb0891f#npm:4.1.0"],\
             ["@yarnpkg/sdks", "npm:3.0.0-rc.53"],\
             ["axios", "npm:1.5.1"],\
+            ["dayjs", "npm:1.11.10"],\
             ["eslint", "npm:8.52.0"],\
             ["eslint-config-prettier", "virtual:7475bde5fbc61ee3186d3aea66c8179ab1e106ce0d8e51c60095ac0ff4e681bdc8e868a607e45bb830d179e1d57e8f0d5add293955d2324e82637bcd9eb0891f#npm:9.0.0"],\
             ["eslint-plugin-import", "virtual:7475bde5fbc61ee3186d3aea66c8179ab1e106ce0d8e51c60095ac0ff4e681bdc8e868a607e45bb830d179e1d57e8f0d5add293955d2324e82637bcd9eb0891f#npm:2.28.1"],\
@@ -3505,6 +3506,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["dayjs", [\
+        ["npm:1.11.10", {\
+          "packageLocation": "./.yarn/cache/dayjs-npm-1.11.10-2b4382efc1-a6b5a3813b.zip/node_modules/dayjs/",\
+          "packageDependencies": [\
+            ["dayjs", "npm:1.11.10"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["debug", [\
         ["npm:3.2.7", {\
           "packageLocation": "./.yarn/cache/debug-npm-3.2.7-754e818c7a-b3d8c59407.zip/node_modules/debug/",\
@@ -6225,6 +6235,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@vitejs/plugin-react", "virtual:7475bde5fbc61ee3186d3aea66c8179ab1e106ce0d8e51c60095ac0ff4e681bdc8e868a607e45bb830d179e1d57e8f0d5add293955d2324e82637bcd9eb0891f#npm:4.1.0"],\
             ["@yarnpkg/sdks", "npm:3.0.0-rc.53"],\
             ["axios", "npm:1.5.1"],\
+            ["dayjs", "npm:1.11.10"],\
             ["eslint", "npm:8.52.0"],\
             ["eslint-config-prettier", "virtual:7475bde5fbc61ee3186d3aea66c8179ab1e106ce0d8e51c60095ac0ff4e681bdc8e868a607e45bb830d179e1d57e8f0d5add293955d2324e82637bcd9eb0891f#npm:9.0.0"],\
             ["eslint-plugin-import", "virtual:7475bde5fbc61ee3186d3aea66c8179ab1e106ce0d8e51c60095ac0ff4e681bdc8e868a607e45bb830d179e1d57e8f0d5add293955d2324e82637bcd9eb0891f#npm:2.28.1"],\

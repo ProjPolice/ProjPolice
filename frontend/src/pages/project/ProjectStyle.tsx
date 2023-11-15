@@ -90,16 +90,21 @@ export const TimeLineContainer = styled.div<{ width: string; height: string; bac
   height: ${(props) => props.height};
   width: ${(props) => props.width};
   z-index: 1;
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
-export const TimeLineBar = styled.div<{ width: string; height: string; background: string }>`
+export const TimeLineBar = styled.div<{ width: number; height: string; background: string; empty: number }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 2%;
-  background-color: ${(props) => props.background};
+  background: linear-gradient(to right, transparent ${(props) => props.empty}%, ${(props) => props.background} 0%);
+  width: ${(props) => props.width}%;
   height: ${(props) => props.height};
-  width: ${(props) => props.width};
+  min-height: 25%;
   z-index: 1;
   border-radius: 0px 5px 5px 0px;
 `;
@@ -115,19 +120,17 @@ export const TimelineInfoLeft = styled.div`
 export const CalendarDayBox = styled.div`
   display: flex;
   justify-content: space-between;
-  /* align-items: center; */
-  /* width: 14.3%; */
-  width: 16.6%;
+  width: 100%;
   height: 100%;
   box-sizing: border-box;
   border-right: 1px solid ${colors.default};
 `;
 
-export const DayNav = styled.div<{ width: string; height: string; background: string }>`
+export const DayNav = styled.div<{ width: string; height: string; background: string; isToday: boolean }>`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  background-color: ${(props) => props.background};
+  background-color: ${(props) => (props.isToday ? colors.selected : props.background)};
   height: ${(props) => props.height};
   width: ${(props) => props.width};
   border-bottom: 2px solid ${colors.default};

@@ -11,3 +11,11 @@ export interface ModalProps {
   visible: boolean;
   handleVisible: () => void;
 }
+
+export interface EpicModalProps extends ModalProps {
+  projectId: number;
+}
+
+export interface TaskModalProps extends EpicModalProps {
+  epicId: number;
+}

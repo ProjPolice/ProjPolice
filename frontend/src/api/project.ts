@@ -49,12 +49,14 @@ interface MemberCreateRequest {
   memberEmail: string;
 }
 
+export interface MemberData {
+  id: number;
+  name: string;
+  image: string;
+}
+
 interface MemberCreateResponse extends CommonResponse {
-  data: {
-    id: number;
-    name: string;
-    image: string;
-  };
+  data: MemberData[];
 }
 
 interface MemberDeleteResponse extends CommonResponse {
@@ -90,16 +92,18 @@ interface ModifyResponse extends CommonResponse {
   };
 }
 
-interface DataResponse extends CommonResponse {
-  data: {
+export interface ProjectData {
+  id: number;
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  owner: {
     id: number;
     name: string;
-    description: string;
-    startDate: string;
-    endDate: string;
-    owner: {
-      id: number;
-      name: string;
-    };
   };
+}
+
+export interface DataResponse extends CommonResponse {
+  data: ProjectData;
 }

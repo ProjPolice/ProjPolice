@@ -6,47 +6,49 @@ import { PositionContainer } from '@project/ProjectStyle';
 import { DayNav } from '@project/ProjectStyle';
 import { DayContainer } from '@project/ProjectStyle';
 
+import { getWeek } from '@utils/getWeek';
+import dayjs from 'dayjs';
+import { useState } from 'react';
+import { getWeekdays } from '@utils/getWeekdays';
 import TimelineList from './TimelineList';
+import { ProjectIdProps } from '@interfaces/project';
 
-function ProjectCalendar() {
+function ProjectCalendar({ id }: ProjectIdProps) {
+  const [year] = useState(dayjs().year());
+  const [month] = useState(dayjs().month());
+  const [week] = useState(getWeek());
+
+  const weekdays = getWeekdays(year, month, week);
+
   return (
     <Container width={'97%'} height={'95%'} style={{ boxShadow: 'none', borderRadius: '0px', border: 'none' }}>
       <ContainerNav height={'15%'} background={colors.primary} style={{ justifyContent: 'center' }}>
-        <p style={{ color: 'white' }}>YYYY년 M월 W주차</p>
+        <p style={{ color: 'white' }}>
+          {year} 년 {month + 1} 월 {week} 주차
+        </p>
       </ContainerNav>
       <PositionContainer width={'100%'} height={'85%'}>
-        <TimelineList />
+        <TimelineList
+          startDate={`${year}-${month + 1}-${weekdays[0].date}`}
+          endDate={`${year}-${month + 1}-${weekdays[5].date}`}
+          projectId={id}
+        />
         <DayContainer width={'100%'} height={'100%'} background={colors.light}>
-          <CalendarDayBox>
-            <DayNav width={'100%'} height={'15%'} background="">
-              <p style={{ fontSize: '12px' }}>MM.DD</p> <p style={{ fontSize: '12px' }}>(일)</p>
-            </DayNav>
-          </CalendarDayBox>
-          <CalendarDayBox>
-            <DayNav width={'100%'} height={'15%'} background="">
-              <p style={{ fontSize: '12px' }}>MM.DD</p> <p style={{ fontSize: '12px' }}>(일)</p>
-            </DayNav>
-          </CalendarDayBox>
-          <CalendarDayBox>
-            <DayNav width={'100%'} height={'15%'} background="">
-              <p style={{ fontSize: '12px' }}>MM.DD</p> <p style={{ fontSize: '12px' }}>(일)</p>
-            </DayNav>
-          </CalendarDayBox>
-          <CalendarDayBox>
-            <DayNav width={'100%'} height={'15%'} background="">
-              <p style={{ fontSize: '12px' }}>MM.DD</p> <p style={{ fontSize: '12px' }}>(일)</p>
-            </DayNav>
-          </CalendarDayBox>
-          <CalendarDayBox>
-            <DayNav width={'100%'} height={'15%'} background="">
-              <p style={{ fontSize: '12px' }}>MM.DD</p> <p style={{ fontSize: '12px' }}>(일)</p>
-            </DayNav>
-          </CalendarDayBox>
-          <CalendarDayBox>
-            <DayNav width={'100%'} height={'15%'} background="">
-              <p style={{ fontSize: '12px' }}>MM.DD</p> <p style={{ fontSize: '12px' }}>(일)</p>
-            </DayNav>
-          </CalendarDayBox>
+          {weekdays.map((day, index) => (
+            <CalendarDayBox key={index}>
+              <DayNav
+                width={'100%'}
+                height={'15%'}
+                background=""
+                isToday={day.date === dayjs().date() && month === dayjs().month()}
+              >
+                <p style={{ fontSize: '12px' }}>
+                  {month + 1}.{day.date}
+                </p>
+                <p style={{ fontSize: '12px' }}>{day.day}</p>
+              </DayNav>
+            </CalendarDayBox>
+          ))}
         </DayContainer>
       </PositionContainer>
     </Container>

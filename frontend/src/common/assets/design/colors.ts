@@ -16,8 +16,9 @@ export const colors = {
   board1: '#FFF2F2',
   board2: '#FFFDEE',
   board3: '#F0FFEF',
+
+  selected: '#AED6F9',
 };
 
-const randomColorList = ['#2391EE', '#FED915', '#FF7474', '#3056D3', '#CFAAFF', '#24FF00'];
-
-export const randomColor = randomColorList[Math.floor(Math.random() * randomColorList.length)];
+export const threeColorList = ['#FF7474', '#24FF00', '#CFAAFF'];
+export const backgroundColorList = ['#A6FF98', '#FFA9A9', '#E9D7FF'];

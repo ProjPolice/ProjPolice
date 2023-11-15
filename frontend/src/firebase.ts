@@ -22,7 +22,7 @@ export const requestPermission = () => {
     if (permission === 'granted') {
       return getToken(messaging, { vapidKey: ENV.VITE_FIREBASE_MESSAGING_KEY })
         .then((token) => {
-          console.log(token);
+          localStorage.setItem('FirebaseToken', token);
         })
         .catch((error) => {
           console.log(error);

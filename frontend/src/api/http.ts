@@ -1,4 +1,4 @@
-// import { getToken } from '@utils/getToken';
+import { getAccessToken } from '@utils/getToken';
 import Axios, { AxiosRequestConfig } from 'axios';
 
 export const ROOT = 'https://api.projpolice.com/';
@@ -8,13 +8,22 @@ export const instance = Axios.create({
 });
 
 instance.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem('accessToken');
   const newConfig = { ...config };
-  if (token) {
-    newConfig.headers.Authorization = `Bearer ${token}`;
+  const accessToken = getAccessToken();
+  if (accessToken) {
+    newConfig.headers.Authorization = `Bearer ${accessToken}`;
   }
   return newConfig;
 });
+
+instance.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    console.log(error);
+  },
+);
 
 export const http = {
   get: <Response = unknown>(url: string) => instance.get<Response>(url).then((response) => response.data),

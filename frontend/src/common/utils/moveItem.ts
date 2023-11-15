@@ -10,6 +10,5 @@ export const moveItem = ({ result, items, setItems }: MoveItemProps) => {
     const movedItem = updatedItems[prev].splice(prevIndex, 1)[0];
     updatedItems[next].splice(nextIndex, 0, movedItem);
   }
-  console.log(updatedItems);
   setItems(updatedItems);
 };

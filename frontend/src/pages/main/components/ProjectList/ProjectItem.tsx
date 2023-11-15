@@ -1,9 +1,9 @@
-import { Projects } from '@api/user';
-import { randomColor } from '@assets/design/colors';
+import { threeColorList } from '@assets/design/colors';
+import { ProjectItemProps } from '@interfaces/main';
 import { ProjectBox, ProjectBoxMember, ProjectBoxTask, ProjectBoxTitle } from '@main/MainStyle';
 import { useNavigate } from 'react-router-dom';
 
-function ProjectItem({ id, name, description }: Projects) {
+function ProjectItem({ id, name, description, index }: ProjectItemProps) {
   const navigate = useNavigate();
 
   const moveToDetail = () => {
@@ -11,7 +11,7 @@ function ProjectItem({ id, name, description }: Projects) {
   };
 
   return (
-    <ProjectBox backgroundColor={randomColor} onClick={moveToDetail}>
+    <ProjectBox backgroundColor={threeColorList[index]} onClick={moveToDetail}>
       <ProjectBoxTitle>
         <h6>{name}</h6>
       </ProjectBoxTitle>
