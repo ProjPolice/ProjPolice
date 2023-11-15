@@ -262,7 +262,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public UserProjectPagingResponse selectProjectOfUser(long userId, int page, int numOfRows) {
         Pageable pageable = PageRequest.of(page - 1, numOfRows);
-        Page<Project> projects = projectRepository.findByUserId(userId, pageable);
+        Page<Project> projects = projectRepository.findByProjectUserId(userId, pageable);
         return UserProjectPagingResponse.builder()
             .projects(projects.stream()
                 .map(project -> ProjectIdNameDescData.builder()
