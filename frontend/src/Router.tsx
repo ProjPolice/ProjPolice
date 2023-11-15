@@ -11,6 +11,7 @@ import { Test } from '../Test';
 
 import Login from './pages/user/Login';
 import SignUp from 'pages/user/SignUp';
+import Intro from 'pages/intro/Intro';
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
         element: <SignUp />,
       },
     ],
+  },
+  {
+    path: '/intro',
+    element: <Intro />,
   },
 ]);
 
