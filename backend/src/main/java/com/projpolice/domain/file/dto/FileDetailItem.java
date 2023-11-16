@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.projpolice.domain.file.domain.File;
+import com.projpolice.domain.task.dto.ProjectDetailProjection;
 
 import lombok.Builder;
 import lombok.Data;
@@ -31,6 +32,17 @@ public class FileDetailItem {
             .extension(file.getExtension())
             .taskId(file.getTask().getId())
             .createdAt(file.getCreatedAt())
+            .build();
+    }
+
+    public static FileDetailItem from(ProjectDetailProjection detail){
+        return FileDetailItem.builder()
+            .id(detail.getFileId())
+            .name(detail.getFileName())
+            .comment(detail.getFileComment())
+            .version(detail.getFileVersion())
+            .extension(detail.getFileExtension())
+            .taskId(detail.getTaskId())
             .build();
     }
 }

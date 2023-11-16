@@ -204,9 +204,7 @@ public class TaskServiceImpl implements TaskService {
         projectAuthManager.checkProjectMembershipOrThrow(projectId);
         List<ProjectDetailProjection> projectTaskDetailsByProjectId = taskRepository.findProjectTaskDetailsByProjectId(
             projectId);
-        return projectTaskDetailsByProjectId.stream()
-            .map(ProjectTaskDetails::new)
-            .collect(Collectors.toList());
+        return ProjectTaskDetails.of(projectTaskDetailsByProjectId);
     }
 
     @Override
@@ -214,8 +212,6 @@ public class TaskServiceImpl implements TaskService {
         projectAuthManager.checkEpicMembershipOrThrow(epicId);
         List<ProjectDetailProjection> projectTaskDetailsByProjectId = taskRepository.findEpicTaskDetailsByEpicId(
             epicId);
-        return projectTaskDetailsByProjectId.stream()
-            .map(ProjectTaskDetails::new)
-            .collect(Collectors.toList());
+        return ProjectTaskDetails.of(projectTaskDetailsByProjectId);
     }
 }
