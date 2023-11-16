@@ -101,41 +101,41 @@
 
 <h3>시작 페이지</h3>
 <div markdown="1">
-<img src="./readme/startpage.png" width="200px" />
+<img src="./readme/startpage.png" width="500px" />
 
 <h3>메인 페이지</h3>
 <div markdown="1">
 <summary>1. 메인 페이지</summary>
-<img src="./readme/main.png" width="200px" />
+<img src="./readme/main.png" width="500px" />
 <summary>2. 프로젝트 생성</summary>
-<img src="./readme/main.png" width="200px" />
+<img src="./readme/main.png" width="500px" />
 </div>
 
 <h3>유저 페이지</h3>
 <div markdown="1">
 <summary>1. 회원가입</summary>
-<img src="./readme/signup.png" width="200px" />
+<img src="./readme/signup.png" width="500px" />
 <summary>2. 로그인</summary>
-<img src="./readme/login.png" width="200px" />
+<img src="./readme/login.png" width="500px" />
 <summary>3. 마이페이지</summary>
-<img src="./readme/mypage.png" width="200px" />
+<img src="./readme/mypage.png" width="500px" />
 </div>
 
 <h3>프로젝트 상세 페이지</h3>
 <div markdown="1">
 <summary>1. 프로젝트 상세 메인 페이지</summary>
-<img src="./readme/capture.png" width="200px" />
+<img src="./readme/capture.png" width="500px" />
 <summary>2. 할일 생성</summary>
-<img src="./readme/makeepic.png" width="200px" />
+<img src="./readme/makeepic.png" width="500px" />
 <summary>3. 작업 생성</summary>
-<img src="./readme/maketask.png" width="200px" />
+<img src="./readme/maketask.png" width="500px" />
 <summary>4. 파일 업로드</summary>
-<img src="./readme/upload.png" width="200px" />
+<img src="./readme/upload.png" width="500px" />
 </div>
 
 <h3>작업 관리 페이지</h3>
 <div markdown="1">
-<img src="./readme/mywork.png" width="200px" />
+<img src="./readme/mywork.png" width="500px" />
 </div>
 
 ---
