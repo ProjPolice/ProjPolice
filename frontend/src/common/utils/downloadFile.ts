@@ -6,6 +6,7 @@ export const downloadFile = (fileId: number) => {
     .then((response) => {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(response.data);
+      a.download = response.headers['content-disposition'];
       a.click();
       console.log(response);
     })
