@@ -34,6 +34,8 @@ export const http = {
   patch: <Response = unknown, Request = unknown>(url: string, body?: Request) =>
     instance.patch<Response>(url, body).then((response) => response.data),
   delete: <Response = unknown>(url: string) => instance.delete<Response>(url).then((response) => response.data),
+  download: <Response = unknown>(url: string, config?: AxiosRequestConfig) =>
+    instance.get<Response>(url, config).then((response) => response),
 };
 
 export interface CommonResponse {

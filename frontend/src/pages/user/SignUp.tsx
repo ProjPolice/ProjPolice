@@ -1,10 +1,12 @@
-import { Page } from '@assets/design/globalStyles';
-import { Header, HeaderText, Container, Box, Column, InputBox, Button } from './UserStyle';
+import { Header, HeaderText, Container, Box, Column, InputBox, Button, UserPage } from './UserStyle';
 import { useTextInput } from 'common/hooks/useTextInput';
 
 import user from '@api/user';
 import { useImageInput } from 'common/hooks/useFileInput';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { accessToken } from 'state/user';
+import { useEffect } from 'react';
 
 function SignUp() {
   const navigate = useNavigate();
@@ -13,6 +15,14 @@ function SignUp() {
   const [passwordConfirmation, handlePasswordConfirmation] = useTextInput();
   const [email, handleEmail] = useTextInput();
   const [image, handleImage, imageSrc] = useImageInput();
+
+  const token = useRecoilValue(accessToken);
+
+  useEffect(() => {
+    if (token) {
+      navigate('/');
+    }
+  });
 
   const submitSignup = () => {
     if (password === passwordConfirmation) {
@@ -37,7 +47,7 @@ function SignUp() {
   };
 
   return (
-    <Page>
+    <UserPage>
       <Container>
         <Box>
           <Header>
@@ -131,7 +141,7 @@ function SignUp() {
         <div style={{ marginTop: '5%' }}></div>
         <Button onClick={submitSignup}>회원가입</Button>
       </Container>
-    </Page>
+    </UserPage>
   );
 }
 

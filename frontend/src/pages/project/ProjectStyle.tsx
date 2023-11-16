@@ -163,6 +163,7 @@ export const DetailBox = styled.div<{ width: string; height: string; background:
 export const EpicContainer = styled.div<{ width: string; height: string }>`
   display: flex;
   flex-direction: column;
+  align-self: center;
   /* justify-content: center; */
   /* align-items: center; */
   overflow-y: auto;
@@ -170,20 +171,10 @@ export const EpicContainer = styled.div<{ width: string; height: string }>`
   background-color: ${colors.white};
   width: ${(props) => props.width};
   height: ${(props) => props.height};
+  overflow-y: auto;
   box-sizing: border-box;
   &::-webkit-scrollbar {
-    width: 12px;
-  }
-  &::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    display: none;
   }
 `;
 
@@ -192,16 +183,17 @@ export const EpicItem = styled.div<{ width: string; height: string; background: 
   justify-content: space-around;
   align-items: center;
   background-color: ${(props) => props.background};
-  height: ${(props) => props.height};
+  min-height: ${(props) => props.height};
   width: ${(props) => props.width};
   border-bottom: 2px solid ${colors.default};
 `;
 
-export const TaskInfoStyle = styled.p`
+export const TaskInfoStyle = styled.div`
   display: flex;
-  width: 18%;
+  flex: 1;
   padding: 0% 2% 0%;
   font-size: 15px;
+  justify-content: center;
 `;
 
 export const Photo = styled.img<{
@@ -233,4 +225,10 @@ export const ProfileBox = styled.div`
 
 export const Segment = styled.div`
   flex: 1;
+`;
+
+export const ContainerNavContext = styled.div`
+  display: flex;
+  width: 100%;
+  align-self: center;
 `;

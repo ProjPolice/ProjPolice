@@ -69,11 +69,7 @@ function EpicDetail({ projectId, epicId }: EpicDetailProps) {
         <DetailBox width={'100%'} height={'40%'} background="">
           <h6>작업</h6>
           <div style={{ display: 'flex' }}>
-            {tasks.map((task, index) => (
-              <div style={{ marginLeft: '5px' }} key={index}>
-                <h6>{task.name}</h6>
-              </div>
-            ))}
+            <p>{tasks.length} 건</p>
           </div>
         </DetailBox>
       </DetailContainer>

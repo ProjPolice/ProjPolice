@@ -4,24 +4,23 @@ import BoardItem from './BoardItem';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { moveItem } from '@utils/moveItem';
 import { useEffect, useState } from 'react';
-import user, { TaskData } from '@api/user';
+import user from '@api/user';
+import { IBoardItems } from '@interfaces/task';
 
 function Board() {
-  const [todoItems, setTodoItems] = useState<TaskData[]>([]);
-  const [proceedingItems, setProceedingItems] = useState<TaskData[]>([]);
-  const [doneItems, setDoneItems] = useState<TaskData[]>([]);
+  const [items, setItems] = useState<IBoardItems>({ TODO: [], PROCEEDING: [], DONE: [] });
 
   useEffect(() => {
     user.tasks().then((response) => {
       const todo = response.data.tasks.filter((t) => t.status === 'TODO');
       const proceeding = response.data.tasks.filter((p) => p.status === 'PROCEEDING');
       const done = response.data.tasks.filter((d) => d.status === 'DONE');
-      setTodoItems(todo);
-      setProceedingItems(proceeding);
-      setDoneItems(done);
       console.log(todo);
-      console.log(proceeding);
-      console.log(done);
+      setItems({
+        TODO: todo,
+        PROCEEDING: proceeding,
+        DONE: done,
+      });
     });
   }, []);
 
@@ -34,21 +33,17 @@ function Board() {
             onDragEnd={(result) =>
               moveItem({
                 result,
-                todoItems,
-                proceedingItems,
-                doneItems,
-                setTodoItems,
-                setProceedingItems,
-                setDoneItems,
+                items,
+                setItems,
               })
             }
           >
             <SectionContainer>
               <SectionTitle>해야할 일</SectionTitle>
-              <Droppable droppableId="todo">
+              <Droppable droppableId="TODO">
                 {(provided) => (
                   <BoardSection backgroundColor={colors.board1} {...provided.droppableProps} ref={provided.innerRef}>
-                    {todoItems.map((todoItem, index) => (
+                    {items.TODO.map((todoItem, index) => (
                       <BoardItem {...todoItem} backgroundColor={colors.red} key={index} index={index} />
                     ))}
                     {provided.placeholder}
@@ -58,10 +53,10 @@ function Board() {
             </SectionContainer>
             <SectionContainer>
               <SectionTitle>진행 중인 일</SectionTitle>
-              <Droppable droppableId="proceeding">
+              <Droppable droppableId="PROCEEDING">
                 {(provided) => (
                   <BoardSection backgroundColor={colors.board2} {...provided.droppableProps} ref={provided.innerRef}>
-                    {proceedingItems.map((proceedingItem, index) => (
+                    {items.PROCEEDING.map((proceedingItem, index) => (
                       <BoardItem {...proceedingItem} backgroundColor={colors.yellow} key={index} index={index} />
                     ))}
                     {provided.placeholder}
@@ -71,10 +66,10 @@ function Board() {
             </SectionContainer>
             <SectionContainer>
               <SectionTitle>완료한 일</SectionTitle>
-              <Droppable droppableId="done">
+              <Droppable droppableId="DONE">
                 {(provided) => (
                   <BoardSection backgroundColor={colors.board3} {...provided.droppableProps} ref={provided.innerRef}>
-                    {doneItems.map((doneItem, index) => (
+                    {items.DONE.map((doneItem, index) => (
                       <BoardItem {...doneItem} backgroundColor={colors.green} key={index} index={index} />
                     ))}
                     {provided.placeholder}

@@ -2,8 +2,10 @@ import { CommonResponse, http } from './http';
 
 export default {
   file: () => http.get<FileResponse>('files'),
-  upload: (data: UploadRequest) => http.post<UploadResponse>('files', data),
+  upload: (data: UploadRequest, taskId: number) =>
+    http.post<UploadResponse>(`files?task_id=${taskId}`, data, { headers: { 'Content-Type': 'multipart/form-data' } }),
   delete: () => http.delete<DeleteResponse>('files'),
+  download: (fileId: number) => http.download<string>(`files/${fileId}`, { responseType: 'blob' }),
 };
 
 interface FileResponse extends CommonResponse {
@@ -21,9 +23,8 @@ interface FileResponse extends CommonResponse {
 }
 
 interface UploadRequest {
-  comment: string;
   version: number;
-  file: string;
+  file: File;
 }
 
 interface UploadResponse extends CommonResponse {

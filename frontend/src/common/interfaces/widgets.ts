@@ -19,3 +19,12 @@ export interface EpicModalProps extends ModalProps {
 export interface TaskModalProps extends EpicModalProps {
   epicId: number;
 }
+
+export interface UploadFileProps extends ModalProps {
+  taskId: number;
+}
+
+export interface fileIconProps {
+  extension: string | undefined;
+  fileId: number;
+}

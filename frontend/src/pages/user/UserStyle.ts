@@ -2,6 +2,16 @@ import styled from '@emotion/styled';
 import { colors } from '@assets/design/colors';
 import { ColumnProps, InputBoxProps } from '@interfaces/user';
 
+export const UserPage = styled.div`
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: ${colors.white};
+`;
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;

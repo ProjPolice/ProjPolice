@@ -1,5 +1,3 @@
-import { Global } from '@emotion/react';
-import { globalStyle } from '@assets/design/globalStyles';
 import { Page } from '@assets/design/globalStyles';
 import { CenterContainer } from './IntroStyle';
 import { colors } from '@assets/design/colors';
@@ -11,11 +9,23 @@ import { Ptext } from './IntroStyle';
 import Img1 from '@assets/images/img1.png';
 import Img2 from '@assets/images/img2.png';
 import Img3 from '@assets/images/img3.png';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import { accessToken } from 'state/user';
 
 function Intro() {
+  const navigate = useNavigate();
+  const token = useRecoilValue(accessToken);
+
+  useEffect(() => {
+    if (token) {
+      navigate('/');
+    }
+  });
+
   return (
     <Page>
-      <Global styles={globalStyle} />
       {/* 전체 컨테이너 */}
       <CenterContainer background={colors.light}>
         {/* 섹션1 */}
@@ -49,8 +59,8 @@ function Intro() {
             <Ptext style={{ fontSize: '2rem', margin: '4% 0% 1%' }}>
               만능 프로젝트 관리자! 프로젝트 폴리스와 함께하세요.
             </Ptext>
-            <Button width={'160px'} height={'45px'} fontsize="14px">
-              서비스 체험하기
+            <Button width={'160px'} height={'45px'} fontsize="14px" onClick={() => navigate('/login')}>
+              서비스 시작하기
             </Button>
           </Container>
           {/* 섹션 1- Right (이미지) */}
@@ -138,7 +148,13 @@ function Intro() {
               초보자부터 전문가까지, 모두가 만족할 수 있는 서비스를 경험해 보세요. 지금 바로 팀원들과 시작해 보세요!
             </Ptext>
           </Container>
-          <Button width={'300px'} height={'60px'} fontsize="1.6rem" style={{ marginTop: '4%' }}>
+          <Button
+            width={'300px'}
+            height={'60px'}
+            fontsize="1.6rem"
+            style={{ marginTop: '4%' }}
+            onClick={() => navigate('/signup')}
+          >
             지금 회원가입하러 가기
           </Button>
           <Ptext>

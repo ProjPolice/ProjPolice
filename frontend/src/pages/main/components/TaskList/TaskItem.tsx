@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { TaskItemProps } from '@interfaces/main';
 
 import { TaskBox, TaskListBody, TaskListHeader, TaskListItem } from '@main/MainStyle';
-import { parseStatus } from '@utils/parseProgress';
+import { parseStatus } from '@utils/parseStatus';
 
 function TaskItem({ backgroundColor, items }: TaskItemProps) {
   return (

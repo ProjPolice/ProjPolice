@@ -1,14 +1,15 @@
-import { Page, link } from '@assets/design/globalStyles';
-import { Container, Box, Header, HeaderText, InputBox, Column, Button, LoginFooter } from './UserStyle';
+import { link } from '@assets/design/globalStyles';
+import { Container, Box, Header, HeaderText, InputBox, Column, Button, LoginFooter, UserPage } from './UserStyle';
 import { colors } from '@assets/design/colors';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTextInput } from 'common/hooks/useTextInput';
 import user from '@api/user';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { accessToken, refreshToken, userIdState } from 'state/user';
+import { useEffect } from 'react';
 
 function Login() {
-  const setAccess = useSetRecoilState(accessToken);
+  const [access, setAccess] = useRecoilState(accessToken);
   const setRefresh = useSetRecoilState(refreshToken);
   const setUserId = useSetRecoilState(userIdState);
   const navigate = useNavigate();
@@ -17,6 +18,12 @@ function Login() {
 
   const [email, handleEmail] = useTextInput();
   const [password, handlePassword] = useTextInput();
+
+  useEffect(() => {
+    if (access) {
+      navigate('/');
+    }
+  });
 
   const submitLogin = () => {
     const data = {
@@ -42,7 +49,7 @@ function Login() {
   };
 
   return (
-    <Page>
+    <UserPage>
       <Container>
         <Box>
           <Header>
@@ -96,7 +103,7 @@ function Login() {
           </Link>
         </LoginFooter>
       </Container>
-    </Page>
+    </UserPage>
   );
 }
 

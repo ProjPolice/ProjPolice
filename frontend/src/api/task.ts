@@ -29,13 +29,13 @@ interface CreateResponse extends CommonResponse {
 }
 
 interface ModifyRequest {
-  name: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  status: string;
-  userId: number;
-  epicId: number;
+  name?: string;
+  description?: string;
+  startDate?: string;
+  endDate?: string;
+  status?: string;
+  userId?: number;
+  epicId?: number;
 }
 
 interface ModifyResponse extends CommonResponse {
@@ -74,8 +74,12 @@ export interface TasksData {
     name: string;
   };
   file?: {
+    id: number;
     name: string;
-    uuid: string;
+    comment: string;
+    version: number;
+    extension: string;
+    taskId: number;
   };
 }
 
