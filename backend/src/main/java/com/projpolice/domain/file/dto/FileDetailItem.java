@@ -1,5 +1,7 @@
 package com.projpolice.domain.file.dto;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.projpolice.domain.file.domain.File;
 
@@ -17,6 +19,7 @@ public class FileDetailItem {
     private Integer version;
     private String extension;
     private Long taskId;
+    private LocalDateTime createdAt;
 
     public static FileDetailItem from(File file) {
         return FileDetailItem.builder()
@@ -27,6 +30,7 @@ public class FileDetailItem {
             .version(file.getVersion())
             .extension(file.getExtension())
             .taskId(file.getTask().getId())
+            .createdAt(file.getCreatedAt())
             .build();
     }
 }
