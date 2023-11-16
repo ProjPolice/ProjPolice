@@ -115,19 +115,14 @@ public class FileController {
     @Operation(summary = "파일 다운로드", description = "파일을 다운로드하는 메소드입니다.")
     public ResponseEntity<Resource> downloadFileByFileId(@PathVariable(name = "file_id") Long fileId) {
         FileResourceItem fileResourceItem = fileService.getFileOfFile(fileId);
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add(HttpHeaders.CONTENT_DISPOSITION,
-            ContentDisposition.attachment().filename(
-                    String.format("%s.%s", fileResourceItem.getName(), fileResourceItem.getExtension()), StandardCharsets.UTF_8
-                )
-                .build()
-                .toString()
-        );
-        responseHeaders.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
 
         return ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_OCTET_STREAM)
-            .headers(responseHeaders)
+            .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment() // (6)
+                .filename(String.format("%s.%s", fileResourceItem.getName(), fileResourceItem.getExtension()),
+                    StandardCharsets.UTF_8)
+                .build()
+                .toString())
             .body(fileResourceItem.getResource());
     }
 }
