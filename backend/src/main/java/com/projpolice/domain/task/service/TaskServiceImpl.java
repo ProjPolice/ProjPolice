@@ -32,7 +32,6 @@ import com.projpolice.domain.user.repository.rdb.UserRepository;
 import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.deletion.DeletionService;
 import com.projpolice.global.common.error.exception.EpicException;
-import com.projpolice.global.common.error.exception.TaskException;
 import com.projpolice.global.common.error.exception.UserException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.manager.ProjectAuthManager;
@@ -139,10 +138,10 @@ public class TaskServiceImpl implements TaskService {
         }
 
         if (updated) {
+            // long projectId = taskRepository.findProjectIdById(taskId)
+            //     .orElseThrow(() -> new TaskException(ExceptionInfo.INVALID_PROJECT));
+            // redisService.invalidateProject(projectId);
             notificationService.taskChanged(taskId, task.getUser().getId(), changeBuilder.build());
-            long projectId = taskRepository.findProjectIdById(taskId)
-                .orElseThrow(() -> new TaskException(ExceptionInfo.INVALID_TASK));
-            redisService.invalidateProject(projectId);
         }
 
         return TaskUpdateResponse.from(task);
