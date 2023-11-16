@@ -84,7 +84,8 @@ public class FileServiceImpl implements FileService {
         Task task = taskRepository.findById(taskId)
             .orElseThrow(() -> new TaskException(ExceptionInfo.INVALID_TASK));
 
-        final String uuid = UUID.randomUUID().toString();
+        final String uuid = String.format("%s_%s", UUID.randomUUID().toString(),
+            fileUploadRequest.getFile().getOriginalFilename());
 
         // oracle cloud object storage에 파일 업로드
         storageConnector.putObject(FileUtil.generateStreamFromFile(fileUploadRequest.getFile()), uuid, CONTENT_TYPE);

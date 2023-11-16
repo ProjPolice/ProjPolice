@@ -8,4 +8,5 @@ import lombok.experimental.SuperBuilder;
 public class FileBaseItem {
     private long id;
     private String name;
+    private String extension;
 }

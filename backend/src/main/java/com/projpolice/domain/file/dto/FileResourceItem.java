@@ -16,6 +16,7 @@ public class FileResourceItem extends FileBaseItem {
         return FileResourceItem.builder()
             .id(file.getId())
             .name(file.getName())
+            .extension(file.getExtension())
             .resource(resource)
             .build();
     }

@@ -119,7 +119,8 @@ public class FileController {
         return ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_OCTET_STREAM)
             .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment() // (6)
-                .filename(fileResourceItem.getName(), StandardCharsets.UTF_8)
+                .filename(String.format("%s.%s", fileResourceItem.getName(), fileResourceItem.getExtension()),
+                    StandardCharsets.UTF_8)
                 .build()
                 .toString())
             .body(fileResourceItem.getResource());
