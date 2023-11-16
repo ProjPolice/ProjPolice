@@ -108,7 +108,7 @@
 <summary>1. 메인 페이지</summary>
 <img src="./readme/main.png" width="500px" />
 <summary>2. 프로젝트 생성</summary>
-<img src="./readme/main.png" width="500px" />
+<img src="./readme/makeproject.png" width="500px" />
 </div>
 
 <h3>유저 페이지</h3>
