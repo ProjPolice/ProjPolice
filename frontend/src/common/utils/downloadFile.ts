@@ -4,11 +4,10 @@ export const downloadFile = (fileId: number) => {
   file
     .download(fileId)
     .then((response) => {
-      const blob = new Blob([response.data], { type: response.headers['content-type'] });
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      console.log(response.headers);
+      a.href = URL.createObjectURL(response.data);
       a.click();
+      console.log(response);
     })
     .catch((error) => {
       console.log(error);

@@ -24,7 +24,13 @@ export interface UploadFileProps extends ModalProps {
   taskId: number;
 }
 
+export interface FileModalProps extends ModalProps {
+  taskId: number;
+}
+
 export interface fileIconProps {
   extension: string | undefined;
-  fileId: number;
+  onClick: () => void;
+  name?: string;
+  size?: number;
 }

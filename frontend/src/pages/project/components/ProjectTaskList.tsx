@@ -11,17 +11,21 @@ import { EpicDetailProps } from '@interfaces/project';
 import { parseStatus } from '@utils/parseStatus';
 import ProjPoliceButton from '@widgets/buttons/ProjPoliceButton';
 import UploadFileModal from '@widgets/modals/UploadFileModal';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { taskDataState } from 'state/project';
 import FileIcon from '@widgets/FileIcon';
+import FileModal from '@widgets/modals/FileModal';
+import { userIdState } from 'state/user';
 
 function ProjectTaskList({ projectId, epicId }: EpicDetailProps) {
   const [tasks, setTasks] = useRecoilState(taskDataState);
-  const [visible, setVisible] = useState(false);
+  const [uploadModalvisible, setUploadModalVisible] = useState(false);
+  const [fileModalVisible, setFileModalVisible] = useState(false);
   const [selectedTask, setSelectedTask] = useState(-1);
+  const userId = useRecoilValue(userIdState);
 
   const handleSelectedTask = (index: number) => {
-    if (selectedTask === -1) {
+    if (selectedTask === -1 && index === selectedTask) {
       setSelectedTask(index);
     } else {
       setSelectedTask(-1);
@@ -43,7 +47,16 @@ function ProjectTaskList({ projectId, epicId }: EpicDetailProps) {
 
   return (
     <Container width={'93%'} height={'90%'}>
-      <UploadFileModal visible={visible} handleVisible={() => setVisible(!visible)} taskId={selectedTask} />
+      <FileModal
+        visible={fileModalVisible}
+        handleVisible={() => setFileModalVisible(!fileModalVisible)}
+        taskId={selectedTask}
+      />
+      <UploadFileModal
+        visible={uploadModalvisible}
+        handleVisible={() => setUploadModalVisible(!uploadModalvisible)}
+        taskId={selectedTask}
+      />
       <ContainerNav height={'10%'} background={colors.yellow}>
         <ContainerNavContext>
           <TaskInfoStyle>
@@ -83,18 +96,29 @@ function ProjectTaskList({ projectId, epicId }: EpicDetailProps) {
                 <p>{task.endDate}</p>
               </TaskInfoStyle>
               <TaskInfoStyle>
-                {task.file?.extension && <FileIcon extension={task.file.extension} fileId={task.file.id} />}
+                {task.file?.extension && (
+                  <FileIcon
+                    extension={task.file.extension}
+                    onClick={() => {
+                      setFileModalVisible(!fileModalVisible);
+                      setSelectedTask(task.id);
+                    }}
+                    size={30}
+                  />
+                )}
               </TaskInfoStyle>
               <TaskInfoStyle>
-                <ProjPoliceButton
-                  width={30}
-                  height={20}
-                  context="+"
-                  onClick={() => {
-                    setVisible(!visible);
-                    handleSelectedTask(task.id);
-                  }}
-                ></ProjPoliceButton>
+                {task.member?.id === userId && (
+                  <ProjPoliceButton
+                    width={30}
+                    height={20}
+                    context="+"
+                    onClick={() => {
+                      setUploadModalVisible(!uploadModalvisible);
+                      handleSelectedTask(task.id);
+                    }}
+                  ></ProjPoliceButton>
+                )}
               </TaskInfoStyle>
             </EpicItem>
           ))
