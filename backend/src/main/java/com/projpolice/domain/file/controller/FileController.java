@@ -1,6 +1,5 @@
 package com.projpolice.domain.file.controller;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.springframework.core.io.Resource;
@@ -119,8 +118,7 @@ public class FileController {
         return ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_OCTET_STREAM)
             .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment() // (6)
-                .filename(String.format("%s.%s", fileResourceItem.getName(), fileResourceItem.getExtension()),
-                    StandardCharsets.UTF_8)
+                .filename(String.format("%s.%s", fileResourceItem.getName(), fileResourceItem.getExtension()))
                 .build()
                 .toString())
             .body(fileResourceItem.getResource());
