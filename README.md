@@ -99,22 +99,49 @@
 
 ## 🖥 서비스 화면
 
-<summary>메인 페이지</summary>
+<h3>시작 페이지</h3>
 <div markdown="1">
-<img src="" width="200px" />
-<img src="" width="200px" />
+<img src="./readme/startpage.png" width="200px" />
+
+<h3>메인 페이지</h3>
+<div markdown="1">
+<summary>1. 메인 페이지</summary>
+<img src="./readme/main.png" width="200px" />
+<summary>2. 프로젝트 생성</summary>
+<img src="./readme/main.png" width="200px" />
 </div>
 
-<summary>회원가입 페이지</summary>
+<h3>유저 페이지</h3>
 <div markdown="1">
-<img src="" width="200px" />
-<img src="" width="200px" />
-<img src="" width="200px" />
+<summary>1. 회원가입</summary>
+<img src="./readme/signup.png" width="200px" />
+<summary>2. 로그인</summary>
+<img src="./readme/login.png" width="200px" />
+<summary>3. 마이페이지</summary>
+<img src="./readme/mypage.png" width="200px" />
+</div>
+
+<h3>프로젝트 상세 페이지</h3>
+<div markdown="1">
+<summary>1. 프로젝트 상세 메인 페이지</summary>
+<img src="./readme/capture.png" width="200px" />
+<summary>2. 할일 생성</summary>
+<img src="./readme/makeepic.png" width="200px" />
+<summary>3. 작업 생성</summary>
+<img src="./readme/maketask.png" width="200px" />
+<summary>4. 파일 업로드</summary>
+<img src="./readme/upload.png" width="200px" />
+</div>
+
+<h3>작업 관리 페이지</h3>
+<div markdown="1">
+<img src="./readme/mywork.png" width="200px" />
 </div>
 
 ---
 
 ## 🏗️ 아키텍쳐
+
 <div align=center>
 <img alt="Group 8" src="./readme/system.png" width="80%" height="80%" />
 </div>
