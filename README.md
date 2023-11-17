@@ -276,7 +276,8 @@
  ┣ 📜firebase.ts
  ┣ 📜root.tsx
  ┣ 📜Router.tsx
- ┗ 📜vite-env.d.ts
+ ┣ 📜vite-env.d.ts
+ ┗ 📜.env
 ```
 
 </div>
@@ -437,10 +438,13 @@
  ┃ ┃ ┃ ┃ ┃ ┗ 📜HealthCheck.java
  ┃ ┃ ┃ ┃ ┗ 📜BackendApplication.java
  ┃ ┗ 📂resources
- ┃ ┃ ┣ 📜application-blue.properties
+ ┃ ┃ ┣ 📜application.properties
  ┃ ┃ ┣ 📜application-common.properties
- ┃ ┃ ┣ 📜application-green.properties
- ┃ ┃ ┗ 📜application.properties
+ ┃ ┃ ┣ 📜application-configs.properties
+ ┃ ┃ ┣ 📜application-keys.properties
+ ┃ ┃ ┣ 📜application-mails.properties
+ ┃ ┃ ┣ 📜application-blue.properties
+ ┃ ┃ ┗ 📜application-green.properties
  ┗ 📂test
  ┃ ┗ 📂java
  ┃ ┃ ┗ 📂com
