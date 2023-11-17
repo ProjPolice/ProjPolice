@@ -1,3 +1,4 @@
+import { FileData } from './file';
 import { CommonResponse, http } from './http';
 
 export default {
@@ -73,14 +74,7 @@ export interface TasksData {
     id: number;
     name: string;
   };
-  file?: {
-    id: number;
-    name: string;
-    comment: string;
-    version: number;
-    extension: string;
-    taskId: number;
-  };
+  file: FileData[];
 }
 
 interface TasksResponse extends CommonResponse {

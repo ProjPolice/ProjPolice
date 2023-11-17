@@ -69,7 +69,7 @@ function Profile() {
                 <></>
               </div>
             ) : (
-              <img src={imageSrc} width={100} />
+              <img src={imageSrc} width={100} crossOrigin="anonymous" />
             )}
           </Box>
         </Row>

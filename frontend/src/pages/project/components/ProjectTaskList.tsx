@@ -24,20 +24,13 @@ function ProjectTaskList({ projectId, epicId }: EpicDetailProps) {
   const [selectedTask, setSelectedTask] = useState(-1);
   const userId = useRecoilValue(userIdState);
 
-  const handleSelectedTask = (index: number) => {
-    if (selectedTask === -1 && index === selectedTask) {
-      setSelectedTask(index);
-    } else {
-      setSelectedTask(-1);
-    }
-  };
-
   useEffect(() => {
     if (epicId !== -1) {
       task
         .data(projectId, epicId)
         .then((response) => {
           setTasks(response.data);
+          console.log(response.data);
         })
         .catch((error) => {
           console.log(error);
@@ -96,9 +89,9 @@ function ProjectTaskList({ projectId, epicId }: EpicDetailProps) {
                 <p>{task.endDate}</p>
               </TaskInfoStyle>
               <TaskInfoStyle>
-                {task.file?.extension && (
+                {task.file.length !== 0 && (
                   <FileIcon
-                    extension={task.file.extension}
+                    extension={task.file[0].extension}
                     onClick={() => {
                       setFileModalVisible(!fileModalVisible);
                       setSelectedTask(task.id);
@@ -115,7 +108,7 @@ function ProjectTaskList({ projectId, epicId }: EpicDetailProps) {
                     context="+"
                     onClick={() => {
                       setUploadModalVisible(!uploadModalvisible);
-                      handleSelectedTask(task.id);
+                      setSelectedTask(task.id);
                     }}
                   ></ProjPoliceButton>
                 )}

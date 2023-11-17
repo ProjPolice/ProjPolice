@@ -18,7 +18,6 @@ function Project() {
   const selectedIndex = useRecoilValue(selectedIndexState);
   const projectOwner = useRecoilValue(currentProjectOwner);
   const userId = useRecoilValue(userIdState);
-
   const [visible, setVisible] = useState(false);
 
   const params = useParams();
