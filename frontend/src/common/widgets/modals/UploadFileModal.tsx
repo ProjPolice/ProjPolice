@@ -45,7 +45,7 @@ function UploadFileModal({ visible, handleVisible, taskId }: UploadFileProps) {
           const updatedTasks = JSON.parse(JSON.stringify(tasks));
           updatedTasks.map((updated: TaskData) => {
             if (updated.id === taskId) {
-              updated.file = uploadedFile;
+              updated.file.unshift(uploadedFile);
             }
           });
           setTasks(updatedTasks);
