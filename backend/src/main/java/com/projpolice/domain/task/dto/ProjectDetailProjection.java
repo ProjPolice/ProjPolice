@@ -1,6 +1,7 @@
 package com.projpolice.domain.task.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.projpolice.global.common.meta.domain.TaskStatus;
 
@@ -31,4 +32,5 @@ public interface ProjectDetailProjection {
     String getFileComment();
     Integer getFileVersion();
     String getFileExtension();
+    LocalDateTime getFileCreatedAt();
 }

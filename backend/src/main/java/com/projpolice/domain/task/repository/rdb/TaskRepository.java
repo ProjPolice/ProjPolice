@@ -154,7 +154,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
          file.name as fileName,
          file.comment as fileComment,
          file.version as fileVersion,
-         file.extension as fileExtension
+         file.extension as fileExtension,
+         file.createdAt as fileCreatedAt
         from Task task
         left join Epic epic on task.epic.id = epic.id
         left join Project project on project.id = epic.project.id
@@ -178,6 +179,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
          file.comment as fileComment,
          file.version as fileVersion,
          file.extension as fileExtension,
+         file.createdAt as fileCreatedAt,
          epic.id as epicId,
          epic.name as epicName
         from Task task

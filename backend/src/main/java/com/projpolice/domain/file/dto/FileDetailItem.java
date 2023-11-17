@@ -42,6 +42,7 @@ public class FileDetailItem {
             .comment(detail.getFileComment())
             .version(detail.getFileVersion())
             .extension(detail.getFileExtension())
+            .createdAt(detail.getFileCreatedAt())
             .taskId(detail.getTaskId())
             .build();
     }

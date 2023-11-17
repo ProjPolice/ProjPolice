@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,9 @@ public class ProjectTaskDetails {
             } else {
                 task.getFile().add(FileDetailItem.from(projectDetailProjection));
             }
+        }
+        for (ProjectTaskDetails projectTaskDetails : result) {
+            projectTaskDetails.getFile().sort((o1, o2) -> -o1.getCreatedAt().compareTo(o2.getCreatedAt()));
         }
         return result;
     }
