@@ -1,5 +1,15 @@
+import { Page } from '@assets/design/globalStyles';
+import Board from './components/Board';
+import { TextContainer } from './TaskStyle';
 function Task() {
-  return <div>내가 해야하는 작업 페이지</div>;
+  return (
+    <Page style={{ overflow: 'hidden' }}>
+      <TextContainer>
+        <h3>내 작업 관리</h3>
+      </TextContainer>
+      <Board />
+    </Page>
+  );
 }
 
 export default Task;

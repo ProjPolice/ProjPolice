@@ -31,3 +31,9 @@ dist-ssr
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Vite
+.vite
+
+# 환경변수
+.env

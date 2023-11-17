@@ -1,5 +1,17 @@
+import { Page } from '@assets/design/globalStyles';
+
+// import Header from './components/Header';
+import ProjectList from './components/ProjectList';
+import TaskList from './components/TaskList';
+
 function Main() {
-  return <div>메인페이지</div>;
+  return (
+    <Page>
+      {/* <Header /> */}
+      <ProjectList />
+      <TaskList />
+    </Page>
+  );
 }
 
 export default Main;
