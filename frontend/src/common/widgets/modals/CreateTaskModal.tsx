@@ -167,6 +167,7 @@ function CreateTaskModal({ visible, handleVisible, projectId, epicId }: TaskModa
                     height={50}
                     onClick={() => setSelectedMember(member.id)}
                     style={selectedMember === member.id ? { border: '3px solid red', boxSizing: 'border-box' } : {}}
+                    crossOrigin="anonymous"
                   />
                 ))}
               </div>

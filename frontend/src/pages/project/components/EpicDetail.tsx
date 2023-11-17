@@ -26,7 +26,7 @@ function EpicDetail({ projectId, epicId }: EpicDetailProps) {
       });
 
     task
-      .data(projectId, epicId)
+      .epic(epicId)
       .then((response) => {
         setTasks(response.data);
       })

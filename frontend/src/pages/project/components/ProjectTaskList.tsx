@@ -17,33 +17,26 @@ import FileIcon from '@widgets/FileIcon';
 import FileModal from '@widgets/modals/FileModal';
 import { userIdState } from 'state/user';
 
-function ProjectTaskList({ projectId, epicId }: EpicDetailProps) {
+function ProjectTaskList({ epicId }: EpicDetailProps) {
   const [tasks, setTasks] = useRecoilState(taskDataState);
   const [uploadModalvisible, setUploadModalVisible] = useState(false);
   const [fileModalVisible, setFileModalVisible] = useState(false);
   const [selectedTask, setSelectedTask] = useState(-1);
   const userId = useRecoilValue(userIdState);
 
-  const handleSelectedTask = (index: number) => {
-    if (selectedTask === -1 && index === selectedTask) {
-      setSelectedTask(index);
-    } else {
-      setSelectedTask(-1);
-    }
-  };
-
   useEffect(() => {
     if (epicId !== -1) {
       task
-        .data(projectId, epicId)
+        .epic(epicId)
         .then((response) => {
           setTasks(response.data);
+          console.log(response.data);
         })
         .catch((error) => {
           console.log(error);
         });
     }
-  }, [projectId, epicId]);
+  }, [epicId]);
 
   return (
     <Container width={'93%'} height={'90%'}>
@@ -96,9 +89,9 @@ function ProjectTaskList({ projectId, epicId }: EpicDetailProps) {
                 <p>{task.endDate}</p>
               </TaskInfoStyle>
               <TaskInfoStyle>
-                {task.file?.extension && (
+                {task.file.length !== 0 && (
                   <FileIcon
-                    extension={task.file.extension}
+                    extension={task.file[0].extension}
                     onClick={() => {
                       setFileModalVisible(!fileModalVisible);
                       setSelectedTask(task.id);
@@ -115,7 +108,7 @@ function ProjectTaskList({ projectId, epicId }: EpicDetailProps) {
                     context="+"
                     onClick={() => {
                       setUploadModalVisible(!uploadModalvisible);
-                      handleSelectedTask(task.id);
+                      setSelectedTask(task.id);
                     }}
                   ></ProjPoliceButton>
                 )}
