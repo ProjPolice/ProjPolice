@@ -56,6 +56,11 @@ public class NotificationServiceImpl implements NotificationService {
         final String body = String.format("%s에 %s님에 의해 초대 되었습니다.", projectName, projectOwnerName);
 
         firebaseNotificationService.userInvitedToProject(projectId, title, body, fcmToken);
+        mailService.sendMail(MailDto.builder()
+                .title(title)
+                .body(body)
+                .emailAddress(user.getEmail())
+            .build());
     }
 
     @Override
@@ -77,6 +82,11 @@ public class NotificationServiceImpl implements NotificationService {
         final String body = String.format("%s에서 %s님에 의해 제외 되셨습니다.", projectName, projectOwnerName);
 
         firebaseNotificationService.userRemovedFromProject(projectId, title, body, fcmToken);
+        mailService.sendMail(MailDto.builder()
+            .title(title)
+            .body(body)
+            .emailAddress(user.getEmail())
+            .build());
     }
 
     @Override
@@ -100,6 +110,11 @@ public class NotificationServiceImpl implements NotificationService {
         final String body = String.format("%s에 새로운 작업 %s이 할당 되었습니다.", projectName, taskName);
 
         firebaseNotificationService.taskAssignedToUser(taskId, title, body, fcmToken);
+        mailService.sendMail(MailDto.builder()
+            .title(title)
+            .body(body)
+            .emailAddress(user.getEmail())
+            .build());
     }
 
     @Override
