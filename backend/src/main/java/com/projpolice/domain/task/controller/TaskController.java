@@ -111,6 +111,7 @@ public class TaskController {
     }
 
     @GetMapping
+    @Operation(summary = "프로젝트 또는 할일의 세부 작업 리스트 조회", security = @SecurityRequirement(name = "Authorization"), description = "프로젝트 또는 할일 기준으로 세부 작업 리스트를 조회합니다. project id 또는 epic id 중 하나만을 이욯해야합니다.")
     public ResponseEntity<BaseResponse<List<ProjectTaskDetails>>> getTasksBy(
         @RequestParam(value = "project_id", required = false) Long projectId,
         @RequestParam(value = "epic_id", required = false) Long epicId) {
