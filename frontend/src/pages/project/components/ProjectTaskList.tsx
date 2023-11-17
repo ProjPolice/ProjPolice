@@ -17,7 +17,7 @@ import FileIcon from '@widgets/FileIcon';
 import FileModal from '@widgets/modals/FileModal';
 import { userIdState } from 'state/user';
 
-function ProjectTaskList({ projectId, epicId }: EpicDetailProps) {
+function ProjectTaskList({ epicId }: EpicDetailProps) {
   const [tasks, setTasks] = useRecoilState(taskDataState);
   const [uploadModalvisible, setUploadModalVisible] = useState(false);
   const [fileModalVisible, setFileModalVisible] = useState(false);
@@ -27,7 +27,7 @@ function ProjectTaskList({ projectId, epicId }: EpicDetailProps) {
   useEffect(() => {
     if (epicId !== -1) {
       task
-        .data(projectId, epicId)
+        .epic(epicId)
         .then((response) => {
           setTasks(response.data);
           console.log(response.data);
@@ -36,7 +36,7 @@ function ProjectTaskList({ projectId, epicId }: EpicDetailProps) {
           console.log(error);
         });
     }
-  }, [projectId, epicId]);
+  }, [epicId]);
 
   return (
     <Container width={'93%'} height={'90%'}>

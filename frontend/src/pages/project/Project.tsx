@@ -6,12 +6,12 @@ import ProjectCalendarTimeline from './components/ProjectCalendarTimeline';
 import ProjectDetail from './components/ProjectDetail';
 import ProjectTaskList from './components/ProjectTaskList';
 import { currentProjectOwner, selectedIndexState } from 'state/project';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { useParams } from 'react-router-dom';
 import EpicDetail from './components/EpicDetail';
 import ProjPoliceButton from '@widgets/buttons/ProjPoliceButton';
 import { userIdState } from 'state/user';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AddMemberModal from '@widgets/modals/AddMemberModal';
 
 function Project() {
@@ -20,9 +20,17 @@ function Project() {
   const userId = useRecoilValue(userIdState);
   const [visible, setVisible] = useState(false);
 
+  const resetEpicId = useResetRecoilState(selectedIndexState);
+
   const params = useParams();
 
   const projectId = Number(params.project_id);
+
+  useEffect(() => {
+    return () => {
+      resetEpicId();
+    };
+  }, []);
 
   return (
     <Page>

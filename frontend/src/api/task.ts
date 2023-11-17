@@ -4,8 +4,8 @@ import { CommonResponse, http } from './http';
 export default {
   create: (data: CreateRequest) => http.post<CreateResponse>('tasks', data),
   modify: (taskId: number, data: ModifyRequest) => http.patch<ModifyResponse>(`tasks/${taskId}`, data),
-  data: (projectId: number, epicId: number) =>
-    http.get<TasksResponse>(`tasks?project_Id=${projectId}&epic_id=${epicId}`),
+  project: (projectId: number) => http.get<TasksResponse>(`tasks?project_Id=${projectId}`),
+  epic: (epicId: number) => http.get<TasksResponse>(`tasks?&epic_id=${epicId}`),
 };
 
 interface CreateRequest {
