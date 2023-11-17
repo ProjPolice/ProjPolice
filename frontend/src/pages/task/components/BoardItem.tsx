@@ -22,7 +22,7 @@ function BoardItem({ id, name, startDate, endDate, epic, project, file, backgrou
           <BoardBox backgroundColor={backgroundColor} isDragging={snapshot.isDragging}>
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingRight: '10%' }}>
               <p>{name}</p>
-              {file ? <p>{file.name}</p> : <p>등록된 파일이 없습니다</p>}
+              {file.length !== 0 ? <p>{file[0].name}</p> : <p>등록된 파일이 없습니다</p>}
             </div>
             <p>
               {startDate} ~ {endDate}
