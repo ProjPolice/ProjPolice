@@ -97,6 +97,9 @@ public class UserServiceImpl implements UserService {
             storageConnector.putObject(FileUtil.generateStreamFromFile(request.getImage()), imageUuid, CONTENT_TYPE);
             user.setImage(imageUuid);
         }
+        if (request.getPassword() != null){
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
 
         userRepository.save(user);
 
