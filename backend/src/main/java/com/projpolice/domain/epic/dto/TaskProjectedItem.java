@@ -2,6 +2,8 @@ package com.projpolice.domain.epic.dto;
 
 import java.time.LocalDate;
 
+import com.projpolice.global.common.meta.domain.TaskStatus;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,4 +14,6 @@ public class TaskProjectedItem {
     String name;
     LocalDate startDate;
     LocalDate endDate;
+    TaskStatus status;
+    long userId;
 }

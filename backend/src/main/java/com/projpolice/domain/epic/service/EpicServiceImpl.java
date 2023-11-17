@@ -4,27 +4,31 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.projpolice.domain.epic.domain.Epic;
+import com.projpolice.domain.epic.domain.rdb.Epic;
 import com.projpolice.domain.epic.dto.EpicDetailData;
 import com.projpolice.domain.epic.dto.EpicProjectedItem;
 import com.projpolice.domain.epic.dto.EpicProjectionDataItem;
 import com.projpolice.domain.epic.dto.TaskProjectedItem;
-import com.projpolice.domain.epic.repository.EpicRepository;
+import com.projpolice.domain.epic.repository.rdb.EpicRepository;
 import com.projpolice.domain.epic.request.EpicCreateRequest;
 import com.projpolice.domain.epic.request.EpicUpdateRequest;
-import com.projpolice.domain.project.domain.Project;
-import com.projpolice.domain.project.repository.ProjectRepository;
-import com.projpolice.domain.task.repository.TaskRepository;
+import com.projpolice.domain.project.domain.rdb.Project;
+import com.projpolice.domain.project.repository.rdb.ProjectRepository;
 import com.projpolice.global.common.base.BaseIdItem;
+import com.projpolice.global.common.deletion.DeletionService;
+import com.projpolice.global.common.error.exception.BaseException;
 import com.projpolice.global.common.error.exception.EpicException;
 import com.projpolice.global.common.error.exception.TaskException;
 import com.projpolice.global.common.error.info.ExceptionInfo;
 import com.projpolice.global.common.manager.ProjectAuthManager;
+import com.projpolice.global.redis.RedisService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,8 +37,11 @@ import lombok.RequiredArgsConstructor;
 public class EpicServiceImpl implements EpicService {
     private final EpicRepository epicRepository;
     private final ProjectRepository projectRepository;
-    private final TaskRepository taskRepository;
     private final ProjectAuthManager projectAuthManager;
+
+    @Qualifier("redisDummyService")
+    private final RedisService redisService;
+    private final DeletionService deletionService;
 
     /**
      * 해당 프로젝트에 할일 생성하는 메소드
@@ -51,11 +58,12 @@ public class EpicServiceImpl implements EpicService {
             .orElseThrow(() -> new TaskException(ExceptionInfo.INVALID_PROJECT));
 
         Epic epic = epicRepository.save(Epic.of(epicCreateRequest, project));
+        redisService.invalidateProject(epicCreateRequest.getProjectId());
         return EpicDetailData.from(epic);
     }
 
     /**
-     * 해당 할일 상셍 조회
+     * 해당 할일 상세 조회
      *
      * @param id
      * @return EpicDetailData
@@ -64,10 +72,15 @@ public class EpicServiceImpl implements EpicService {
     @Transactional(readOnly = true)
     public EpicDetailData getEpic(Long id) {
         projectAuthManager.checkEpicMembershipOrThrow(id);
+        Optional<EpicDetailData> cache = redisService.findEpicDetailById(id);
+        if (cache.isPresent()) {
+            return cache.get();
+        }
 
         Epic epic = epicRepository.findById(id).orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC));
-
-        return EpicDetailData.from(epic);
+        EpicDetailData data = EpicDetailData.from(epic);
+        redisService.saveEpicDetail(data);
+        return data;
     }
 
     /**
@@ -83,17 +96,29 @@ public class EpicServiceImpl implements EpicService {
         projectAuthManager.checkEpicMembershipOrThrow(id);
 
         Epic epic = epicRepository.findById(id).orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC));
+        boolean updated = false;
+
         if (epicUpdateRequest.getName() != null) {
             epic.setName(epicUpdateRequest.getName());
+            updated = true;
         }
         if (epicUpdateRequest.getDescription() != null) {
             epic.setDescription(epicUpdateRequest.getDescription());
+            updated = true;
         }
         if (epicUpdateRequest.getStartDate() != null) {
             epic.setStartDate(epicUpdateRequest.getStartDate());
+            updated = true;
         }
         if (epicUpdateRequest.getEndDate() != null) {
             epic.setEndDate(epicUpdateRequest.getEndDate());
+            updated = true;
+        }
+
+        if (updated) {
+            long projectId = epicRepository.findProjectIdByEpicId(id)
+                .orElseThrow(() -> new EpicException(ExceptionInfo.INVALID_EPIC));
+            redisService.invalidateProject(projectId);
         }
 
         return EpicDetailData.from(epic);
@@ -101,6 +126,7 @@ public class EpicServiceImpl implements EpicService {
 
     /**
      * 할일 삭제 기능
+     *
      * @param id
      * @return 삭제한 id
      */
@@ -108,32 +134,42 @@ public class EpicServiceImpl implements EpicService {
     @Transactional
     public BaseIdItem deleteEpic(Long id) {
         projectAuthManager.checkEpicMembershipOrThrow(id);
+        deletionService.deleteEpic(id);
 
-        taskRepository.deleteAllByEpicId(id);
-        epicRepository.deleteById(id);
         return BaseIdItem.from(id);
     }
 
     /**
      * Selects project epics with a date range.
      *
-     * @param project_id the ID of the project
+     * @param projectId the ID of the project
      * @param startDate the start date of the date range (if null, defaults to one month ago)
-     * @param endDate the end date of the date range (if null, defaults to one month from now)
+     * @param endDate   the end date of the date range (if null, defaults to one month from now)
      * @return a list of EpicProjectedItem objects representing the selected epics and their associated tasks
      */
     @Override
-    public List<EpicProjectedItem> selectProjectEpicsWithDateRange(long project_id, LocalDate startDate,
+    public List<EpicProjectedItem> selectProjectEpicsWithDateRange(long projectId, LocalDate startDate,
         LocalDate endDate) {
-        projectAuthManager.checkProjectMembershipOrThrow(project_id);
+        // Project가 존재 하지 않을 수 있음
+        if (!projectRepository.existsById(projectId)) {
+            throw new BaseException(ExceptionInfo.INVALID_PROJECT);
+        }
+        projectAuthManager.checkProjectMembershipOrThrow(projectId);
         if (startDate == null) {
             startDate = LocalDate.now().minusMonths(1);
         }
         if (endDate == null) {
             endDate = LocalDate.now().plusMonths(1);
         }
+
+        Optional<List<EpicProjectedItem>> cache = redisService.selectProjectEpicsWithDateRange(projectId,
+            startDate, endDate);
+        if (cache.isPresent()) {
+            return cache.get();
+        }
+
         Map<Long, EpicProjectedItem> map = new TreeMap<>();
-        List<EpicProjectionDataItem> items = epicRepository.selectProjectEpicsWithDateRange(project_id,
+        List<EpicProjectionDataItem> items = epicRepository.selectProjectEpicsWithDateRange(projectId,
             startDate, endDate);
         for (EpicProjectionDataItem item : items) {
             EpicProjectedItem epicItem = map.get(item.getEpicId());
@@ -146,17 +182,22 @@ public class EpicServiceImpl implements EpicService {
                     .build();
                 map.put(item.getEpicId(), epicItem);
             }
+            if (item.getTaskId() == null)
+                continue;
             TaskProjectedItem taskItem = TaskProjectedItem.builder()
                 .id(item.getTaskId())
                 .name(item.getTaskName())
                 .startDate(item.getTaskStartDate())
                 .endDate(item.getTaskEndDate())
+                .status(item.getTaskStatus())
+                .userId(item.getUserId())
                 .build();
             epicItem.getTasks().add(taskItem);
         }
 
         List<EpicProjectedItem> result = new ArrayList<>(map.size());
         result.addAll(map.values());
+        redisService.saveProjectEpicsWithDateRange(projectId, startDate, endDate, result);
 
         return result;
     }

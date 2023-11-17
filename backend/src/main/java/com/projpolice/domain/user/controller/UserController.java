@@ -1,21 +1,36 @@
 package com.projpolice.domain.user.controller;
 
+import static com.projpolice.domain.user.service.JwtService.*;
+
+import java.time.LocalDate;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.projpolice.domain.project.service.ProjectService;
+import com.projpolice.domain.task.response.UserTaskRangeResponse;
+import com.projpolice.domain.task.service.TaskService;
+import com.projpolice.domain.user.domain.rdb.User;
 import com.projpolice.domain.user.request.UserJoinRequest;
 import com.projpolice.domain.user.request.UserLoginRequest;
 import com.projpolice.domain.user.request.UserUpdateRequest;
 import com.projpolice.domain.user.response.UserInfoResponse;
-import com.projpolice.domain.user.response.UserJoinResponse;
 import com.projpolice.domain.user.response.UserLoginResponse;
+import com.projpolice.domain.user.response.UserLogoutResponse;
+import com.projpolice.domain.user.response.UserProjectPagingResponse;
 import com.projpolice.domain.user.service.UserService;
+import com.projpolice.global.common.base.BaseIdItem;
 import com.projpolice.global.common.base.BaseResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +48,8 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "사용자 컨트롤러", description = "사용자를 담당하는 컨트롤러입니다.")
 public class UserController {
     private final UserService userService;
+    private final TaskService taskService;
+    private final ProjectService projectService;
 
     /**
      * 회원가입 처리
@@ -40,13 +57,13 @@ public class UserController {
      * @param request
      * @return 회원의 아이디
      */
-    @PostMapping("/join")
-    @Operation(summary = "회원가입", description = "새로운 사용자 정보를 입력 받아 회원가입을 진행합니다.")
-    public ResponseEntity<? extends BaseResponse<UserJoinResponse>> join(@RequestBody UserJoinRequest request) {
+    @PostMapping(value = "/join", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "회원가입", description = "새로운 사용자 정보를 입력 받아 회원가입을 진행합니다. \n 단, 스웨거에서는 이미지가 없으면 에러 발생")
+    public ResponseEntity<? extends BaseResponse<BaseIdItem>> join(@ModelAttribute UserJoinRequest request) {
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(
-                BaseResponse.<UserJoinResponse>builder()
+                BaseResponse.<BaseIdItem>builder()
                     .code(HttpStatus.OK.value())
                     .message("회원가입 성공")
                     .data(userService.join(request))
@@ -78,10 +95,10 @@ public class UserController {
      * @param request
      * @return 수정된 사용자의 정보
      */
-    @PatchMapping
+    @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "사용자 정보 수정", security = @SecurityRequirement(name = "Authorization"), description = "Access Token과 수정할 정보를 받아 사용자의 정보를 수정합니다.")
     public ResponseEntity<? extends BaseResponse<UserInfoResponse>> updateUserInfo(
-        @RequestBody UserUpdateRequest request) {
+        @ModelAttribute UserUpdateRequest request) {
 
         return ResponseEntity.ok()
             .body(BaseResponse.<UserInfoResponse>builder()
@@ -93,20 +110,89 @@ public class UserController {
     }
 
     /**
-     * 로그인 처리
+     * 로그인 처리, FCM 토큰 입력받기
      *
      * @param request
      * @return 인증에 필요한 Jwt Token 발급
      */
     @PostMapping
-    @Operation(summary = "사용자 로그인", security = @SecurityRequirement(name = "Authorization"), description = "이메일과 패스워드를 받아 Access Token을 반환합니다.")
-    public ResponseEntity<? extends BaseResponse<UserLoginResponse>> login(@RequestBody UserLoginRequest request) {
+    @Operation(summary = "사용자 로그인", description = "이메일과 패스워드를 받아 Access Token을 반환합니다. 추가적으로 FCM을 위해 토큰 입력을 해야합니다.")
+    public ResponseEntity<BaseResponse<UserLoginResponse>> login(@RequestBody UserLoginRequest request) {
+
         return ResponseEntity.ok()
             .body(BaseResponse.<UserLoginResponse>builder()
                 .code(200)
                 .message("로그인 성공")
                 .data(userService.login(request))
                 .build()
+            );
+    }
+
+    @DeleteMapping
+    @Operation(summary = "사용자 로그아웃", security = @SecurityRequirement(name = "Authorization"), description = "로그아웃 합니다. 추가로 사용자의 FCM 토큰도 삭제합니다.")
+    public ResponseEntity<BaseResponse<UserLogoutResponse>> logout() {
+
+        return ResponseEntity.ok()
+            .body(BaseResponse.<UserLogoutResponse>builder()
+                .code(200)
+                .message("로그아웃 성공")
+                .data(userService.logout())
+                .build()
+            );
+    }
+
+    @GetMapping("/reissue")
+    @Operation(summary = "사용자 리프레쉬 토큰 점검 후 재발금", description = "리프레쉬 토큰을 점검하여 유효할 경우 accessToken을 재발급합니다.")
+    public ResponseEntity<BaseResponse<String>> reissue(@RequestHeader("Authorization") String refreshToken) {
+
+        return ResponseEntity.ok()
+            .body(BaseResponse.<String>builder()
+                .code(200)
+                .message("재발급 성공")
+                .data(userService.reissue(refreshToken.substring(7)))
+                .build()
+            );
+    }
+
+    @GetMapping("/tasks")
+    @Operation(summary = "현재 나의 세부 작업 리스트 조회", security = @SecurityRequirement(name = "Authorization"), description = "Access Token에 해당하는 사용자의 현재 세부 리스트를 조회 기간에 따라 반환합니다.")
+    public ResponseEntity<BaseResponse<UserTaskRangeResponse>> selectUserTaskRelatedDataWithRange(
+        @RequestParam(value = "startDate", required = false) LocalDate startDate,
+        @RequestParam(value = "endDate", required = false) LocalDate endDate
+    ) {
+        if (startDate == null) {
+            startDate = LocalDate.now().minusDays(3);
+        }
+        if (endDate == null) {
+            endDate = LocalDate.now().plusDays(3);
+        }
+
+        return ResponseEntity.ok()
+            .body(
+                BaseResponse.<UserTaskRangeResponse>builder()
+                    .code(200)
+                    .message("현재 나의 세부 작업 리스트 조회 성공")
+                    .data(UserTaskRangeResponse.builder()
+                        .tasks(taskService.selectUserTaskRelatedDataWithRange(startDate, endDate))
+                        .build())
+                    .build()
+            );
+    }
+
+    @GetMapping("/projects")
+    @Operation(summary = "현재 나의 프로젝트 리스트 조회", security = @SecurityRequirement(name = "Authorization"), description = "Access Token에 해당하는 사용자의 현재 프로젝트를 조회 기간에 따라 반환합니다.")
+    public ResponseEntity<BaseResponse<UserProjectPagingResponse>> selectUserProjectRelatedDataWithRange(
+        @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+        @RequestParam(name = "num_of_pages", required = false, defaultValue = "100000") int numOfPages) {
+        User user = getLoggedUser();
+
+        return ResponseEntity.ok()
+            .body(
+                BaseResponse.<UserProjectPagingResponse>builder()
+                    .code(200)
+                    .message("현재 나의 프로젝트 리스트 조회 성공")
+                    .data(projectService.selectProjectOfUser(user.getId(), page, numOfPages))
+                    .build()
             );
     }
 }

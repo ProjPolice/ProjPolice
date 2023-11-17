@@ -10,7 +10,9 @@ public enum ExceptionInfo {
     // Common
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 1000, "서버 에러입니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, 1001, "권한이 존재하지 않습니다."),
-    ACESSTOKEN_EXPIRED(HttpStatus.BAD_REQUEST, 1002, "토큰이 만료되었습니다."),
+    ACCESS_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, 1002, "엑세스 토큰이 만료되었습니다."),
+    REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, 1003, "리프레쉬 토큰이 만료되었습니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, 1004, "잘못된 리프레쉬 토큰입니다."),
 
     // User
     UNAUTHORIZED_ERROR(HttpStatus.UNAUTHORIZED, 2000, "권한이 부족합니다."),
@@ -39,8 +41,9 @@ public enum ExceptionInfo {
     FAILED_FILE_DELETE(HttpStatus.BAD_REQUEST, 7002, "파일 삭제를 실패했습니다."),
 
     //File
-    INVALID_FILE(HttpStatus.BAD_REQUEST, 8000, "존재하지 않는 파일입니다.")
-    ,;
+    INVALID_FILE(HttpStatus.BAD_REQUEST, 8000, "존재하지 않는 파일입니다."),
+    FAILED_FILE_CONVERSION(HttpStatus.BAD_REQUEST, 8001, "파일 변환에 실패했습니다."),
+    ;
 
     private final HttpStatus status;
     private final Integer code;

@@ -1,6 +1,8 @@
 package com.projpolice.domain.user.dto;
 
-import com.projpolice.domain.user.domain.User;
+import java.util.Objects;
+
+import com.projpolice.domain.user.domain.rdb.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,5 +25,20 @@ public class UserIdNameItem {
             .name(user.getName())
             .name(user.getName())
             .build();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        UserIdNameItem that = (UserIdNameItem)o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

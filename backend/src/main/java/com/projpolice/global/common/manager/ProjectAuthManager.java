@@ -5,12 +5,12 @@ import static com.projpolice.global.common.error.info.ExceptionInfo.*;
 
 import org.springframework.stereotype.Component;
 
-import com.projpolice.domain.epic.repository.EpicRepository;
-import com.projpolice.domain.project.domain.Project;
-import com.projpolice.domain.project.repository.ProjectRepository;
-import com.projpolice.domain.project.repository.UserProjectRepository;
-import com.projpolice.domain.task.repository.TaskRepository;
-import com.projpolice.domain.user.domain.User;
+import com.projpolice.domain.epic.repository.rdb.EpicRepository;
+import com.projpolice.domain.project.domain.rdb.Project;
+import com.projpolice.domain.project.repository.rdb.ProjectRepository;
+import com.projpolice.domain.project.repository.rdb.UserProjectRepository;
+import com.projpolice.domain.task.repository.rdb.TaskRepository;
+import com.projpolice.domain.user.domain.rdb.User;
 import com.projpolice.global.common.error.exception.UnAuthorizedException;
 
 import lombok.RequiredArgsConstructor;
@@ -118,6 +118,13 @@ public class ProjectAuthManager {
     public void checkTaskMembershipOrThrow(long taskId) {
         User loggedUser = getLoggedUser();
         if (!taskRepository.checkMembership(taskId, loggedUser.getId())) {
+            throw new UnAuthorizedException(UNAUTHORIZED);
+        }
+    }
+
+    public void checkUserIdMatchOrThrow(long userId) {
+        User loggedUser = getLoggedUser();
+        if (!loggedUser.getId().equals(userId)) {
             throw new UnAuthorizedException(UNAUTHORIZED);
         }
     }
