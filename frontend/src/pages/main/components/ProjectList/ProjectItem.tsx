@@ -1,20 +1,33 @@
-import { ProjectItemListProps } from '@interfaces/main';
+import { threeColorList } from '@assets/design/colors';
+import { ProjectItemProps } from '@interfaces/main';
+import { ProjectBox, ProjectBoxMember, ProjectBoxTask, ProjectBoxTitle } from '@main/MainStyle';
+import { useNavigate } from 'react-router-dom';
 
-import { ProjectBox } from '@main/MainStyle';
+function ProjectItem({ id, name, description, index }: ProjectItemProps) {
+  const navigate = useNavigate();
 
-function ProjectItem({ backgroundColor, projectname, membercount }: ProjectItemListProps) {
+  const moveToDetail = () => {
+    navigate(`project/${id}`);
+  };
+
   return (
-    <ProjectBox backgroundColor={backgroundColor}>
-      <div style={{ flex: 1 }}></div>
-      <div style={{ flex: 1, alignSelf: 'start' }}>
-        <p>{projectname}</p>
-      </div>
-      <div style={{ flex: 2 }}>
-        <p>{membercount}</p>
-      </div>
-      <div style={{ flex: 3 }}>
-        <p>{projectname}</p>
-      </div>
+    <ProjectBox backgroundColor={threeColorList[index]} onClick={moveToDetail}>
+      <ProjectBoxTitle>
+        <h6>{name}</h6>
+      </ProjectBoxTitle>
+      <ProjectBoxMember>
+        <p>{description}</p>
+        {/* {members.map((member, index) => (
+          <p key={index}>{member.name}</p>
+        ))} */}
+      </ProjectBoxMember>
+      <ProjectBoxTask>
+        {/* {tasks.map((task, index) => (
+          <LeftLinedBox width="45%" height="30%" backgroundColor={backgroundColor} key={index}>
+            <p>{task.name}</p>
+          </LeftLinedBox>
+        ))} */}
+      </ProjectBoxTask>
     </ProjectBox>
   );
 }

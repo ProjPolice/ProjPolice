@@ -1,3 +1,5 @@
+import { Projects, TaskData } from '@api/user';
+
 export interface HeaderBoxProps {
   count?: number;
   name?: string;
@@ -5,13 +7,11 @@ export interface HeaderBoxProps {
   backgroundColor?: string;
 }
 
-export interface ProjectItemListProps {
-  backgroundColor: string;
-  projectname: string;
-  membercount: number;
+export interface ProjectItemProps extends Projects {
+  index: number;
 }
 
-export interface BoardItemProps {
-  name?: string;
+export interface TaskItemProps {
+  items: TaskData[];
   backgroundColor: string;
 }

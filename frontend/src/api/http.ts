@@ -1,33 +1,44 @@
-import Axios from 'axios';
-// import Config from 'react-native-config';
+import { getAccessToken } from '@utils/getToken';
+import Axios, { AxiosRequestConfig } from 'axios';
 
-export const ROOT = 'http://www.naver.com';
+export const ROOT = 'https://api.projpolice.com/';
 
-const httpAxios = Axios.create({
+export const instance = Axios.create({
   baseURL: ROOT,
 });
 
-// 토큰이 있을 때 httpAxios에 토큰을 집어넣는 로직
-// httpAxios.interceptors.request.use((config) => {
-//   // Request URL 보는법
-//   // console.log(config.url);
-//   const newConfig = { ...config };
-//   const token = store.getState().user.token;
-//   if (token) {
-//     newConfig.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return newConfig;
-// });
+instance.interceptors.request.use((config) => {
+  const newConfig = { ...config };
+  const accessToken = getAccessToken();
+  if (accessToken) {
+    newConfig.headers.Authorization = `Bearer ${accessToken}`;
+  }
+  return newConfig;
+});
+
+instance.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    console.log(error);
+  },
+);
 
 export const http = {
-  get: <Response = unknown>(url: string) =>
-    httpAxios.get<Response>(url).then((response) => response.data),
-  post: <Response = unknown, Request = unknown>(url: string, body?: Request) =>
-    httpAxios.post<Response>(url, body).then((response) => response.data),
+  get: <Response = unknown>(url: string) => instance.get<Response>(url).then((response) => response.data),
+  post: <Response = unknown, Request = unknown>(url: string, body?: Request, config?: AxiosRequestConfig) =>
+    instance.post<Response>(url, body, config).then((response) => response.data),
   put: <Response = unknown, Request = unknown>(url: string, body?: Request) =>
-    httpAxios.put<Response>(url, body).then((response) => response.data),
-  delete: <Response = unknown>(url: string) =>
-    httpAxios.delete<Response>(url).then((response) => response.data),
-  token: <Response = unknown, Request = unknown>(url: string, body?: Request) =>
-    httpAxios.post<Response>(url, body).then((response) => response),
+    instance.put<Response>(url, body).then((response) => response.data),
+  patch: <Response = unknown, Request = unknown>(url: string, body?: Request, config?: AxiosRequestConfig) =>
+    instance.patch<Response>(url, body, config).then((response) => response.data),
+  delete: <Response = unknown>(url: string) => instance.delete<Response>(url).then((response) => response.data),
+  download: <Response = unknown>(url: string, config?: AxiosRequestConfig) =>
+    instance.get<Response>(url, config).then((response) => response),
 };
+
+export interface CommonResponse {
+  code: number;
+  messages: string;
+}

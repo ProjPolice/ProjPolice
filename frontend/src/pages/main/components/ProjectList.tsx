@@ -1,18 +1,62 @@
+import { useEffect, useState } from 'react';
+
 import ProjectItem from './ProjectList/ProjectItem';
-import { colors } from '@assets/design/colors';
 import { ProjectBoxContainer, ProjectContainer, TextContainer } from '@main/MainStyle';
+import user, { Projects } from '@api/user';
+import ProjPoliceButton from '@widgets/buttons/ProjPoliceButton';
+import CreateProjectkModal from '@widgets/modals/CreateProjectModal';
 
 function ProjectList() {
+  const [items, setItems] = useState<Projects[]>([]);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    user.projects().then((response) => {
+      setItems(response.data.projects);
+    });
+  }, []);
+
+  const itemsPerPage = 3; // 한 페이지에 보여질 아이템 수
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const visibleItems = items.slice(startIndex, endIndex);
+
+  const handleModalVisible = () => {
+    setVisible(!visible);
+  };
+
   return (
     <ProjectContainer>
+      <CreateProjectkModal visible={visible} handleVisible={handleModalVisible} />
       <TextContainer>
-        <h4>최근 프로젝트</h4>
-        <p>전체보기</p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyItems: 'center', width: '100%', gap: '1%' }}>
+          <h4>프로젝트</h4>
+          <h6>총 {items.length}건</h6>
+          <ProjPoliceButton width={55} height={25} context="+ 추가" onClick={handleModalVisible} />
+        </div>
+        <div style={{ display: 'flex', gap: '3%' }}>
+          {currentPage > 0 && (
+            <ProjPoliceButton width={30} height={30} context="←" onClick={handlePrevPage} type="bold" />
+          )}
+          {endIndex < items.length && (
+            <ProjPoliceButton width={30} height={30} context="→" onClick={handleNextPage} type="bold" />
+          )}
+        </div>
       </TextContainer>
       <ProjectBoxContainer>
-        <ProjectItem projectname={'프로젝트 1'} membercount={1} backgroundColor={colors.yellow} />
-        <ProjectItem projectname={'프로젝트 2'} membercount={2} backgroundColor={colors.blue} />
-        <ProjectItem projectname={'프로젝트 3'} membercount={3} backgroundColor={colors.black} />
+        {visibleItems.map((project, index) => (
+          <ProjectItem {...project} key={index} index={index} />
+        ))}
       </ProjectBoxContainer>
     </ProjectContainer>
   );
