@@ -15,7 +15,6 @@ function Board() {
       const todo = response.data.tasks.filter((t) => t.status === 'TODO');
       const proceeding = response.data.tasks.filter((p) => p.status === 'PROCEEDING');
       const done = response.data.tasks.filter((d) => d.status === 'DONE');
-      console.log(todo);
       setItems({
         TODO: todo,
         PROCEEDING: proceeding,

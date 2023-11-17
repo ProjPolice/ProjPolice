@@ -13,7 +13,7 @@ import file from '@api/file';
 import { useNumberInput } from 'common/hooks/useNumberInput';
 import { useRecoilState } from 'recoil';
 import { taskDataState } from 'state/project';
-import { TaskData } from '@api/user';
+import { TasksData } from '@api/task';
 
 function UploadFileModal({ visible, handleVisible, taskId }: UploadFileProps) {
   const [taskFile, setTaskFile] = useState<File>();
@@ -43,7 +43,7 @@ function UploadFileModal({ visible, handleVisible, taskId }: UploadFileProps) {
           const uploadedFile = response.data;
 
           const updatedTasks = JSON.parse(JSON.stringify(tasks));
-          updatedTasks.map((updated: TaskData) => {
+          updatedTasks.map((updated: TasksData) => {
             if (updated.id === taskId) {
               updated.file.unshift(uploadedFile);
             }

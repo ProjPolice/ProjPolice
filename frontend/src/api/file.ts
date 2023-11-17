@@ -37,10 +37,10 @@ interface UploadResponse extends CommonResponse {
     id: number;
     name: string;
     comment: string;
-    uuid: string;
     version: number;
     extension: string;
     taskId: number;
+    createdAt: string;
   };
 }
 

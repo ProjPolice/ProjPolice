@@ -82,7 +82,7 @@ export interface TaskData {
   file: {
     id: number;
     name: string;
-  }[];
+  };
   userId: number;
 }
 
