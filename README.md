@@ -60,7 +60,7 @@
 
 |                                                                         |                                                                         |                                                                         |     |
 | :---------------------------------------------------------------------: | :---------------------------------------------------------------------: | :---------------------------------------------------------------------: | :-: |
-| <img src="./readme/6.png" width="200px" height="200px" /><br>**윤민영** | <img src="./readme/5.png" width="200px" height="200px" /><br>**임혜진** | <img src="./readme/2.png" width="200px" height="200px" /><br>**진익근** |
+| <img src="./readme/.png" width="200px" height="200px" /><br>**윤민영** | <img src="./readme/.png" width="200px" height="200px" /><br>**임혜진** | <img src="./readme/.png" width="200px" height="200px" /><br>**진익근** |
 
 ---
 
@@ -68,7 +68,7 @@
 
 |                                                                         |                                                                         |                                                                         |     |
 | :---------------------------------------------------------------------: | :---------------------------------------------------------------------: | :---------------------------------------------------------------------: | :-: |
-| <img src="./readme/4.png" width="200px" height="200px" /><br>**김민정** | <img src="./readme/1.png" width="200px" height="200px" /><br>**유창재** | <img src="./readme/3.png" width="200px" height="200px" /><br>**정우정** |
+| <img src="./readme/.png" width="200px" height="200px" /><br>**김민정** | <img src="./readme/.png" width="200px" height="200px" /><br>**유창재** | <img src="./readme/.png" width="200px" height="200px" /><br>**정우정** |
 
 ---
 
